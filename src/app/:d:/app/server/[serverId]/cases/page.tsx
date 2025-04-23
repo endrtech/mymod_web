@@ -86,7 +86,7 @@ export default async function ServerMembers({
             </div>
             <div className="p-6 -mt-12 h-[80vh] overflow-y-auto">
                 <DataTable columns={columns} data={memberDataArray} />
-            </div>\
+            </div>
             <Toaster className="dark" />
         </div>
     )
