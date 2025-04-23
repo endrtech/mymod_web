@@ -88,7 +88,7 @@ export function DataTable<TData, TValue>({
     })
 
     return (
-        <div className="w-full">
+        <div className={`${geistSans.className} w-full`}>
             <div className="w-full flex items-center justify-between py-4">
                 <div className="flex items-center py-4">
                     <Input
@@ -107,7 +107,7 @@ export function DataTable<TData, TValue>({
                             Columns
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="dark">
+                    <DropdownMenuContent align="end" className={`${geistSans.className} dark z-[999]`}>
                         {table
                             .getAllColumns()
                             .filter(

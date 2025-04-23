@@ -39,15 +39,22 @@ export const getColumns = (
 ): ColumnDef<Notification>[] => [
         {
             accessorKey: "userId",
+            id: "userId",
+            enableHiding: false,
         },
         {
             accessorKey: "notificationId",
+            id: "notificationId",
+            enableHiding: false,
         },
         {
             accessorKey: "avatar",
+            id: "avatar",
+            enableHiding: false,
         },
         {
             accessorKey: "username",
+            id: "username",
             header: ({ column }) => {
                 return (
                     <Button
@@ -80,6 +87,7 @@ export const getColumns = (
         },
         {
             accessorKey: "title",
+            id: "title",
             header: ({ column }) => {
                 return (
                     <Button
@@ -102,6 +110,7 @@ export const getColumns = (
         },
         {
             accessorKey: "description",
+            id: "description",
             header: ({ column }) => {
                 return (
                     <Button
@@ -124,6 +133,7 @@ export const getColumns = (
         },
         {
             accessorKey: "status",
+            id: "status",
             header: ({ column }) => {
                 return (
                     <Button
@@ -146,6 +156,7 @@ export const getColumns = (
         },
         {
             accessorKey: "created",
+            id: "created",
             header: ({ column }) => {
                 return (
                     <Button
