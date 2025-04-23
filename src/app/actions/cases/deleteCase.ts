@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const deleteCase = async (caseId: any) => {
     const resp = await axios.delete(
-        `http://localhost:3030/api/cases/${caseId}`,
+        `https://api.mymod.endr.tech/api/cases/${caseId}`,
     );
 
     if (resp.status === 200) {

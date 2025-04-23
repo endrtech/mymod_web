@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function getUser(userId: string) {
     try {
-        const resp = await axios.get(`http://localhost:3030/api/users/${userId}`);
+        const resp = await axios.get(`https://api.mymod.endr.tech/api/users/${userId}`);
         if (resp.status === 200) {
             return resp.data;
         } else {

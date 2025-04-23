@@ -4,7 +4,7 @@ export async function getCaseData(
     caseId: string
 ) {
     const resp = await axios.get(
-        `http://localhost:3030/api/cases/${caseId}`,
+        `https://api.mymod.endr.tech/api/cases/${caseId}`,
       );
     
       if (resp.status === 200) {
