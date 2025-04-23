@@ -25,7 +25,7 @@ export default async function DiscordApp() {
                 <div className="m-2">
                     <img src="/connect-discord-graphic.png" width="40%" alt="Connect your Discord account" className="rounded-lg" />
                 </div>
-                <Link href="https://intent-bunny-32.accounts.dev/user" target="_blank" className="m-2">
+                <Link href="https://accounts.mymod.endr.tech/user" target="_blank" className="m-2">
                     <Button variant="outline" className="dark text-white">
                         Go to Accounts Dashboard
                     </Button>
