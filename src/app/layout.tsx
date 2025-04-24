@@ -4,6 +4,9 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import NextNProgress from 'nextjs-progressbar';
 import LoadingBar from "@/components/LoadingBar";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { Suspense } from "react";
+import LoadingOverlay from "./loading";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,10 +32,11 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${geistSans.className} ${geistMono.className} antialiased w-full h-screen`}
+          className={`${geistSans.className} antialiased w-full h-screen`}
         >
-          <LoadingBar />
+          <Suspense fallback={<LoadingOverlay />}>
           {children}
+          </Suspense>
         </body>
       </html>
     </ClerkProvider>
