@@ -85,7 +85,8 @@ export default async function SettingsPage({
                                 <span className="text-left">Tickets</span>
                             </TabsTrigger>
                         </TabsList>
-                        <TabsContent value="overview">
+                        <div className="w-full max-h-[70vh] overflow-y-auto">
+                            <TabsContent value="overview">
                             <Card className="w-full bg-black border-zinc-700 p-2">
                                 <CardContent className="p-2">
                                     <div className="flex flex-col items-start justify-start w-full gap-4">
@@ -162,6 +163,7 @@ export default async function SettingsPage({
                         <TabsContent value="ai-settings">
                             <AISettingsCard currentServerData={currentServerData} />
                         </TabsContent>
+                        </div>
                     </Tabs>
                 </div>
             </div>
