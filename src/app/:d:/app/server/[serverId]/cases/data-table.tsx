@@ -22,7 +22,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, MoreHorizontal, View } from "lucide-react"
+import { ChevronLeft, ChevronRight, MoreHorizontal, RefreshCw, View } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import {
     DropdownMenu,
@@ -36,6 +36,7 @@ import {
 import Link from "next/link"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { ViewMemberDialog } from "@/components/dialog/ViewMemberDialog"
+import { useRouter } from "next/navigation"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -46,6 +47,7 @@ export function DataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
+    const router = useRouter();
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -76,7 +78,7 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
-            <div className="flex items-center justify-between py-4">
+            <div className="flex items-center justify-between gap-2 py-4">
                 <div className="flex items-center py-4">
                     <Input
                         placeholder="Filter cases by reason..."
@@ -88,6 +90,10 @@ export function DataTable<TData, TValue>({
                         type="text"
                     />
                 </div>
+                <span className="flex-grow" />
+                <Button onClick={() => router.refresh()} variant="outline" size="icon" className="ml-auto dark text-white">
+                    <RefreshCw />
+                </Button>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto text-white dark">
