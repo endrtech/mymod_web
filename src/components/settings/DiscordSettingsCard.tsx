@@ -56,7 +56,7 @@ export const DiscordSettingsCard = ({ serverId }: any) => {
                         <Label htmlFor="mymodLogChannel" className="text-zinc-500 text-sm w-full">Due to Discord API limitations, some settings may not be displayed here, such as Community settings. Continue to use the Discord client to modify these settings.</Label>
                         <div className="flex flex-row gap-1 items-center justify-start w-full">
                             <Label htmlFor="mymodLogChannel" className="text-white w-[40%]">Server name</Label>
-                            <Input type="text" name="mymodLogChannel" placeholder="e.g: My Beautiful Server" onChange={(e) => setServerName(e.target.value)} defaultValue={currentServerData.data?.dsData.name} className="bg-zinc-900 border-zinc-800 text-white" />
+                            <Input type="text" name="mymodLogChannel" placeholder="e.g: My Beautiful Server" onChange={(e) => setServerName(e.target.value)} value={serverName} className="bg-zinc-900 border-zinc-800 text-white" />
                             <Button variant="outline" size="icon" className="dark text-white" onClick={() => updateSettingsForGuild("server_name", serverName)}>
                                 <Save />
                             </Button>
@@ -67,7 +67,7 @@ export const DiscordSettingsCard = ({ serverId }: any) => {
                         <h4 className="text-xl text-left w-full font-bold text-zinc-300">Engagement</h4>
                         <div className="flex flex-row gap-1 items-center justify-start w-full">
                             <Label htmlFor="mymodLogChannel" className="text-white w-[40%]">Default Notification Settings</Label>
-                            <Select name="verification_level" onValueChange={(e) => setServerMsgNotificationSettings(Number.parseInt(e))} value={`${currentServerData.data?.dsData.defaultMessageNotifications}`}>
+                            <Select name="verification_level" onValueChange={(e) => setServerMsgNotificationSettings(Number.parseInt(e))} value={`${serverMsgNotificationSettings}`}>
                                 <SelectTrigger className="w-full dark placeholder-zinc-300 bg-zinc-900 border-zinc-800 text-white">
                                     <SelectValue placeholder="Select a verification level..." />
                                 </SelectTrigger>
@@ -87,7 +87,7 @@ export const DiscordSettingsCard = ({ serverId }: any) => {
                             <div className="flex flex-col gap-1 items-start justify-center w-full">
                                 <Label htmlFor="mymodLogChannel" className="text-white w-[40%]">Inactive Channel</Label>
                                 <div className="flex flex-row gap-1 items-center justify-start w-full">
-                                    <Select name="verification_level" onValueChange={(e) => setServerAfkChannelId(Number.parseInt(e))} value={`${currentServerData.data?.dsData.afkChannelId}`}>
+                                    <Select name="verification_level" onValueChange={(e) => setServerAfkChannelId(Number.parseInt(e))} value={`${serverAfkChannelId}`}>
                                         <SelectTrigger className="w-full dark placeholder-zinc-300 bg-zinc-900 border-zinc-800 text-white">
                                             <SelectValue placeholder="Select a verification level..." />
                                         </SelectTrigger>
@@ -108,7 +108,7 @@ export const DiscordSettingsCard = ({ serverId }: any) => {
                             <div className="flex flex-col gap-1 items-start justify-center w-full">
                                 <Label htmlFor="mymodLogChannel" className="text-white w-[40%]">Inactive Timeout</Label>
                                 <div className="flex flex-row gap-1 items-center justify-start w-full">
-                                    <Select name="verification_level" onValueChange={(e) => setServerAfkTimeout(Number.parseInt(e))} value={`${currentServerData.data?.dsData.afkTimeout}`}>
+                                    <Select name="verification_level" onValueChange={(e) => setServerAfkTimeout(Number.parseInt(e))} value={`${serverAfkTimeout}`}>
                                         <SelectTrigger className="w-full dark placeholder-zinc-300 bg-zinc-900 border-zinc-800 text-white">
                                             <SelectValue placeholder="Select a verification level..." />
                                         </SelectTrigger>
@@ -136,7 +136,7 @@ export const DiscordSettingsCard = ({ serverId }: any) => {
                                 <Label htmlFor="mymodLogChannel" className="text-white">Verification level</Label>
                                 <Label htmlFor="mymodLogChannel" className="text-zinc-500 text-sm w-[80%]">Members of the server must meet the following criteria before they can send messages in text channels, or initiate a DM. If a member has an assigned role and server onboarding is not enabled, this does not apply.</Label>
                             </div>
-                            <Select name="verification_level" onValueChange={(e) => setServerVerificationLevel(e)} value={`${serverVerificationLevel !== 0 ? currentServerData.data?.dsData.verificationLevel : serverVerificationLevel}`}>
+                            <Select name="verification_level" onValueChange={(e) => setServerVerificationLevel(e)} value={`${serverVerificationLevel}`}>
                                 <SelectTrigger className="w-full dark placeholder-zinc-300 bg-zinc-900 border-zinc-800 text-white">
                                     <SelectValue placeholder="Select a verification level..." />
                                 </SelectTrigger>
@@ -167,7 +167,7 @@ export const DiscordSettingsCard = ({ serverId }: any) => {
                                 <Label htmlFor="mymodLogChannel" className="text-white">Explicit image filter</Label>
                                 <Label htmlFor="mymodLogChannel" className="text-zinc-500 text-sm max-w-[80%]">Automatically block messages in this server that may contain explicit images in channels not marked as Age-restricted. Please choose how this filter will apply to members in your server.</Label>
                             </div>
-                            <Select name="nsfw_level" onValueChange={(e) => setServerNsfwLevel(e)} value={`${serverNsfwLevel !== 0 ? currentServerData.data?.dsData.nsfwLevel : serverNsfwLevel}`}>
+                            <Select name="nsfw_level" onValueChange={(e) => setServerNsfwLevel(e)} value={`${serverNsfwLevel}`}>
                                 <SelectTrigger className="w-full dark placeholder-zinc-300 bg-zinc-900 border-zinc-800 text-white">
                                     <SelectValue placeholder="Select your explicit image filter..." />
                                 </SelectTrigger>
