@@ -32,7 +32,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${geistSans.className} antialiased w-full h-screen`}
+          className={`${geistSans.className} antialiased w-full h-screen bg-black`}
         >
           <Suspense fallback={<LoadingOverlay />}>
           {children}

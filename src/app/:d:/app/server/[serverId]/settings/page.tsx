@@ -12,10 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Briefcase, Cog, CreditCard, Ellipsis, LayoutDashboard, Save, Slash, Sparkle, Sparkles, Speaker, Ticket, UsersRound, Volume, Volume2 } from "lucide-react";
+import { Briefcase, Cog, CreditCard, Ellipsis, LayoutDashboard, Paintbrush, Save, Slash, Sparkle, Sparkles, Speaker, Ticket, UsersRound, Volume, Volume2 } from "lucide-react";
 import Image from "next/image";
 import { Toaster } from "@/components/ui/sonner";
 import { CasesAppSettingsCard } from "@/components/settings/CasesAppSettingsCard";
+import { AppearanceSettingsCard } from "@/components/settings/AppearanceSettingsCard";
 
 export default async function SettingsPage({
     params,
@@ -45,8 +46,8 @@ export default async function SettingsPage({
                 <div className="flex flex-row items-center justify-between w-full z-[99]">
                     <h1 className="text-4xl font-bold text-zinc-300">Settings</h1>
                 </div>
-                <div className="flex flex-row items-center justify-between w-full my-4">
-                    <Tabs orientation="vertical" defaultValue="general" className="flex flex-row items-start justify-start w-full h-[70vh]">
+                <div className="flex flex-row items-center justify-between w-full h-auto my-4">
+                    <Tabs orientation="vertical" defaultValue="general" className="flex flex-row items-start justify-start w-full h-auto">
                         <TabsList className="flex flex-col gap-2 h-full w-[15%] justify-start text-left dark">
                             <h4 className="text-sm uppercase text-left w-full font-medium text-zinc-500 p-2">General</h4>
                             <TabsTrigger value="overview" className="w-full max-h-[40px] p-2 flex flex-row items-center justify-start gap-2 text-left">
@@ -56,6 +57,10 @@ export default async function SettingsPage({
                             <TabsTrigger value="general" className="w-full max-h-[40px] p-2 flex flex-row items-center justify-start gap-2 text-left">
                                 <Cog className="p-1 rounded-sm bg-zinc-900 text-white min-w-[25px] min-h-[25px]" />
                                 <span className="text-left">Discord Settings</span>
+                            </TabsTrigger>
+                            <TabsTrigger value="appearance" className="w-full max-h-[40px] p-2 flex flex-row items-center justify-start gap-2 text-left">
+                                <Paintbrush className="p-1 rounded-sm bg-zinc-900 text-white min-w-[25px] min-h-[25px]" />
+                                <span className="text-left">Appearance</span>
                             </TabsTrigger>
                             <TabsTrigger value="boost-perks" className="w-full max-h-[40px] p-2 flex flex-row items-center justify-start gap-2 text-left">
                                 <div className="p-1 rounded-sm bg-pink-400 text-white min-w-[25px] min-h-[25px] flex flex-row items-center justify-center">
