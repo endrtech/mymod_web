@@ -13,30 +13,17 @@ import { updateGuildSettings } from "@/app/actions/guilds/updateGuildSettings"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 
-export const DiscordSettingsCard = ({ serverId }: any) => {
+export const DiscordSettingsCard = ({ serverId, serverData, guildChannels }: any) => {
     const router = useRouter();
-    const [currentServerData, setCurrentServerData] = useState<any>(null);
-    const [currentGuildChannels, setCurrentGuildChannels] = useState<any>(null);
 
-    // This controls the settings for each section of the card:
+    const [serverName, setServerName] = useState(serverData?.data?.dsData?.name);
+    const [serverMsgNotificationSettings, setServerMsgNotificationSettings] = useState(0 || serverData?.data?.dsData?.defaultMessageNotifications);
+    const [serverAfkChannelId, setServerAfkChannelId] = useState(0 || serverData?.data?.dsData?.afkChannelId);
+    const [serverAfkTimeout, setServerAfkTimeout] = useState(0 || serverData?.data?.dsData?.afkTimeout);
+    const [serverVerificationLevel, setServerVerificationLevel] = useState(serverData?.data?.dsData?.verificationLevel);
+    const [serverNsfwLevel, setServerNsfwLevel] = useState(serverData?.data?.dsData?.nsfwLevel);
 
-    useEffect(() => {
-        const getData = async () => {
-            const currentServerDataData = await getCurrentGuild(serverId);
-            const currentGuildChannelsData = await getGuildChannels(serverId);
-
-            setCurrentServerData(currentServerDataData);
-            setCurrentGuildChannels(currentGuildChannelsData);
-        }
-        getData();
-    }, [serverId]);
-
-    const [serverName, setServerName] = useState(currentServerData?.data?.dsData.name);
-    const [serverMsgNotificationSettings, setServerMsgNotificationSettings] = useState(0 || currentServerData?.data?.dsData.defaultMessageNotifications);
-    const [serverAfkChannelId, setServerAfkChannelId] = useState(0 || currentServerData?.data?.dsData.afkChannelId);
-    const [serverAfkTimeout, setServerAfkTimeout] = useState(0 || currentServerData?.data?.dsData.afkTimeout);
-    const [serverVerificationLevel, setServerVerificationLevel] = useState(currentServerData?.data?.dsData.verificationLevel);
-    const [serverNsfwLevel, setServerNsfwLevel] = useState(currentServerData?.data?.dsData.nsfwLevel);
+    console.log(serverName, serverMsgNotificationSettings, serverAfkChannelId, serverAfkTimeout, serverVerificationLevel, serverNsfwLevel)
 
     const updateSettingsForGuild = async (setting: any, content: any) => {
         console.log(content);
@@ -47,7 +34,7 @@ export const DiscordSettingsCard = ({ serverId }: any) => {
         }
     }
 
-    if (currentServerData !== null) {
+    if (serverData !== null) {
         return (
             <Card className="w-full h-[100%] bg-black border-zinc-700 p-2">
                 <CardContent className="p-2 overflow-y-auto h-[100%]">
@@ -94,7 +81,7 @@ export const DiscordSettingsCard = ({ serverId }: any) => {
                                         <SelectContent side="bottom" className="dark">
                                             <SelectItem value="null">None</SelectItem>
                                             {
-                                                currentGuildChannels.data?.map((channel: any) => (
+                                                guildChannels.data?.map((channel: any) => (
                                                     <SelectItem key={channel.id} value={channel.id}><Volume2 /> {channel.name}</SelectItem>
                                                 ))
                                             }

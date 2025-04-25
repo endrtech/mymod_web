@@ -29,7 +29,7 @@ export default async function SettingsPage({
     params: Promise<{ serverId: string }>
 }>) {
     const currentServerData = await getCurrentGuild((await params).serverId);
-    const currentGuildChannels = await getGuildChannels((await params).serverId);
+    const currentGuildChannels = await getGuildChannels((await params).serverId, "voice");
 
     const bg = currentServerData?.data.mmData.module_config.appearance?.background;
     const isVideo = bg?.endsWith(".mp4");
@@ -208,7 +208,7 @@ export default async function SettingsPage({
                                     </Card>
                                 </TabsContent>
                                 <TabsContent value="general" className="h-[70vh]">
-                                    <DiscordSettingsCard serverId={currentServerData?.data.dsData.id} />
+                                    <DiscordSettingsCard serverData={currentServerData} guildChannels={currentGuildChannels} serverId={currentServerData?.data.dsData.id} />
                                 </TabsContent>
                                 <TabsContent value="appearance" className="h-[70vh]">
                                     <AppearanceSettingsCard currentServerData={currentServerData} />
