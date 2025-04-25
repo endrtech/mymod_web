@@ -33,7 +33,7 @@ export default function RootLayout({
         <body
           className={`${geistSans.className} antialiased w-full h-screen bg-black`}
         >
-          <NextTopLoader color="#29D" height={3} />
+          <NextTopLoader color="#29D" height={3} showSpinner={false} />
           <Suspense fallback={<LoadingOverlay />}>
             {children}
           </Suspense>
