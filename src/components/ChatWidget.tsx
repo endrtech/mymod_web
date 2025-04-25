@@ -11,9 +11,11 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarProvider,
 import { Button } from "./ui/button";
 import { getDiscordUser } from "@/app/actions/getDiscordUser";
 import { getGuildMember } from "@/app/actions/getGuildMember";
+import getCurrentGuild from "@/app/actions/getCurrentGuild";
 
 export default function ChatWidget({ serverId, userId }: { serverId: string, userId: string }) {
     const [discordData, setDiscordData] = useState<any>(null);
+    const [guildData, setGuildData] = useState<any>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
     const { toggleSidebar } = useSidebar();
@@ -28,7 +30,9 @@ export default function ChatWidget({ serverId, userId }: { serverId: string, use
     useEffect(() => {
         const getDiscordUserData = async () => {
             const discordData = await getGuildMember(serverId, userId);
+            const guildData = await getCurrentGuild(serverId);
             setDiscordData(discordData);
+            setGuildData(guildData);
         }
         getDiscordUserData();
         localStorage.setItem("chatMessages", JSON.stringify(messages));
@@ -82,7 +86,7 @@ export default function ChatWidget({ serverId, userId }: { serverId: string, use
         <>
             <Sidebar onLoad={() => sendInitialPrompt()} style={{
                 "--sidebar-width": "25%",
-            } as React.CSSProperties} side="right" variant="floating" collapsible="offcanvas" className="-p-2 h-auto z-[999] p-0 m-2 dark bg-black border-1 border-zinc-900 shadow-xl rounded-2xl">
+            } as React.CSSProperties} side="right" variant="floating" collapsible="offcanvas" className={`${guildData?.data.mmData.module_config.appearance?.font || "font-geist"} -p-2 h-auto z-[999] p-0 m-2 dark bg-black border-1 border-zinc-900 shadow-xl rounded-2xl`}>
                 <SidebarHeader className="p-0 bg-black rounded-t-xl border-none">
                     <div className="p-4 backdrop-blur-xl rounded-t-xl bg-gradient-to-b from-black/90 to-transparent text-white font-semibold mb-24">
                         <div className="absolute inset-0 chat-gradient-bg z-0" />

@@ -41,6 +41,8 @@ export default async function ServerMembers({
     const memberDataArray: Payment[] = [];
     const memberData = await getCurrentGuildMembers((await params).serverId);
     const currentServerData = await getCurrentGuild((await params).serverId);
+    const bg = currentServerData?.data.mmData.module_config.appearance?.background;
+    const isVideo = bg?.endsWith(".mp4");
 
     memberData?.forEach((member: any) => {
         memberDataArray.push({
@@ -55,29 +57,71 @@ export default async function ServerMembers({
     });
 
     return (
-        <main className="bg-black w-full h-screen" suppressHydrationWarning>
-            <div className="bkg-gradient w-full h-screen z-0"></div>
-            <div className="flex flex-col items-left mt-[15px] w-full p-6">
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href={`/:d:/app/server/${currentServerData?.data.dsData.id}`} className="hover:text-white">Overview</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator>
-                            <Slash />
-                        </BreadcrumbSeparator>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href={`/:d:/app/server/${currentServerData?.data.dsData.id}/members`} className="hover:text-white">Members</BreadcrumbLink>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
-                <div className="flex flex-row items-center gap-2 justify-between w-full">
-                    <div className={`font-semibold text-4xl text-zinc-300`}>Members</div>
+        <main className="w-full h-screen" suppressHydrationWarning>
+            {/* Video background if it's an mp4 */}
+            {isVideo && (
+                <>
+                    <video
+                        className="absolute inset-0 w-full h-full object-cover z-0"
+                        src={bg}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                    />
+                    <div className="absolute z-[1] left-0 w-[100vw] h-full" style={{
+                        backgroundImage: bg
+                            ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"})), url('${bg}')`
+                            : "none",
+                        backgroundColor: bg ? undefined : "black",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                    }}></div>
+                </>
+            )}
+
+            {/* Gradient/image background if not a video */}
+            {!isVideo && (
+                <div
+                    className="absolute inset-0 w-full h-full z-0"
+                    style={{
+                        backgroundImage: bg
+                            ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"})), url('${bg}')`
+                            : "none",
+                        backgroundColor: bg ? undefined : "black",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                    }}
+                />
+            )}
+            <div className="relative z-[10] w-full h-full">
+                <div className="w-full h-[50px] rounded-[20px] blur-[40px]" style={{
+                    background: `radial-gradient(circle at top center, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_1 : "#00BFFF"}99 10%, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_2 : "#8A2BE6"}66 40%, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_3 : "#FF0080"}4D 70%)`,
+                }}></div>
+                <div className="flex flex-col items-left mt-[15px] w-full p-6">
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink href={`/:d:/app/server/${currentServerData?.data.dsData.id}`} className="hover:text-white">Overview</BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator>
+                                <Slash />
+                            </BreadcrumbSeparator>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink href={`/:d:/app/server/${currentServerData?.data.dsData.id}/members`} className="hover:text-white">Members</BreadcrumbLink>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                    <div className="flex flex-row items-center gap-2 justify-between w-full">
+                        <div className={`font-semibold text-4xl text-zinc-300`}>Members</div>
+                    </div>
+                    <p className={`font-medium text-lg text-zinc-500`}>This is where your server members live. View, or quickly create a case from this screen.</p>
                 </div>
-                <p className={`font-medium text-lg text-zinc-500`}>This is where your server members live. View, or quickly create a case from this screen.</p>
-            </div>
-            <div className="p-6 -mt-12 h-[80vh] overflow-y-auto">
-                <DataTable columns={columns} data={memberDataArray} />
+                <div className="p-6 -mt-12 h-[80vh] overflow-y-auto">
+                    <DataTable columns={columns} data={memberDataArray} />
+                </div>
             </div>
         </main>
     )

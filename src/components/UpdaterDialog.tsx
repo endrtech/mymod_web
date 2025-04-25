@@ -50,9 +50,9 @@ export const UpdaterDialog = () => {
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <DialogTrigger asChild>
-                                <Button variant="outline" size="icon" className={`dark ${appBuild.currentBuild > appBuild.previousBuild && appBuild.version !== appVersion ? "text-orange-500 hover:text-orange-500" : "text-green-500 hover:text-green-500"}`}>
+                                <Button variant="outline" size="icon" className={`dark ${appBuild.currentBuild > appBuild.previousBuild && appVersion !== appBuild.version ? "text-orange-500 hover:text-orange-500" : "text-green-500 hover:text-green-500"}`}>
                                     {
-                                        appBuild.currentBuild > appBuild.previousBuild && appBuild.version !== appVersion ? (
+                                        appBuild.currentBuild > appBuild.previousBuild && appVersion !== appBuild.version ? (
                                             <CloudUpload />
                                         ) : (
                                             <Check />

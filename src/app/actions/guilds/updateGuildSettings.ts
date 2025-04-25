@@ -1,9 +1,7 @@
 import axios from "axios";
 
 export const updateGuildSettings = async (serverId: any, setting: any, content: any) => {
-    console.log(setting);
-    console.log(content);
-    const resp = await axios.post(`https://api.mymod.endr.tech/api/guilds/${serverId}`, {
+    const resp = await axios.post(`http://localhost:3030/api/guilds/${serverId}`, {
         setting,
         content,
     });

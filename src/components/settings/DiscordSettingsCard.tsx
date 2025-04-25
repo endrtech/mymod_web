@@ -49,8 +49,8 @@ export const DiscordSettingsCard = ({ serverId }: any) => {
 
     if (currentServerData !== null) {
         return (
-            <Card className="w-full bg-black border-zinc-700">
-                <CardContent>
+            <Card className="w-full h-[100%] bg-black border-zinc-700 p-2">
+                <CardContent className="p-2 overflow-y-auto h-[100%]">
                     <div className="flex flex-col gap-2 items-start w-full">
                         <h4 className="text-xl text-left w-full font-bold text-zinc-300">General Settings</h4>
                         <Label htmlFor="mymodLogChannel" className="text-zinc-500 text-sm w-full">Due to Discord API limitations, some settings may not be displayed here, such as Community settings. Continue to use the Discord client to modify these settings.</Label>

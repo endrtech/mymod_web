@@ -22,7 +22,7 @@ export const AISettingsCard = ({ currentServerData }: any) => {
     }
 
     return (
-        <Card className="w-full bg-black border-zinc-700 p-4">
+        <Card className="w-full h-[100%] overflow-y-auto bg-black border-zinc-700 p-4">
             <div className="flex flex-col h-full w-full items-center justify-center">
                 <div className="relative w-12 h-12 m-8">
                     {/* Glow behind icon */}
