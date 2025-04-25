@@ -6,6 +6,8 @@ import NextNProgress from 'nextjs-progressbar';
 import { Suspense } from "react";
 import LoadingOverlay from "./loading";
 import NextTopLoader from 'nextjs-toploader';
+import { auth } from "@clerk/nextjs/server";
+import { permanentRedirect, redirect, RedirectType } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,11 +24,17 @@ export const metadata: Metadata = {
   description: "Welcome to the future of moderation.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await auth();
+
+  if(!user.userId) {
+    return redirect(`http://${process.env.NEXT_PUBLIC_ENDR_ID_AUTH_URL}/oauth/authorize?clientId=${process.env.NEXT_PUBLIC_ENDR_ID_APP_ID}`);
+  }
+
   return (
     <ClerkProvider>
       <html lang="en">
