@@ -26,7 +26,7 @@ export const AISettingsCard = ({ currentServerData }: any) => {
             <div className="flex flex-col h-full w-full items-center justify-center">
                 <div className="relative w-12 h-12 m-8">
                     {/* Glow behind icon */}
-                    <div className="absolute inset-0 rounded-full blur-lg opacity-90 animate-spin"
+                    <div className="absolute inset-0 rounded-full blur-lg opacity-90 animate-pulse"
                         style={{
                             background: "linear-gradient(135deg, #0090F7, #BA62FC, #F2416B, #F55600)"
                         }} />
