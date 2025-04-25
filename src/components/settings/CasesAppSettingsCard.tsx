@@ -55,7 +55,7 @@ export const CasesAppSettingsCard = ({ currentServerData }: any) => {
     }
 
     return (
-        <Card className="w-full bg-black border-zinc-700 p-4">
+        <Card className="w-full h-[100%] overflow-y-auto bg-black border-zinc-700 p-4">
             <div className="flex flex-col gap-2 items-start w-full text-white">
                 <h4 className="text-sm uppercase text-left w-full font-bold text-zinc-500 py-2">Configure Case logging</h4>
                 <div className="flex flex-row gap-1 items-center justify-start w-full">
@@ -152,7 +152,7 @@ export const CasesAppSettingsCard = ({ currentServerData }: any) => {
                 <div className="flex flex-row gap-1 items-start justify-start w-full">
                     <div className="flex flex-col gap-1 items-start">
                         <Label htmlFor="mymodLogChannel" className="text-white w-[50%]">User DM embed description</Label>
-                        <Label htmlFor="mymodLogChannel" className="text-zinc-500 text-sm">MYMOD Beta does not support custom parameters yet. Use this option to display contact details, or where the message came from. Markdown is supported, but is not rendered here.</Label>
+                        <Label htmlFor="mymodLogChannel" className="text-zinc-500 text-sm w-[80%]">MYMOD Beta does not support custom parameters yet. Use this option to display contact details, or where the message came from. Markdown is supported, but is not rendered here.</Label>
                     </div>
                     <Textarea rows={3} name="mymodLogChannel" value={caseUsrDmEmbedDescription} onChange={(e) => setCaseUsrDmEmbedDescription(e.target.value)} placeholder="e.g: This is a message from..." className="bg-zinc-900 border-zinc-800 w-[100%]" />
                     <Button variant="outline" size="icon" className="dark text-white" onClick={() => updateSetting("case_usr_dm_embed_desc", caseUsrDmEmbedDescription)}>

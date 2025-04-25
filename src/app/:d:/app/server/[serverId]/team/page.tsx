@@ -22,6 +22,8 @@ export default async function ServerPage({
 }>) {
     const currentServerData = await getCurrentGuild((await params).serverId);
     const guildRelationshipData = await getCurrentGuildRelationships((await params).serverId);
+    const bg = currentServerData?.data.mmData.module_config.appearance?.background;
+    const isVideo = bg?.endsWith(".mp4");
     const guildRelationshipDataArray: Team[] = [];
 
     guildRelationshipData?.relData.forEach((team: any) => {
@@ -34,9 +36,50 @@ export default async function ServerPage({
         });
     });
 
-        return (
-            <main className="bg-black w-full h-screen" suppressHydrationWarning>
-                <div className="bkg-gradient w-full h-screen z-0"></div>
+    return (
+        <main className="w-full h-screen" suppressHydrationWarning>
+            {/* Video background if it's an mp4 */}
+            {isVideo && (
+                <>
+                    <video
+                        className="absolute inset-0 w-full h-full object-cover z-0"
+                        src={bg}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                    />
+                    <div className="absolute z-[1] left-0 w-[100vw] h-full" style={{
+                        backgroundImage: bg
+                            ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"})), url('${bg}')`
+                            : "none",
+                        backgroundColor: bg ? undefined : "black",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                    }}></div>
+                </>
+            )}
+
+            {/* Gradient/image background if not a video */}
+            {!isVideo && (
+                <div
+                    className="absolute inset-0 w-full h-full z-0"
+                    style={{
+                        backgroundImage: bg
+                            ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"})), url('${bg}')`
+                            : "none",
+                        backgroundColor: bg ? undefined : "black",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                    }}
+                />
+            )}
+            <div className="relative z-[30] w-full h-full">
+                <div className="w-full h-[50px] rounded-[20px] blur-[40px]" style={{
+                    background: `radial-gradient(circle at top center, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_1 : "#00BFFF"}99 10%, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_2 : "#8A2BE6"}66 40%, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_3 : "#FF0080"}4D 70%)`,
+                }}></div>
                 <div className="flex flex-col items-left mt-[15px] w-full p-6">
                     <Breadcrumb>
                         <BreadcrumbList>
@@ -51,7 +94,7 @@ export default async function ServerPage({
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
-                    <div className="flex flex-row items-center justify-between w-full z-[99]">
+                    <div className="flex flex-row items-center justify-between w-full">
                         <h1 className="text-4xl font-bold text-zinc-300">Your Team</h1>
                         <Dialog>
                             <DialogTrigger asChild>
@@ -81,6 +124,8 @@ export default async function ServerPage({
                                     The <b>Helper</b> role acts similarly to a Trial role. This
                                     role allows a MYMOD user to <b>ONLY</b> access Tickets, and
                                     Cases. That&apos;s it.
+                                    <br /><br />
+                                    Access to applications in MYMOD for each role can be customised in Settings.
                                 </p>
                             </DialogContent>
                         </Dialog>
@@ -89,6 +134,7 @@ export default async function ServerPage({
                         <DataTable columns={columns} data={guildRelationshipDataArray} />
                     </div>
                 </div>
-            </main>
-        )
-    }
+            </div>
+        </main>
+    )
+}

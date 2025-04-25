@@ -55,7 +55,7 @@ export default async function RootLayout({
         className={`${montserrat.className} antialiased w-full h-screen`}
       >
         <div className="flex flex-row items-left justify-left w-full h-screen">
-          <div className="h-screen w-[4%] border-r-1 border-zinc-800 bg-black flex flex-col items-center py-4 gap-6">
+          <div className="h-screen z-[30] w-[4%] border-r-1 border-zinc-800 bg-black flex flex-col items-center py-4 gap-6">
             {/* Application Navigation Items */}
             <Link href={"/:d:/app"} className="flex flex-row justify-center">
               <img src="/mymod_emblem.svg" width="50%" alt="MYMOD" />
@@ -89,7 +89,7 @@ export default async function RootLayout({
                         </TooltipTrigger>
                         <TooltipContent side="right" className="z-[99] border-1 border-black shadow-xl">
                           <div className="flex flex-col text-left justify-center">
-                            <h3 className="font-bold text-ellipsis max-w-lg">{guild.name}</h3>
+                            <h3 className="font-bold text-ellipsis max-w-lg overflow-hidden">{guild.name}</h3>
                             <p className="text-sm">Guild ID: {guild.id}</p>
                           </div>
                         </TooltipContent>
