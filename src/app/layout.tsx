@@ -3,10 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import NextNProgress from 'nextjs-progressbar';
-import LoadingBar from "@/components/LoadingBar";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { Suspense } from "react";
 import LoadingOverlay from "./loading";
+import NextTopLoader from 'nextjs-toploader';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,8 +33,9 @@ export default function RootLayout({
         <body
           className={`${geistSans.className} antialiased w-full h-screen bg-black`}
         >
+          <NextTopLoader color="#29D" height={3} showSpinner={false} />
           <Suspense fallback={<LoadingOverlay />}>
-          {children}
+            {children}
           </Suspense>
         </body>
       </html>
