@@ -40,7 +40,7 @@ export const UpdaterDialog = () => {
 
     const updateApp = () => {
         window.localStorage.setItem("app-version", appBuild.version);
-        router.refresh();
+        window.location.reload();
     }
 
     if (appBuild !== 400) {
