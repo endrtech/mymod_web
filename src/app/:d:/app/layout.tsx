@@ -25,6 +25,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { NotificationDialog } from "@/components/dialog/NotificationDialog";
 import { getAppInfo } from "@/app/actions/getAppInfo";
 import { UpdaterDialog } from "@/components/UpdaterDialog";
+import { auth } from "@clerk/nextjs/server";
+import { dark } from "@clerk/themes";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -40,9 +42,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await auth();
   const discordData = await getDiscordUser();
   const userData = await getUser(discordData?.id);
-
+  
   if (userData === 404) {
     return redirect("/connect-discord");
   }
@@ -112,7 +115,7 @@ export default async function RootLayout({
               </Tooltip>
             </TooltipProvider>
             <NotificationDialog notificationsData={notificationsData} />
-            <UserButton />
+            <UserButton appearance={{ baseTheme: dark }} />
           </div>
           {children}
         </div>
