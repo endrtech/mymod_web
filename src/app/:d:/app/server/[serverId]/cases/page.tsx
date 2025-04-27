@@ -6,22 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Geist } from "next/font/google";
 import getCurrentGuild from "@/app/actions/getCurrentGuild";
 import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Briefcase, LayoutDashboard, Slash } from "lucide-react";
 import { getActiveCases } from "@/app/actions/cases/getActiveCases";
 import { DataTable } from "./data-table";
@@ -31,89 +31,129 @@ import { CreateCaseDialog } from "@/components/dialog/CreateCaseDialog";
 import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
 export default async function ServerMembers({
-    params,
+  params,
 }: Readonly<{
-    params: Promise<{ serverId: string }>
+  params: Promise<{ serverId: string }>;
 }>) {
-    const memberDataArray: Case[] = [];
-    const currentServerData = await getCurrentGuild((await params).serverId);
-    const activeCasesData = await getActiveCases((await params).serverId);
+  const memberDataArray: Case[] = [];
+  const currentServerData = await getCurrentGuild((await params).serverId);
+  const activeCasesData = await getActiveCases((await params).serverId);
+  const bg =
+    currentServerData?.data.mmData.module_config.appearance?.background;
+  const isVideo = bg?.endsWith(".mp4");
 
-    activeCasesData?.forEach((caseItem: any) => {
-        memberDataArray.push({
-            serverId: currentServerData?.data.dsData.id,
-            userId: caseItem.userID,
-            avatar: caseItem.user_info.avatar,
-            username: caseItem.user_info.username,
-            globalName: caseItem.user_info.globalName,
-            caseType: caseItem.case_info.case_type,
-            caseId: caseItem.caseID,
-            caseStatus: caseItem.case_info.case_status,
-            caseDuration: caseItem.case_info.case_duration,
-            caseReason: caseItem.case_info.case_reason,
-        });
+  activeCasesData?.forEach((caseItem: any) => {
+    memberDataArray.push({
+      serverId: currentServerData?.data.dsData.id,
+      userId: caseItem.userID,
+      avatar: caseItem.user_info.avatar,
+      username: caseItem.user_info.username,
+      globalName: caseItem.user_info.globalName,
+      caseType: caseItem.case_info.case_type,
+      caseId: caseItem.caseID,
+      caseStatus: caseItem.case_info.case_status,
+      caseDuration: caseItem.case_info.case_duration,
+      caseReason: caseItem.case_info.case_reason,
     });
+  });
 
-    return (
-        <div className="bg-black w-full h-full" suppressHydrationWarning>
-            <div className="bkg-gradient w-full h-screen z-0"></div>
-            <div className="flex flex-col items-left mt-[15px] w-full p-6">
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href={`/:d:/app/server/${currentServerData?.data.dsData.id}`} className="hover:text-white">Overview</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator>
-                            <Slash />
-                        </BreadcrumbSeparator>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href={`/:d:/app/server/${currentServerData?.data.dsData.id}/members`} className="hover:text-white">Cases</BreadcrumbLink>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
-                <div className="flex flex-row w-full justify-between gap-2">
-                    <div className="flex flex-col items-start p-1">
-                        <div className={`font-semibold text-4xl text-zinc-300`}>Cases</div>
-                        <p className={`font-medium text-lg text-zinc-500`}>Open and action cases against a user for anything, such as banning, or warning a user.</p>
-                    </div>
-                    <CreateCaseDialog currentServerData={currentServerData} />
-                </div>
+  return (
+    <div className="w-full h-screen" suppressHydrationWarning>
+      {/* Video background if it's an mp4 */}
+      {isVideo && (
+        <>
+          <video
+            className="absolute inset-0 w-full h-full object-cover z-0"
+            src={bg}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+          <div
+            className="absolute z-[1] left-0 w-[100vw] h-full"
+            style={{
+              backgroundImage: bg
+                ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"})), url('${bg}')`
+                : "none",
+              backgroundColor: bg ? undefined : "black",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+            }}
+          ></div>
+        </>
+      )}
+
+      {/* Gradient/image background if not a video */}
+      {!isVideo && (
+        <div
+          className="absolute inset-0 w-full h-full z-0"
+          style={{
+            backgroundImage: bg
+              ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"})), url('${bg}')`
+              : "none",
+            backgroundColor: bg ? undefined : "black",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }}
+        />
+      )}
+      <div className="relative z-[10] w-full h-full">
+        <div
+          className="w-full h-[50px] rounded-[20px] blur-[40px]"
+          style={{
+            background: `radial-gradient(circle at top center, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_1 : "#00BFFF"}99 10%, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_2 : "#8A2BE6"}66 40%, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_3 : "#FF0080"}4D 70%)`,
+          }}
+        ></div>
+        <div className="flex flex-col items-left mt-[15px] w-full p-6">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink
+                  href={`/:d:/app/server/${currentServerData?.data.dsData.id}`}
+                  className="hover:text-white"
+                >
+                  Overview
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator>
+                <Slash />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbLink
+                  href={`/:d:/app/server/${currentServerData?.data.dsData.id}/members`}
+                  className="hover:text-white"
+                >
+                  Cases
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <div className="flex flex-row w-full justify-between gap-2">
+            <div className="flex flex-col items-start p-1">
+              <div className={`font-semibold text-4xl text-zinc-300`}>
+                Cases
+              </div>
+              <p className={`font-medium text-lg text-zinc-500`}>
+                Open and action cases against a user for anything, such as
+                banning, or warning a user.
+              </p>
             </div>
-            <div className="p-6 -mt-12 h-[80vh] overflow-y-auto">
-                <DataTable columns={columns} data={memberDataArray} />
-            </div>
-            <Toaster className="dark" />
+            <CreateCaseDialog currentServerData={currentServerData} />
+          </div>
         </div>
-    )
+        <div className="p-6 -mt-12 h-[80vh] overflow-y-auto">
+          <DataTable columns={columns} data={memberDataArray} />
+        </div>
+        <Toaster className="dark" />
+      </div>
+    </div>
+  );
 }
-
-/*
-<main className="bg-black w-full h-screen" suppressHydrationWarning>
-            <div className="bkg-gradient w-full h-screen z-0"></div>
-            <div className="flex flex-col items-left mt-[15px] w-full p-6">
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href={`/:d:/app/server/${currentServerData?.data.dsData.id}`} className="hover:text-white">Overview</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator>
-                            <Slash />
-                        </BreadcrumbSeparator>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href={`/:d:/app/server/${currentServerData?.data.dsData.id}/members`} className="hover:text-white">Cases</BreadcrumbLink>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
-                <div className={`font-semibold text-4xl ${geistSans.className} text-zinc-300`}>Cases</div>
-                <p className={`font-medium text-lg ${geistSans.className} text-zinc-500`}>Open and action cases against a user for anything, such as banning, or warning a user.</p>
-            </div>
-            <div className="p-6 -mt-12 h-[70vh] overflow-y-auto">
-                <DataTable columns={columns} data={memberDataArray} />
-            </div>
-        </main>
-        */

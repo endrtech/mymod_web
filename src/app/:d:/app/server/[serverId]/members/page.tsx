@@ -6,22 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Geist } from "next/font/google";
 import getCurrentGuild from "@/app/actions/getCurrentGuild";
 import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Slash } from "lucide-react";
 import { DataTable } from "./data-table";
 import { columns, Payment } from "./columns";
@@ -29,115 +29,122 @@ import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { AISidebarTrigger } from "@/components/AISidebarTrigger";
 
 const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
 export default async function ServerMembers({
-    params,
+  params,
 }: Readonly<{
-    params: Promise<{ serverId: string }>
+  params: Promise<{ serverId: string }>;
 }>) {
-    const memberDataArray: Payment[] = [];
-    const memberData = await getCurrentGuildMembers((await params).serverId);
-    const currentServerData = await getCurrentGuild((await params).serverId);
+  const memberDataArray: Payment[] = [];
+  const memberData = await getCurrentGuildMembers((await params).serverId);
+  const currentServerData = await getCurrentGuild((await params).serverId);
+  const bg =
+    currentServerData?.data.mmData.module_config.appearance?.background;
+  const isVideo = bg?.endsWith(".mp4");
 
-    memberData?.forEach((member: any) => {
-        memberDataArray.push({
-            serverId: currentServerData?.data.dsData.id,
-            userId: member?.id,
-            image: member?.avatar,
-            username: member?.globalName || member?.username,
-            permissions: member?.permissions,
-            roles: member?.roles,
-            type: member?.type,
-        });
+  memberData?.forEach((member: any) => {
+    memberDataArray.push({
+      serverId: currentServerData?.data.dsData.id,
+      userId: member?.id,
+      image: member?.avatar,
+      username: member?.globalName || member?.username,
+      permissions: member?.permissions,
+      roles: member?.roles,
+      type: member?.type,
     });
+  });
 
-    return (
-        <main className="bg-black w-full h-screen" suppressHydrationWarning>
-            <div className="bkg-gradient w-full h-screen z-0"></div>
-            <div className="flex flex-col items-left mt-[15px] w-full p-6">
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href={`/:d:/app/server/${currentServerData?.data.dsData.id}`} className="hover:text-white">Overview</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator>
-                            <Slash />
-                        </BreadcrumbSeparator>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href={`/:d:/app/server/${currentServerData?.data.dsData.id}/members`} className="hover:text-white">Members</BreadcrumbLink>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
-                <div className="flex flex-row items-center gap-2 justify-between w-full">
-                    <div className={`font-semibold text-4xl text-zinc-300`}>Members</div>
-                </div>
-                <p className={`font-medium text-lg text-zinc-500`}>This is where your server members live. View, or quickly create a case from this screen.</p>
+  return (
+    <main className="w-full h-screen" suppressHydrationWarning>
+      {/* Video background if it's an mp4 */}
+      {isVideo && (
+        <>
+          <video
+            className="absolute inset-0 w-full h-full object-cover z-0"
+            src={bg}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+          <div
+            className="absolute z-[1] left-0 w-[100vw] h-full"
+            style={{
+              backgroundImage: bg
+                ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"})), url('${bg}')`
+                : "none",
+              backgroundColor: bg ? undefined : "black",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+            }}
+          ></div>
+        </>
+      )}
+
+      {/* Gradient/image background if not a video */}
+      {!isVideo && (
+        <div
+          className="absolute inset-0 w-full h-full z-0"
+          style={{
+            backgroundImage: bg
+              ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"})), url('${bg}')`
+              : "none",
+            backgroundColor: bg ? undefined : "black",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }}
+        />
+      )}
+      <div className="relative z-[10] w-full h-full">
+        <div
+          className="w-full h-[50px] rounded-[20px] blur-[40px]"
+          style={{
+            background: `radial-gradient(circle at top center, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_1 : "#00BFFF"}99 10%, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_2 : "#8A2BE6"}66 40%, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_3 : "#FF0080"}4D 70%)`,
+          }}
+        ></div>
+        <div className="flex flex-col items-left mt-[15px] w-full p-6">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink
+                  href={`/:d:/app/server/${currentServerData?.data.dsData.id}`}
+                  className="hover:text-white"
+                >
+                  Overview
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator>
+                <Slash />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbLink
+                  href={`/:d:/app/server/${currentServerData?.data.dsData.id}/members`}
+                  className="hover:text-white"
+                >
+                  Members
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <div className="flex flex-row items-center gap-2 justify-between w-full">
+            <div className={`font-semibold text-4xl text-zinc-300`}>
+              Members
             </div>
-            <div className="p-6 -mt-12 h-[80vh] overflow-y-auto">
-                <DataTable columns={columns} data={memberDataArray} />
-            </div>
-        </main>
-    )
+          </div>
+          <p className={`font-medium text-lg text-zinc-500`}>
+            This is where your server members live. View, or quickly create a
+            case from this screen.
+          </p>
+        </div>
+        <div className="p-6 -mt-12">
+          <DataTable columns={columns} data={memberDataArray} />
+        </div>
+      </div>
+    </main>
+  );
 }
-
-/*
-<table className="h-full w-full text-left text-sm text-white rtl:text-right">
-                    <tbody>
-                        {memberData &&
-                            memberData.map((member: any) => (
-                                <div
-                                    className="flex flex-row items-center gap-2 px-6 py-4"
-                                    key={member.id}
-                                >
-                                    <div className="grow">
-                                        <div className="flex flex-col items-left gap-1">
-                                            <div className="flex flex-row items-center gap-2 p-2">
-                                                <Image
-                                                    src={member.avatar}
-                                                    alt={member.username}
-                                                    width={30}
-                                                    height={30}
-                                                    className="rounded-full"
-                                                />
-                                                <span>
-                                                    <b>{member.globalName || member.username}</b>
-                                                </span>
-                                            </div>
-                                            <div className="flex flex-row items-center gap-1 px-4">
-                                                <span className="me-2 rounded-full text-sm font-medium text-indigo-400">
-                                                    {member.permissions} permissions
-                                                </span>
-                                                <span className="me-2 rounded-full text-sm font-medium text-yellow-400">
-                                                    {member.roles} roles
-                                                </span>
-                                                <span className="me-2 rounded-full text-sm font-medium capitalize text-gray-400">
-                                                    {member.type}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        className="flex flex-row items-end h-full gap-2 pr-2"
-                                    >
-                                        <Button size="icon" variant="ghost">
-                                            <i className="bx bx-xs bx-trash"></i>
-                                        </Button>
-                                        <Button size="icon" variant="ghost">
-                                            <i className="bx bx-xs bx-plus"></i>
-                                        </Button>
-                                        <Link
-                                            href={"#"}
-                                        >
-                                            <Button size="icon" variant="ghost">
-                                                <i className="bx bx-xs bx-show-alt"></i>
-                                            </Button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            ))}
-                    </tbody>
-                </table>
-                */

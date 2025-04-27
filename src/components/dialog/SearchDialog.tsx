@@ -1,5 +1,5 @@
 "use client"
-import { ChevronRight, Search, Users, X } from "lucide-react"
+import { ChevronLeft, ChevronRight, Search, Users, X } from "lucide-react"
 import { Button } from "../ui/button"
 import { Dialog, DialogClose, DialogContent, DialogOverlay, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Input } from "../ui/input"
@@ -14,11 +14,12 @@ import { ViewMemberDialog } from "./ViewMemberDialog"
 import { ViewMemberSearchDialog } from "./ViewMemberSearchDialog"
 import { searchCases } from "@/app/actions/cases/searchCases"
 import { searchAuditLogs } from "@/app/actions/guilds/searchAuditLogs"
+import moment from "moment"
 
 export const SearchDialog = ({ serverId }: any) => {
     const [searchedCases, setSearchedCases] = useState<any>({});
     const [searchedMembers, setSearchedMembers] = useState<any>({});
-    const [searchedLogs, setSearchedLogs] = useState<any>({});
+    const [searchedLogs, setSearchedLogs] = useState<Array<any>>();
     const [searchResults_members, setSearchResults_members] = useState(0);
     const [searchResults_cases, setSearchResults_cases] = useState(0);
     const [searchResults_logs, setSearchResults_logs] = useState(0);
@@ -26,6 +27,8 @@ export const SearchDialog = ({ serverId }: any) => {
     const [memebrId, setMemberId] = useState(null);
     const [query, setQuery] = useState("");
     const [open, setOpen] = useState(false);
+
+    let searchDataTimeout: any = undefined;
 
     const searchData = async (value: any) => {
         setQuery(value);
@@ -48,18 +51,18 @@ export const SearchDialog = ({ serverId }: any) => {
             setSearchedLogs(response3);
             setSearchResults_logs(response3.length);
         } else {
-            setSearchedLogs({});
+            setSearchedLogs([]);
         }
     }
 
     const closeSearch = () => {
-        setSearchResults_members(0); 
+        setSearchResults_members(0);
         setSearchResults_cases(0);
         setSearchResults_logs(0);
-        setSearchedCases({}); 
-        setSearchedLogs({}); 
-        setSearchedMembers({}); 
-        setQuery(""); 
+        setSearchedCases({});
+        setSearchedLogs([]);
+        setSearchedMembers({});
+        setQuery("");
         setOpen(false);
     }
 
@@ -88,9 +91,18 @@ export const SearchDialog = ({ serverId }: any) => {
                                 <Input
                                     type="text"
                                     onChange={(e) => {
-                                        const value = e.target.value;
+                                        const { value } = e.target;
+
                                         if (value.length > 0) {
-                                            searchData(value); // Only call if there's at least 1 character
+                                            if (searchDataTimeout != undefined) {
+                                                clearTimeout(searchDataTimeout);
+                                            }
+
+                                            // Only call if there's at least 1 character
+                                            searchDataTimeout = setTimeout(() => {
+                                                searchData(value);
+                                                searchDataTimeout = undefined;
+                                            }, 1000);
                                         } else {
                                             setQuery("");
                                         }
@@ -103,23 +115,29 @@ export const SearchDialog = ({ serverId }: any) => {
                                 query && (
                                     <Card className="p-0 w-full border-none shadow-lg shadow-black/60 z-[99]">
                                         <CardContent className="bg-black text-white rounded-lg border-none p-6 w-full flex flex-col gap-4">
-                                            <CardTitle>Found {searchResults_members + searchResults_cases + searchResults_logs} result{(searchResults_members + searchResults_cases + searchResults_logs) > 1 || (searchResults_members + searchResults_cases + searchResults_logs) === 0 ? "s" : ""} for "{query}"</CardTitle>
+                                            {
+                                                tabVal !== "member-information" ? <CardTitle>Found {searchResults_members + searchResults_cases + searchResults_logs} result{(searchResults_members + searchResults_cases + searchResults_logs) > 1 || (searchResults_members + searchResults_cases + searchResults_logs) === 0 ? "s" : ""} for "{query}"</CardTitle> : ""
+                                            }
                                             <Tabs value={tabVal}>
-                                                <TabsList className="dark text-white flex flex-row gap-2 w-full">
-                                                    <TabsTrigger value="searched-cases" onClick={() => setTabVal("searched-cases")} className="flex flex-row items-center gap-1">
-                                                        <span>Cases</span>
-                                                        <Badge variant="outline" className="dark text-white">{searchResults_cases || 0}</Badge>
-                                                    </TabsTrigger>
-                                                    <TabsTrigger value="searched-members" onClick={() => setTabVal("searched-members")} className="flex flex-row items-center gap-1">
-                                                        <span>Members</span>
-                                                        <Badge variant="outline" className="dark text-white">{searchedMembers?.data?.length || 0}</Badge>
-                                                    </TabsTrigger>
-                                                    <TabsTrigger value="searched-logs" onClick={() => setTabVal("searched-logs")} className="flex flex-row items-center gap-1">
-                                                        <span>Logs</span>
-                                                        <Badge variant="outline" className="dark text-white">{searchedLogs.length || 0}</Badge>
-                                                    </TabsTrigger>
-                                                </TabsList>
-                                                <TabsContent value="searched-members" className="py-3">
+                                                {
+                                                    tabVal !== "member-information" ? (
+                                                        <TabsList className="dark text-white flex flex-row gap-2 w-full">
+                                                            <TabsTrigger value="searched-cases" onClick={() => setTabVal("searched-cases")} className="flex flex-row items-center gap-1">
+                                                                <span>Cases</span>
+                                                                <Badge variant="outline" className="dark text-white">{searchResults_cases || 0}</Badge>
+                                                            </TabsTrigger>
+                                                            <TabsTrigger value="searched-members" onClick={() => setTabVal("searched-members")} className="flex flex-row items-center gap-1">
+                                                                <span>Members</span>
+                                                                <Badge variant="outline" className="dark text-white">{searchedMembers?.data?.length || 0}</Badge>
+                                                            </TabsTrigger>
+                                                            <TabsTrigger value="searched-logs" onClick={() => setTabVal("searched-logs")} className="flex flex-row items-center gap-1">
+                                                                <span>Logs</span>
+                                                                <Badge variant="outline" className="dark text-white">{searchedLogs?.length || 0}</Badge>
+                                                            </TabsTrigger>
+                                                        </TabsList>
+                                                    ) : ""
+                                                }
+                                                <TabsContent value="searched-members" className="py-3 max-h-[60vh] overflow-y-auto">
                                                     {
                                                         searchedMembers.data?.map((member: any) => (
                                                             <Button onClick={() => { setTabVal("member-information"); setMemberId(member.userId) }} key={member.userId} className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
@@ -138,7 +156,23 @@ export const SearchDialog = ({ serverId }: any) => {
                                                         ))
                                                     }
                                                 </TabsContent>
-                                                <TabsContent value="searched-cases" className="py-3">
+                                                <TabsContent value="searched-logs" className="py-3 max-h-[60vh] overflow-y-auto">
+                                                    {
+                                                        searchedLogs?.map((logItem: any) => (
+                                                            <Button key={logItem.logID} className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
+                                                                <div className="flex flex-row items-center justify-between w-full">
+                                                                    <div className="flex flex-col gap-1 items-start justify-start">
+                                                                        <span className="text-wrap text-left">{logItem.actions_taken}</span>
+                                                                        <span>Executor ID: {logItem.executorID || "Unknown"}</span>
+                                                                        <span>Log ID: {logItem.logID}</span>
+                                                                        <span>Executed on: {moment(logItem.timestamp).format("DD MMM YYYY, hh:mm a")}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </Button>
+                                                        ))
+                                                    }
+                                                </TabsContent>
+                                                <TabsContent value="searched-cases" className="py-3 max-h-[60vh] overflow-y-auto">
                                                     {
                                                         searchedCases.length > 0 && searchedCases?.map((caseItem: any) => (
                                                             <Link href={`/:d:/app/server/${serverId}/cases/${caseItem.caseID}`} key={caseItem.caseID} className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
@@ -154,6 +188,10 @@ export const SearchDialog = ({ serverId }: any) => {
                                                     }
                                                 </TabsContent>
                                                 <TabsContent value="member-information" className="rounded-lg">
+                                                    <Button onClick={() => setTabVal("searched-members")} variant="ghost" className="dark text-white">
+                                                        <ChevronLeft /> Back
+                                                    </Button>
+                                                    <br /><br />
                                                     {
                                                         memebrId !== null && (
                                                             <div className="dark text-white rounded-lg">

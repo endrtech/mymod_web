@@ -40,7 +40,7 @@ export const UpdaterDialog = () => {
 
     const updateApp = () => {
         window.localStorage.setItem("app-version", appBuild.version);
-        router.refresh();
+        window.location.reload();
     }
 
     if (appBuild !== 400) {
@@ -50,9 +50,9 @@ export const UpdaterDialog = () => {
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <DialogTrigger asChild>
-                                <Button variant="outline" size="icon" className={`dark ${appBuild.currentBuild > appBuild.previousBuild ? "text-orange-500 hover:text-orange-500" : "text-green-500 hover:text-green-500"}`}>
+                                <Button variant="outline" size="icon" className={`dark ${appBuild.currentBuild > appBuild.previousBuild && appVersion !== appBuild.version ? "text-orange-500 hover:text-orange-500" : "text-green-500 hover:text-green-500"}`}>
                                     {
-                                        appBuild.currentBuild > appBuild.previousBuild ? (
+                                        appBuild.currentBuild > appBuild.previousBuild && appVersion !== appBuild.version ? (
                                             <CloudUpload />
                                         ) : (
                                             <Check />

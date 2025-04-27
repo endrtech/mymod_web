@@ -3,10 +3,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import NextNProgress from 'nextjs-progressbar';
-import LoadingBar from "@/components/LoadingBar";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { Suspense } from "react";
 import LoadingOverlay from "./loading";
+import NextTopLoader from 'nextjs-toploader';
+import { auth } from "@clerk/nextjs/server";
+import { permanentRedirect, redirect, RedirectType } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,19 +24,26 @@ export const metadata: Metadata = {
   description: "Welcome to the future of moderation.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await auth();
+
+  if(!user.userId) {
+    return redirect(`http://${process.env.NEXT_PUBLIC_ENDR_ID_AUTH_URL}/oauth/authorize?clientId=${process.env.NEXT_PUBLIC_ENDR_ID_APP_ID}`);
+  }
+
   return (
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${geistSans.className} antialiased w-full h-screen`}
+          className={`${geistSans.className} antialiased w-full h-screen bg-black`}
         >
+          <NextTopLoader color="#29D" height={3} showSpinner={false} />
           <Suspense fallback={<LoadingOverlay />}>
-          {children}
+            {children}
           </Suspense>
         </body>
       </html>
