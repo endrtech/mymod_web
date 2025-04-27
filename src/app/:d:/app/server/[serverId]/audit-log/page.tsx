@@ -162,4 +162,3 @@ export default async function ServerMembers({
     </div>
   );
 }
-}
