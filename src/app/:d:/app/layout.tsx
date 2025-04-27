@@ -67,10 +67,6 @@ export default async function RootLayout({
   const discordData = await getDiscordUser();
   const userData = await getUser(discordData?.id);
   const loggedInUser = await currentUser();
-
-  if (userData === 404) {
-    return redirect("/connect-discord");
-  }
   const guildsData = await getUserGuilds(discordData?.id);
   const notificationsData = await getUserNotifications(discordData?.id);
 
