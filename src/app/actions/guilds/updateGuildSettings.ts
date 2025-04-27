@@ -6,9 +6,9 @@ export const updateGuildSettings = async (serverId: any, setting: any, content: 
         content,
     });
 
-    if(resp.status === 200) {
-        return 200;
-    } else {
-        return 400;
-    }
-}
+  if (resp.status === 200) {
+    return 200;
+  } else {
+    return 400;
+  }
+};
