@@ -20,8 +20,7 @@ import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/dist/server/api-utils";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { getDiscordUser } from "@/app/actions/getDiscordUser"; 
 
 const geistSans = Space_Grotesk({
@@ -34,9 +33,9 @@ export default async function Home() {
   const discordData = await getDiscordUser();
   
   if(user.userId && discordData.id) {
-    return router.replace("/:d:/app");
+    return redirect("/:d:/app");
   } else if(user.userId && !discordData.id) {
-    return router.replace("/connect-discord");
+    return redirect("/connect-discord");
   }
 
   return <>Loading...</>;
