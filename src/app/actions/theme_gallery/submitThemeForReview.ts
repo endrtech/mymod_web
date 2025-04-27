@@ -6,7 +6,7 @@ export const submitThemeForReview = async (
   body: any,
 ) => {
   const response = await axios.post(
-    `http://localhost:3030/api/modules/theme_gallery/${userId}/${themeId}`,
+    `https://api.mymod.endr.tech/api/modules/theme_gallery/${userId}/${themeId}`,
     {
       name: body.name,
       description: body.description,

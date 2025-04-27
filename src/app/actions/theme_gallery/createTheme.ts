@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const createTheme = async () => {
   const response = await axios.post(
-    "http://localhost:3030/api/modules/theme_gallery",
+    "https://api.mymod.endr.tech/api/modules/theme_gallery",
     {
       name: "",
       description: "",

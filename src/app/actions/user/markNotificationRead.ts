@@ -5,7 +5,7 @@ export const markNotificationRead = async (
   notificationId: any,
 ) => {
   const response = await axios.get(
-    `http://localhost:3030/api/users/${userId}/notification/read/${notificationId}`,
+    `https://api.mymod.endr.tech/api/users/${userId}/notification/read/${notificationId}`,
   );
 
   if (response.status === 200) {

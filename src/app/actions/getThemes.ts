@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getThemes = async () => {
   const response = await axios.get(
-    "http://localhost:3030/api/modules/theme_gallery?status=active",
+    "https://api.mymod.endr.tech/api/modules/theme_gallery?status=active",
   );
 
   if (response.status === 200) {

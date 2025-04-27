@@ -6,7 +6,7 @@ export async function timeoutGuildMember(
   body: any,
 ) {
   const resp = await axios.post(
-    `http://localhost:3030/api/guilds/${serverId}/members/${userId}/timeout`,
+    `https://api.mymod.endr.tech/api/guilds/${serverId}/members/${userId}/timeout`,
     body,
   );
 

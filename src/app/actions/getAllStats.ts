@@ -20,11 +20,14 @@ export async function getAllStats() {
   const guildsGrouped: Record<string, number> = {};
 
   try {
-    const response = await axios.get(`http://localhost:3030/api/dashboard`, {
-      headers: {
-        "Content-Type": "application/json",
+    const response = await axios.get(
+      `https://api.mymod.endr.tech/api/dashboard`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
 
     if (response.status !== 200) {
       throw new Error("Failed to fetch guild stats");

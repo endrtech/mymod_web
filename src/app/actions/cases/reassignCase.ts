@@ -8,7 +8,7 @@ export async function reassignCase(
   },
 ) {
   const resp = await axios.post(
-    `http://localhost:3030/api/cases/reassign/${caseId}`,
+    `https://api.mymod.endr.tech/api/cases/reassign/${caseId}`,
     body,
   );
 

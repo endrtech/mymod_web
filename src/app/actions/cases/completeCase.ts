@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function completeCase(caseId: string) {
   const resp = await axios.get(
-    `http://localhost:3030/api/cases/complete-case/${caseId}`,
+    `https://api.mymod.endr.tech/api/cases/complete-case/${caseId}`,
   );
 
   if (resp.status === 200) {

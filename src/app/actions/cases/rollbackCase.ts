@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function rollbackCase(caseId: string) {
   const resp = await axios.get(
-    `http://localhost:3030/api/cases/rollback-case/${caseId}`,
+    `https://api.mymod.endr.tech/api/cases/rollback-case/${caseId}`,
   );
 
   if (resp.status === 200) {
