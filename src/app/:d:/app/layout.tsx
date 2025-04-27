@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import "../../globals.css";
-import {
-  ClerkProvider,
-  OrganizationProfile,
-  OrganizationSwitcher,
-  UserButton,
-  UserProfile,
-} from "@clerk/nextjs";
+import { ClerkProvider, UserButton } from "@clerk/nextjs";
 import {
   Tooltip,
   TooltipContent,
@@ -160,7 +154,7 @@ export default async function RootLayout({
               </Tooltip>
             </TooltipProvider>
             <NotificationDialog notificationsData={notificationsData} />
-            <UserButton />
+            <UserButton appearance={{ baseTheme: dark }} />
           </div>
           <div className="w-[100%]">{children}</div>
         </div>

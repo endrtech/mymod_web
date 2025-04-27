@@ -31,6 +31,10 @@ const geistSans = Space_Grotesk({
 export default function Home() {
   const user = useAuth();
   const router = useRouter();
+  
+  if(user.userId) {
+    return router.replace("/:d:/app");
+  }
 
   return <>Loading...</>;
 }

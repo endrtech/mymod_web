@@ -33,6 +33,7 @@ import {
   poppins,
   barlowSemiCondensed,
   inter,
+  hankenGrotesk,
 } from "./fonts";
 
 export const metadata: Metadata = {
@@ -78,7 +79,7 @@ export default async function RootLayout({
     <SidebarProvider defaultOpen={false}>
       <ClerkProvider>
         <div
-          className={`${inter.className} ${poppins.className} ${roboto.className} ${barlowSemiCondensed.className} ${geistSans.className} antialiased bg-zinc-900 w-full h-screen`}
+          className={`${inter.className} ${poppins.className} ${roboto.className} ${barlowSemiCondensed.className} ${geistSans.className} ${hankenGrotesk.className} antialiased bg-zinc-900 w-full h-screen`}
           suppressHydrationWarning={true}
         >
           <div
