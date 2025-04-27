@@ -8,6 +8,7 @@ import LoadingOverlay from "./loading";
 import NextTopLoader from "nextjs-toploader";
 import { auth } from "@clerk/nextjs/server";
 import { permanentRedirect, redirect, RedirectType } from "next/navigation";
+import { PostHogProvider } from "../components/PostHogProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,25 +27,23 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   const user = await auth();
 
-  if(!user.userId) {
+  if (!user.userId) {
     return redirect(`http://${process.env.NEXT_PUBLIC_ENDR_ID_AUTH_URL}/oauth/authorize?clientId=${process.env.NEXT_PUBLIC_ENDR_ID_APP_ID}`);
   }
 
   return (
     <ClerkProvider>
       <html lang="en">
-        <body
-          className={`${geistSans.className} antialiased w-full h-screen bg-black`}
-        >
+        <body className={`${geistSans.className} antialiased w-full h-screen bg-black`}>
           <NextTopLoader color="#29D" height={3} showSpinner={false} />
-          <Suspense fallback={<LoadingOverlay />}>
-            {children}
-          </Suspense>
+          <PostHogProvider>
+            <Suspense fallback={<LoadingOverlay />}>
+              {children}
+            </Suspense>
+          </PostHogProvider>
         </body>
       </html>
     </ClerkProvider>
