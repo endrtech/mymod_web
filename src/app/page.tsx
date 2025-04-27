@@ -28,7 +28,7 @@ const geistSans = Space_Grotesk({
   subsets: ["latin"],
 });
 
-export default function Home() {
+export default async function Home() {
   const user = auth();
   const router = useRouter();
   const discordData = await getDiscordUser();
