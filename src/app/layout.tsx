@@ -29,6 +29,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await auth();
+
+  if(!user.userId) {
+    return redirect(`http://${process.env.NEXT_PUBLIC_ENDR_ID_AUTH_URL}/oauth/authorize?clientId=${process.env.NEXT_PUBLIC_ENDR_ID_APP_ID}`);
+  }
+
   return (
     <ClerkProvider>
       <html lang="en">
@@ -36,7 +42,9 @@ export default async function RootLayout({
           className={`${geistSans.className} antialiased w-full h-screen bg-black`}
         >
           <NextTopLoader color="#29D" height={3} showSpinner={false} />
-          {children}
+          <Suspense fallback={<LoadingOverlay />}>
+            {children}
+          </Suspense>
         </body>
       </html>
     </ClerkProvider>
