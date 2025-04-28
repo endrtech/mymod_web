@@ -52,6 +52,7 @@
     --font-montserrat: "Montserrat", sans-serif;
     --font-dm-sans: "DM Sans", sans-serif;
     --font-hanken-grotesk: "Hanken Grotesk", sans-serif;
+    --font-comic-sans: "Comic Relief", sans-serif;
 
     --radius: 0.625rem;
     --background: oklch(1 0 0);
@@ -101,6 +102,7 @@
     --font-montserrat: "Montserrat", sans-serif;
     --font-dm-sans: "DM Sans", sans-serif;
     --font-hanken-grotesk: "Hanken Grotesk", sans-serif;
+    --font-comic-sans: "Comic Relief", sans-serif;
 
     --background: oklch(0.141 0.005 285.823);
     --foreground: oklch(0.985 0 0);
@@ -165,6 +167,10 @@
 
 .font-hanken-grotesk {
     font-family: var(--font-hanken-grotesk);
+}
+
+.font-comic-sans {
+    font-family: var(--font-comic-sans);
 }
 
 @layer base {
