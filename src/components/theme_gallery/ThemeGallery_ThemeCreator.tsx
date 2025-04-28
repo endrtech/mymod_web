@@ -511,6 +511,7 @@ export const ThemeGallery_ThemeCreator = ({ user }: any) => {
                               <SelectItem value="font-montserrat">Montserrat</SelectItem>
                               <SelectItem value="font-dm-sans">DM Sans</SelectItem>
                               <SelectItem value="font-hanken-grotesk">Hanken Grotesk</SelectItem>
+                              <SelectItem value="font-comic-sans">Comic Relief</SelectItem>
                             </SelectContent>
                           </Select>
                           <Button variant="outline" size="icon" className="dark self-end text-white">
