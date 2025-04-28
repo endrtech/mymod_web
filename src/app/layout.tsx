@@ -31,18 +31,20 @@ export default async function RootLayout({
   const user = await auth();
 
   if (!user.userId) {
-    return redirect(`http://${process.env.NEXT_PUBLIC_ENDR_ID_AUTH_URL}/oauth/authorize?clientId=${process.env.NEXT_PUBLIC_ENDR_ID_APP_ID}`);
+    return redirect(
+      `http${process.env.DEV_MODE === "true" ? "" : "s"}://${process.env.NEXT_PUBLIC_ENDR_ID_AUTH_URL}/oauth/authorize?clientId=${process.env.NEXT_PUBLIC_ENDR_ID_APP_ID}`,
+    );
   }
 
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${geistSans.className} antialiased w-full h-screen bg-black`}>
+        <body
+          className={`${geistSans.className} antialiased w-full h-screen bg-black`}
+        >
           <NextTopLoader color="#29D" height={3} showSpinner={false} />
           <PostHogProvider>
-            <Suspense fallback={<LoadingOverlay />}>
-              {children}
-            </Suspense>
+            <Suspense fallback={<LoadingOverlay />}>{children}</Suspense>
           </PostHogProvider>
         </body>
       </html>
