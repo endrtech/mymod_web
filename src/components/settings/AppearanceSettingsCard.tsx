@@ -449,6 +449,8 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
               </SelectItem>
               <SelectItem value="font-montserrat">Montserrat</SelectItem>
               <SelectItem value="font-dm-sans">DM Sans</SelectItem>
+              <SelectItem value="font-hanken-grotesk">Hanken Grotesk</SelectItem>
+              <SelectItem value="font-comic-sans">Comic Relief</SelectItem>
             </SelectContent>
           </Select>
           <Button
