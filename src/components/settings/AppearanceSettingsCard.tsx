@@ -5,7 +5,7 @@ import { Card } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateGuildSettings } from "@/app/actions/guilds/updateGuildSettings";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -32,71 +32,12 @@ import {
   geistSans,
 } from "@/app/:d:/app/server/[serverId]/fonts";
 import { ThemeGalleryMain } from "../theme_gallery/ThemeGalleryMain";
-
-type Theme = {
-  id: string;
-  name: string;
-  description: string;
-  color_1: string;
-  color_2: string;
-  color_3: string;
-  background: string;
-  font: string;
-  overlayPercent: string;
-};
-
-const themes: Theme[] = [
-  {
-    id: "mercury-2025",
-    name: "Mercury",
-    description:
-      "Step into the world of the Mercury Minecraft server with an out-of-world theme.",
-    color_1: "#FF8A00",
-    color_2: "#A33B00",
-    color_3: "#FF0000",
-    background: "https://i.imgur.com/SNshv1m.png",
-    font: "font-barlow-semi-condensed",
-    overlayPercent: "0.9",
-  },
-  {
-    id: "pride-2025",
-    name: "Pride",
-    description:
-      "Showcase your support for the LGBTQIA+ community with this stellar theme.",
-    color_1: "#FF0066",
-    color_2: "#FFCC00",
-    color_3: "#33CCFF",
-    background: "https://i.imgur.com/f9nHmZd.jpeg",
-    font: "font-montserrat",
-    overlayPercent: "0.9",
-  },
-  {
-    id: "anime-2025",
-    name: "Anime",
-    description: "The dev team was dared to add this one in.",
-    color_1: "#FF00C8",
-    color_2: "#00FFF7",
-    color_3: "#8C00FF",
-    background: "https://i.imgur.com/pjCl84c.mp4",
-    font: "font-montserrat",
-    overlayPercent: "0.9",
-  },
-  {
-    id: "discord-blurple",
-    name: "Discord Blurple",
-    description:
-      "Rep your love for Discord with this very, very, blurple theme. (We aren't allowed to use the Discord font)",
-    color_1: "#5865F2",
-    color_2: "#7289DA",
-    color_3: "#99AAB5",
-    background: "https://i.imgur.com/mas38Jd.png",
-    font: "font-dm-sans",
-    overlayPercent: "0.7",
-  },
-];
+import { getThemes } from "@/app/actions/getThemes";
+import { ThemeGalleryDrawer } from "../theme_gallery/ThemeGalleryDrawer";
 
 export const AppearanceSettingsCard = ({ currentServerData }: any) => {
   const router = useRouter();
+  const [themes, setThemes] = useState<any>();
   const [colorStop1, setColorStop1] = useState(
     currentServerData?.data.mmData.module_config.appearance?.gradient.color_1 ||
       "#00BFFF",
@@ -121,10 +62,18 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
       "font-geist",
   );
 
+  useEffect(() => {
+    const getData = async () => {
+      const themes = await getThemes();
+      setThemes(themes);
+    };
+    getData();
+  }, []);
+
   const currentlySelectedPreset =
     currentServerData?.data.mmData.module_config.appearance?.theme_id !==
     "custom"
-      ? themes.find(
+      ? themes?.data?.find(
           (t) =>
             t.id ===
             currentServerData?.data.mmData.module_config.appearance?.theme_id,
@@ -237,7 +186,7 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
         <h4 className="text-xl text-left w-full font-bold text-zinc-300">
           Currently selected preset
         </h4>
-        <Card className="overflow-hidden w-[370] h-[200px] p-0 border border-zinc-900">
+        <Card className="overflow-hidden w-full md:w-[370] h-[200px] p-0 border border-zinc-900">
           <div className="relative w-full h-full">
             {/* Video background if .mp4 */}
             {currentlySelectedPreset?.background.endsWith(".mp4") && (
@@ -302,7 +251,7 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
           Want to use a pre-made theme from MYMOD? Look no further. Click on a
           theme to view more information about the theme.
         </h4>
-        <ThemeGalleryMain currentServerData={currentServerData} />
+        <ThemeGalleryDrawer currentServerData={currentServerData} />
         <br />
         <h4 className="text-xl text-left w-full font-bold text-zinc-300">
           Gradient Colors
@@ -314,7 +263,7 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
         <h4 className="text-xs text-left uppercase w-full font-medium text-zinc-500 py-2">
           Preview
         </h4>
-        <div className="flex flex-row gap-1 items-start justify-between w-full">
+        <div className="flex flex-col md:flex-row gap-1 items-start justify-between w-full">
           <Card className="overflow-hidden w-full h-[200px] bg-black p-0 border-1 border-zinc-900 clip-none">
             <div
               className="w-full h-[50px] rounded-[20px] blur-[40px]"
@@ -324,7 +273,7 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
             ></div>
           </Card>
           <span className="flex-grow" />
-          <div className="flex flex-col items-start gap-1">
+          <div className="flex flex-col w-full md:w-[200px] items-start gap-1">
             <ColorPickerInput value={colorStop1} onChange={setColorStop1} />
             <ColorPickerInput value={colorStop2} onChange={setColorStop2} />
             <ColorPickerInput value={colorStop3} onChange={setColorStop3} />
@@ -351,9 +300,9 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
         <h4 className="text-xs text-left uppercase w-full font-medium text-zinc-500 py-2">
           Preview
         </h4>
-        <div className="flex flex-row gap-2 items-start justify-between w-full">
+        <div className="flex flex-col md:flex-row gap-2 items-start justify-between w-full">
           <Card
-            className={`overflow-hidden w-full h-[400px] bg-black p-0 border border-zinc-900`}
+            className={`overflow-hidden w-full h-[200px] md:h-[400px] bg-black p-0 border border-zinc-900`}
           >
             {wallpaper?.endsWith(".mp4") && (
               <div className="grid w-full h-full">
@@ -390,7 +339,7 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
               />
             )}
           </Card>
-          <div className="flex flex-col gap-1 items-start justify-start">
+          <div className="flex flex-col gap-1 w-full md:w-[200px] items-start justify-start">
             <h4 className="text-sm text-left w-full font-medium text-zinc-500 pb-1">
               Link to wallpaper
             </h4>
@@ -449,6 +398,9 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
               </SelectItem>
               <SelectItem value="font-montserrat">Montserrat</SelectItem>
               <SelectItem value="font-dm-sans">DM Sans</SelectItem>
+              <SelectItem value="font-hanken-grotesk">
+                Hanken Grotesk
+              </SelectItem>
             </SelectContent>
           </Select>
           <Button

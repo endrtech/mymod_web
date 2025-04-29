@@ -26,6 +26,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ViewMemberDialog } from "@/components/dialog/ViewMemberDialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { ViewMemberDrawer } from "@/components/drawer/ViewMemberDrawer";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -167,22 +174,38 @@ export const columns: ColumnDef<Payment>[] = [
   {
     id: "view",
     cell: ({ row }) => (
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="ghost" size="icon" className="dark text-white">
-            <View />
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="dark text-white p-0 bg-black min-w-[1000px]">
-          <DialogTitle className="pt-3 px-2 text-md flex flex-row items-center justify-start gap-2">
-            <UserPen size={18} /> Member Information
-          </DialogTitle>
-          <ViewMemberDialog
-            serverId={row.getValue("serverId")}
-            userId={row.getValue("userId")}
-          />
-        </DialogContent>
-      </Dialog>
+      <>
+        <Drawer>
+          <DrawerTrigger asChild className="flex lg:hidden">
+            <Button variant="ghost" size="icon" className="dark text-white">
+              <View />
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent className="min-h-[60%] bg-black dark">
+            <DrawerTitle className="hidden"></DrawerTitle>
+            <ViewMemberDrawer
+              serverId={row.getValue("serverId")}
+              userId={row.getValue("userId")}
+            />
+          </DrawerContent>
+        </Drawer>
+        <Dialog>
+          <DialogTrigger asChild className="hidden lg:flex">
+            <Button variant="ghost" size="icon" className="dark text-white">
+              <View />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="dark text-white p-0 bg-black lg:min-w-[1000px] min-w-[80%]">
+            <DialogTitle className="pt-3 px-2 text-md flex flex-row items-center justify-start gap-2">
+              <UserPen size={18} /> Member Information
+            </DialogTitle>
+            <ViewMemberDialog
+              serverId={row.getValue("serverId")}
+              userId={row.getValue("userId")}
+            />
+          </DialogContent>
+        </Dialog>
+      </>
     ),
   },
   {

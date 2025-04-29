@@ -104,12 +104,12 @@ export const ThemeGalleryMain = ({ currentServerData }: any) => {
         </Button>
       </DialogTrigger>
       <DialogContent
-        className={`bg-transparent p-0 border-none min-w-[90%] min-h-[80%] h-[70%] w-[90%] dark text-white`}
+        className={`bg-transparent p-0 border-none w-full h-full md:min-w-[90%] md:min-h-[80%] md:h-[70%] md:w-[90%] dark text-white -ml-4 md:-mt-20`}
       >
         <Card
-          className={`${currentServerData?.data.mmData.module_config.appearance.font || "font-montserrat"} bg-background h-[100%] p-8`}
+          className={`${currentServerData?.data.mmData.module_config.appearance.font || "font-montserrat"} bg-background h-[100%] w-full px-3 md:p-8`}
         >
-          <DialogTitle className="flex flex-row items-center justify start h-fit gap-2">
+          <DialogTitle className="flex flex-row items-center justify start h-fit gap-2 py-6 px-2 md:p-0">
             <Avatar className="w-6 h-6 rounded-full">
               <AvatarImage src="/mymod_emblem.svg" alt="MYMOD" />
             </Avatar>
@@ -187,9 +187,9 @@ export const ThemeGalleryMain = ({ currentServerData }: any) => {
                           {createdThemesData?.data?.map((theme: any) => (
                             <Card
                               key={theme.id}
-                              className="overflow-hidden w-full h-[200px] p-0 border border-zinc-900"
+                              className="overflow-hidden w-full md:w-[370] h-[200px] p-0 border border-zinc-900"
                             >
-                              <div className="relative w-full h-full">
+                              <div className="overflow-hidden relative w-full h-full">
                                 {/* Video background if .mp4 */}
                                 {theme?.background.endsWith(".mp4") && (
                                   <>
@@ -220,7 +220,7 @@ export const ThemeGalleryMain = ({ currentServerData }: any) => {
 
                                 {/* Gradient Overlay */}
                                 <div
-                                  className="absolute top-0 left-0 w-full h-[50px] rounded-[20px] blur-[40px] z-[30]"
+                                  className="absolute overflow-hidden top-0 left-0 w-full h-[50px] rounded-[20px] blur-[40px] z-[10]"
                                   style={{
                                     background: `radial-gradient(circle at top center, ${theme.color_1}99 10%, ${theme.color_2}66 40%, ${theme.color_3}4D 70%)`,
                                   }}
@@ -258,182 +258,195 @@ export const ThemeGalleryMain = ({ currentServerData }: any) => {
                 className="w-[20%]"
               />
             </div>
-            <TabsContent value="featured" className="w-full">
+            <TabsContent value="featured" className="w-full p-2 ">
               <CardTitle>Featured Themes</CardTitle>
               <CardDescription>
                 These themes are curated by MYMOD staff. Currently, only
                 MYMOD-made themes are displayed here.
               </CardDescription>
               <br />
-              <div className="overflow-y-auto w-full grid grid-cols-4 gap-4 w-full">
-                {themes?.data?.map((theme: any) => (
-                  <Dialog key={theme.id}>
-                    <DialogTrigger asChild>
-                      <Card className="overflow-hidden w-full h-[200px] p-0 border border-zinc-900">
-                        <div className="relative w-full h-full">
-                          {/* Video background if .mp4 */}
-                          {theme?.background.endsWith(".mp4") && (
-                            <>
-                              <video
-                                className="absolute inset-0 w-full h-full object-cover z-0"
-                                src={theme.background}
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                              />
-                              <div className="relative w-full h-full z-[2] bg-black/90"></div>
-                            </>
-                          )}
-
-                          {/* Image background if not video */}
-                          {!theme?.background.endsWith(".mp4") && (
-                            <div
-                              className="absolute inset-0 w-full h-full z-0"
-                              style={{
-                                backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('${theme.background}')`,
-                                backgroundSize: "cover",
-                                backgroundRepeat: "no-repeat",
-                                backgroundPosition: "center",
-                              }}
-                            />
-                          )}
-
-                          {/* Gradient Overlay */}
-                          <div
-                            className="absolute top-0 left-0 w-full h-[50px] rounded-[20px] blur-[40px] z-[30]"
-                            style={{
-                              background: `radial-gradient(circle at top center, ${theme.color_1}99 10%, ${theme.color_2}66 40%, ${theme.color_3}4D 70%)`,
-                            }}
-                          />
-
-                          {/* Content Overlay */}
-                          <div className="absolute inset-0 z-[40] self-end flex flex-col items-start justify-start p-4 text-white">
-                            <p className="text-lg font-semibold">
-                              {theme.name}
-                            </p>
-                            <p className="text-sm font-normal">
-                              {theme.description}
-                            </p>
-                            <Badge className="mt-1 dark bg-zinc-900 text-white flex flex-row items-center gap-2">
-                              {theme.system_theme === true ? (
-                                "Made by MYMOD"
-                              ) : (
-                                <div className="flex flex-row items-center gap-2">
-                                  <Avatar className="w-6 h-6">
-                                    <AvatarImage
-                                      src={theme.creator_info.displayAvatarURL}
-                                      alt="Avatar"
-                                      className="rounded-full"
-                                    />
-                                  </Avatar>
-                                  <span>
-                                    {"Made by " +
-                                      theme.creator_info.globalName ||
-                                      theme.creator_info.username}
-                                  </span>
-                                </div>
-                              )}
-                            </Badge>
-                          </div>
-                        </div>
-                      </Card>
-                    </DialogTrigger>
-                    <DialogContent className="dark min-w-[80vw] flex flex-col text-white">
-                      <DialogTitle>Install the {theme.name} theme</DialogTitle>
-                      <DialogDescription>{theme.description}</DialogDescription>
-                      <br />
-                      <h4 className="text-sm uppercase text-left w-full font-bold text-zinc-500 py-2">
-                        What you get
-                      </h4>
-                      <div className="flex flex-row w-full items-start gap-2">
-                        <div className="flex flex-col w-full items-start gap-2">
-                          <h4 className="text-lg text-left w-full font-bold text-zinc-300">
-                            Gradient
-                          </h4>
-                          <Card
-                            className={`overflow-hidden w-full h-[200px] bg-black p-0 border border-zinc-900`}
-                          >
-                            <div className={`relative w-full h-full`}>
-                              {/* Gradient */}
-                              <div
-                                className="absolute top-0 left-0 w-full h-[50px] rounded-[20px] blur-[40px] z-0"
-                                style={{
-                                  background: `radial-gradient(circle at top center, ${theme.color_1}99 10%, ${theme.color_2}66 40%, ${theme.color_3}4D 70%)`,
-                                }}
-                              ></div>
-                            </div>
-                          </Card>
-                        </div>
-                        <div className="flex flex-col w-full items-start gap-2">
-                          <h4 className="text-lg text-left w-full font-bold text-zinc-300">
-                            Wallpaper
-                          </h4>
-                          <Card
-                            className={`overflow-hidden w-full h-[200px] bg-black p-0 border border-zinc-900`}
-                          >
+              <div className="h-[70vh] w-full overflow-y-auto p-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
+                  {themes?.data?.map((theme: any) => (
+                    <Dialog key={theme.id}>
+                      <DialogTrigger asChild>
+                        <Card
+                          key={theme.id}
+                          className="overflow-hidden cursor-pointer w-full h-[200px] p-0 border border-zinc-900"
+                        >
+                          <div className="overflow-hidden relative w-full h-full">
+                            {/* Video background if .mp4 */}
                             {theme?.background.endsWith(".mp4") && (
                               <>
                                 <video
-                                  className="relative inset-0 w-full h-fit object-cover z-0"
+                                  className="absolute inset-0 w-full h-full object-cover z-0"
                                   src={theme.background}
                                   autoPlay
                                   loop
                                   muted
                                   playsInline
                                 />
-                                <div className="relative w-full h-full z-[2] bg-black/90">
-                                  &nbsp;
-                                </div>
+                                <div className="relative w-full h-full z-[2] bg-black/90"></div>
                               </>
                             )}
 
                             {/* Image background if not video */}
                             {!theme?.background.endsWith(".mp4") && (
                               <div
-                                className="relative inset-0 w-full h-full z-0"
+                                className="absolute inset-0 w-full h-full z-0"
                                 style={{
-                                  backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,${theme.overlayPercent}), rgba(0,0,0,${theme.overlayPercent})), url('${theme.background}')`,
+                                  backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('${theme.background}')`,
                                   backgroundSize: "cover",
                                   backgroundRepeat: "no-repeat",
                                   backgroundPosition: "center",
                                 }}
                               />
                             )}
-                          </Card>
-                        </div>
-                        <div className="flex flex-col w-full items-start gap-2">
-                          <h4 className="text-lg text-left w-full font-bold text-zinc-300">
-                            Font
-                          </h4>
-                          <Card
-                            className={`${theme.font} overflow-hidden w-full h-[200px] bg-black p-0 border border-zinc-900`}
-                          >
+
+                            {/* Gradient Overlay */}
                             <div
-                              className={`relative w-full h-full flex flex-col justify-center p-2`}
-                            >
-                              <h1 className="text-3xl font-bold">Heading</h1>
-                              <h1 className="text-xl font-semibold">
-                                Subheading
-                              </h1>
-                              <h1 className="text-md font-normal">Paragraph</h1>
-                              <h1 className="text-sm font-normal text-zinc-400">
-                                Subtext
-                              </h1>
+                              className="absolute overflow-hidden top-0 left-0 w-full h-[50px] rounded-[20px] blur-[40px] z-[10]"
+                              style={{
+                                background: `radial-gradient(circle at top center, ${theme.color_1}99 10%, ${theme.color_2}66 40%, ${theme.color_3}4D 70%)`,
+                              }}
+                            />
+
+                            {/* Content Overlay */}
+                            <div className="absolute inset-0 z-[40] self-end flex flex-col items-start justify-start p-4 text-white">
+                              <p className="text-lg font-semibold">
+                                {theme.name}
+                              </p>
+                              <p className="text-sm font-normal truncate w-full overflow-hidden">
+                                {theme.description}
+                              </p>
+                              <Badge className="mt-1 dark bg-zinc-900 text-white flex flex-row items-center gap-2">
+                                {theme.system_theme === true ? (
+                                  "Made by MYMOD"
+                                ) : (
+                                  <div className="flex flex-row items-center gap-2">
+                                    <Avatar className="w-6 h-6">
+                                      <AvatarImage
+                                        src={
+                                          theme.creator_info.displayAvatarURL
+                                        }
+                                        alt="Avatar"
+                                        className="rounded-full"
+                                      />
+                                    </Avatar>
+                                    <span>
+                                      {"Made by " +
+                                        theme.creator_info.globalName ||
+                                        theme.creator_info.username}
+                                    </span>
+                                  </div>
+                                )}
+                              </Badge>
                             </div>
-                          </Card>
+                          </div>
+                        </Card>
+                      </DialogTrigger>
+                      <DialogContent className="dark min-w-[80vw] flex flex-col text-white">
+                        <DialogTitle>
+                          Install the {theme.name} theme
+                        </DialogTitle>
+                        <DialogDescription>
+                          {theme.description}
+                        </DialogDescription>
+                        <br />
+                        <h4 className="text-sm uppercase text-left w-full font-bold text-zinc-500 py-2">
+                          What you get
+                        </h4>
+                        <div className="flex flex-row w-full items-start gap-2">
+                          <div className="flex flex-col w-full items-start gap-2">
+                            <h4 className="text-lg text-left w-full font-bold text-zinc-300">
+                              Gradient
+                            </h4>
+                            <Card
+                              className={`overflow-hidden w-full h-[200px] bg-black p-0 border border-zinc-900`}
+                            >
+                              <div className={`relative w-full h-full`}>
+                                {/* Gradient */}
+                                <div
+                                  className="absolute top-0 left-0 w-full h-[50px] rounded-[20px] blur-[40px] z-0"
+                                  style={{
+                                    background: `radial-gradient(circle at top center, ${theme.color_1}99 10%, ${theme.color_2}66 40%, ${theme.color_3}4D 70%)`,
+                                  }}
+                                ></div>
+                              </div>
+                            </Card>
+                          </div>
+                          <div className="flex flex-col w-full items-start gap-2">
+                            <h4 className="text-lg text-left w-full font-bold text-zinc-300">
+                              Wallpaper
+                            </h4>
+                            <Card
+                              className={`overflow-hidden w-full h-[200px] bg-black p-0 border border-zinc-900`}
+                            >
+                              {theme?.background.endsWith(".mp4") && (
+                                <>
+                                  <video
+                                    className="relative inset-0 w-full h-fit object-cover z-0"
+                                    src={theme.background}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                  />
+                                  <div className="relative w-full h-full z-[2] bg-black/90">
+                                    &nbsp;
+                                  </div>
+                                </>
+                              )}
+
+                              {/* Image background if not video */}
+                              {!theme?.background.endsWith(".mp4") && (
+                                <div
+                                  className="relative inset-0 w-full h-full z-0"
+                                  style={{
+                                    backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,${theme.overlayPercent}), rgba(0,0,0,${theme.overlayPercent})), url('${theme.background}')`,
+                                    backgroundSize: "cover",
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "center",
+                                  }}
+                                />
+                              )}
+                            </Card>
+                          </div>
+                          <div className="flex flex-col w-full items-start gap-2">
+                            <h4 className="text-lg text-left w-full font-bold text-zinc-300">
+                              Font
+                            </h4>
+                            <Card
+                              className={`${theme.font} overflow-hidden w-full h-[200px] bg-black p-0 border border-zinc-900`}
+                            >
+                              <div
+                                className={`relative w-full h-full flex flex-col justify-center p-2`}
+                              >
+                                <h1 className="text-3xl font-bold">Heading</h1>
+                                <h1 className="text-xl font-semibold">
+                                  Subheading
+                                </h1>
+                                <h1 className="text-md font-normal">
+                                  Paragraph
+                                </h1>
+                                <h1 className="text-sm font-normal text-zinc-400">
+                                  Subtext
+                                </h1>
+                              </div>
+                            </Card>
+                          </div>
                         </div>
-                      </div>
-                      <Button
-                        onClick={() => setTheme(theme.id)}
-                        variant="outline"
-                        className="w-auto self-end dark text-white"
-                      >
-                        Apply theme
-                      </Button>
-                    </DialogContent>
-                  </Dialog>
-                ))}
+                        <Button
+                          onClick={() => setTheme(theme.id)}
+                          variant="outline"
+                          className="w-auto self-end dark text-white"
+                        >
+                          Apply theme
+                        </Button>
+                      </DialogContent>
+                    </Dialog>
+                  ))}
+                </div>
               </div>
             </TabsContent>
           </Tabs>
