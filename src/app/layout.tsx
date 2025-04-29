@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import NextNProgress from "nextjs-progressbar";
 import { Suspense } from "react";
 import LoadingOverlay from "./loading";
 import NextTopLoader from "nextjs-toploader";
 import { auth } from "@clerk/nextjs/server";
-import { permanentRedirect, redirect, RedirectType } from "next/navigation";
+import { redirect } from "next/navigation";
 import { PostHogProvider } from "../components/PostHogProvider";
-import { getDiscordUser } from "./actions/getDiscordUser";
 import { montserrat } from "./:d:/app/server/[serverId]/fonts";
 
 export const metadata: Metadata = {
@@ -33,10 +31,10 @@ export default async function RootLayout({
         <body
           className={`${montserrat.className} antialiased w-full h-screen bg-black`}
         >
-          <NextTopLoader color="#29D" height={3} showSpinner={false} />
-          <Suspense fallback={<LoadingOverlay />}>
-            {children}
-          </Suspense>
+          <PostHogProvider>
+            <NextTopLoader color="#29D" height={3} showSpinner={false} />
+            <Suspense fallback={<LoadingOverlay />}>{children}</Suspense>
+          </PostHogProvider>
         </body>
       </html>
     </ClerkProvider>
