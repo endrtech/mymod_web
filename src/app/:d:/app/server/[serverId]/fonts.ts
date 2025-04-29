@@ -46,3 +46,9 @@ export const comicSans = Comic_Neue({
   weight: ["300", "400", "700"],
   variable: "--font-comic-sans",
 });
+export const poppins = Poppins({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], variable: "--font-poppins" });
+export const barlowSemiCondensed = Barlow_Semi_Condensed({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], variable: "--font-barlow-semi-condensed" })
+export const montserrat = Montserrat({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], variable: "--font-montserrat" });
+export const dmSans = DM_Sans({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], variable: "--font-dm-sans" });
+export const hankenGrotesk = Hanken_Grotesk({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], variable: "--font-hanken-grotesk" })
+//export const comicSans = Comic_Nueue({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], variable: "--font-comic-sans" })

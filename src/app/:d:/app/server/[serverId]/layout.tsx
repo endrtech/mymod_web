@@ -40,6 +40,7 @@ import {
   barlowSemiCondensed,
   inter,
   hankenGrotesk,
+  comicSans,
 } from "./fonts";
 import { RefreshApplicationNav } from "@/components/RefreshApplicationNav";
 import { Button } from "@/components/ui/button";
@@ -132,7 +133,7 @@ export default async function RootLayout({
           }}
         ></div>
         <div
-          className={`flex z-[10] relative flex-col items-left justify-left w-full h-screen ${font}`}
+          className={`flex z-[10] relative flex-col items-left justify-left w-full h-screen ${font}`} suppressHydrationWarning={true}
         >
           <div className="z-[20] flex items-center justify-end gap-2 mr-4 mt-2">
             <RefreshApplicationNav />
