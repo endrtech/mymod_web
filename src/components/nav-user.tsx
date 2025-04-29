@@ -4,13 +4,9 @@ import {
   IconLogout,
   IconNotification,
   IconUserCircle,
-} from "@tabler/icons-react"
+} from "@tabler/icons-react";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,24 +15,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { currentUser } from "@clerk/nextjs/server"
+} from "@/components/ui/sidebar";
+import { currentUser } from "@clerk/nextjs/server";
 
-export async function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+export async function NavUser() {
   const loggedInUser = await currentUser();
 
   return (
@@ -44,10 +32,16 @@ export async function NavUser({
       <SidebarMenuItem>
         <div className="flex flex-row gap-2">
           <Avatar className="h-8 w-8 rounded-lg grayscale">
-            <AvatarImage src={loggedInUser?.imageUrl} alt={`${loggedInUser?.primaryEmailAddress}`} />
+            <AvatarImage
+              src={loggedInUser?.imageUrl}
+              alt={`${loggedInUser?.primaryEmailAddress}`}
+            />
           </Avatar>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-medium">{loggedInUser?.fullName || `${loggedInUser?.primaryEmailAddress?.emailAddress}`}</span>
+            <span className="truncate font-medium">
+              {loggedInUser?.fullName ||
+                `${loggedInUser?.primaryEmailAddress?.emailAddress}`}
+            </span>
             <span className="text-muted-foreground truncate text-xs">
               {`${loggedInUser?.primaryEmailAddress?.emailAddress}`}
             </span>
@@ -55,5 +49,5 @@ export async function NavUser({
         </div>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

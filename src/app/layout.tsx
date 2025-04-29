@@ -1,24 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import NextNProgress from "nextjs-progressbar";
 import { Suspense } from "react";
 import LoadingOverlay from "./loading";
 import NextTopLoader from "nextjs-toploader";
 import { auth } from "@clerk/nextjs/server";
-import { permanentRedirect, redirect, RedirectType } from "next/navigation";
+import { redirect } from "next/navigation";
 import { PostHogProvider } from "../components/PostHogProvider";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { montserrat } from "./:d:/app/server/[serverId]/fonts";
 
 export const metadata: Metadata = {
   title: "MYMOD :: Login",
@@ -40,10 +29,10 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${geistSans.className} antialiased w-full h-screen bg-black`}
+          className={`${montserrat.className} antialiased w-full h-screen bg-black`}
         >
-          <NextTopLoader color="#29D" height={3} showSpinner={false} />
           <PostHogProvider>
+            <NextTopLoader color="#29D" height={3} showSpinner={false} />
             <Suspense fallback={<LoadingOverlay />}>{children}</Suspense>
           </PostHogProvider>
         </body>

@@ -46,8 +46,9 @@ import { getGuildMemberTimeouts } from "@/app/actions/guilds/members/getGuildMem
 import { getGuildMemberKicks } from "@/app/actions/guilds/members/getGuildMemberKicks";
 import { getGuildMemberLogs } from "@/app/actions/guilds/members/getGuildMemberLogs";
 import moment from "moment";
+import DatePickerDrawer from "./DatePickerDrawer";
 
-export const ViewMemberDialog = ({ serverId, userId }: any) => {
+export const ViewMemberDrawer = ({ serverId, userId }: any) => {
   const [guildMemberData, setGuildMemberData] = useState<any>(null);
   const [serverData, setServerData] = useState<any>({});
   const [userData, setUserData] = useState<any>("");
@@ -176,20 +177,26 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
     setTimeout(() => toast.dismiss(successToast), 3000);
   };
 
+  const formatTime = (duration: any, time: any) => {
+    let durationFormatted = duration;
+
+    if (duration > 0) {
+      if (time === "minutes") durationFormatted /= 60 / 1000;
+      if (time === "hours") durationFormatted /= 60 / 60 / 1000;
+      if (time === "seconds") durationFormatted /= 1000;
+    }
+
+    return durationFormatted;
+  };
+
   return (
     <div className="flex flex-col items-start justify-left w-full bg-black">
       <Tabs
         defaultValue="general"
         value={tabValue}
-        className="flex flex-row items-start justify-left w-full"
+        className="flex flex-col items-start justify-left w-full"
       >
-        <TabsList className="w-[150px] h-full flex flex-col items-start justify-start p-2 rounded-none rounded-tr-lg rounded-bl-lg bg-zinc-800">
-          <h2 className="text-xl font-semibold text-zinc-300 pt-4 pb-4">
-            Menu
-          </h2>
-          <h4 className="text-sm uppercase font-medium text-zinc-500 pt-4 pb-4">
-            General
-          </h4>
+        <TabsList className="mt-2 w-full h-full overflow-x-auto whitespace-nowrap flex flex-row items-start justify-start p-2 rounded-none bg-zinc-900 scrollbar-thin scrollbar-thumb-zinc-700">
           <TabsTrigger
             value="general"
             onClick={() => setTabValue("general")}
@@ -222,9 +229,6 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
             <Briefcase className="h-4 w-4" />
             <span>Cases</span>
           </TabsTrigger>
-          <h4 className="text-sm uppercase font-medium text-zinc-500 pt-4 pb-4">
-            Moderation
-          </h4>
           <TabsTrigger
             value="punish-user"
             onClick={() => setTabValue("punish-user")}
@@ -298,9 +302,6 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
             )}
             {memberKickData === null && <Loader2 className="animate-spin" />}
           </TabsTrigger>
-          <h4 className="text-sm uppercase font-medium text-zinc-500 pt-4 pb-4">
-            Reporting
-          </h4>
           <TabsTrigger
             value="audit-log"
             onClick={() => setTabValue("audit-log")}
@@ -312,10 +313,10 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
             </div>
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="general" className="w-[500px] h-[600px]">
+        <TabsContent value="general" className="w-full h-full">
           <div className="flex flex-col items-center justify-start w-full h-full">
             <Card className="p-0 w-full h-full border-none">
-              <CardContent className="p-0 h-[600px] w-full bg-black border-t-1 border-l-1 border-zinc-800 rounded-none rounded-tl-lg">
+              <CardContent className="p-0 h-[600px] w-full bg-black border-none border-zinc-800 rounded-none">
                 <div className="flex flex-col items-start justify-left p-0">
                   {bannerURL !== undefined ? (
                     <Image
@@ -323,11 +324,11 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                       alt="Banner"
                       width={500}
                       height={100}
-                      className="w-[100%] h-[100px] object-cover object-center rounded-tl-lg"
+                      className="w-[100%] h-[100px] object-cover object-center"
                     />
                   ) : (
                     <div
-                      className={`w-full h-[100px] bg-zinc-800 rounded-tl-md flex items-center justify-center`}
+                      className={`w-full h-[100px] bg-zinc-800 flex items-center justify-center`}
                     >
                       &nbsp;
                     </div>
@@ -547,14 +548,14 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
             </Card>
           </div>
         </TabsContent>
-        <TabsContent value="roles" className="w-[500px] h-[600px]">
-          <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
+        <TabsContent value="roles" className="w-full h-full">
+          <div className="flex flex-col items-start justify-left p-4 mt-2 w-full h-full">
             <h2 className="text-xl font-semibold text-zinc-300">Roles</h2>
-            <div className="flex flex-col items-start justify-left mt-4 w-full">
+            <div className="flex flex-col items-start justify-left mt-4 w-full h-[600px]">
               {guildMemberData?.memberRoles?.map((role: any) => (
                 <Button
                   key={role.id}
-                  className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                  className="cursor-default w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
                 >
                   <div className="flex flex-row items-center justify-between w-full">
                     <div className="flex flex-row items-center justify-start">
@@ -563,13 +564,18 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                   </div>
                 </Button>
               ))}
+              {guildMemberData?.memberRoles.length === 0 && (
+                <h2 className="text-sm font-semibold text-zinc-500">
+                  No roles to display.
+                </h2>
+              )}
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="permissions" className="w-[500px] h-[600px]">
+        <TabsContent value="permissions" className="w-full h-full">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
             <h2 className="text-xl font-semibold text-zinc-300">Permissions</h2>
-            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
+            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll h-[600px]">
               {guildMemberData?.memberPermissions?.map((permission: any) => (
                 <Button
                   key={permission}
@@ -582,13 +588,18 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                   </div>
                 </Button>
               ))}
+              {guildMemberData?.memberPermissions.length === 0 && (
+                <h2 className="text-sm font-semibold text-zinc-500">
+                  No permissions to display.
+                </h2>
+              )}
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="cases" className="w-[500px] h-[600px]">
+        <TabsContent value="cases" className="w-full h-full">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
             <h2 className="text-xl font-semibold text-zinc-300">Cases</h2>
-            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
+            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll h-[400px]">
               {guildMemberData?.memberCases?.map((caseItem: any) => (
                 <Link
                   key={caseItem.caseID}
@@ -598,32 +609,42 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                   <Button className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
                     <div className="flex flex-row items-center justify-between w-full">
                       <div className="flex flex-col gap-1 items-start justify-start">
-                        <span className="capitalize">
+                        <span className="capitalize text-wrap text-left">
                           {caseItem.case_info.case_type}{" "}
-                          {caseItem.user_info.displayName} from{" "}
+                          {caseItem.user_info.globalName} from{" "}
                           {serverData?.data.dsData.name}
                         </span>
-                        <span>Case ID: {caseItem.caseID}</span>
+                        <span className="text-wrap text-left">
+                          Case ID: {caseItem.caseID}
+                        </span>
                       </div>
                       <ChevronRight className="h-4 w-4 text-zinc-400" />
                     </div>
                   </Button>
                 </Link>
               ))}
+              {guildMemberData?.memberCases.length === 0 && (
+                <Button
+                  disabled
+                  className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                >
+                  <span>There are no recorded cases for this user.</span>
+                </Button>
+              )}
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="punish-user" className="w-[500px] h-[600px]">
-          <div className="flex flex-col items-start justify-left -mt-4 p-4 w-full h-full">
+        <TabsContent value="punish-user" className="w-full h-full">
+          <div className="flex flex-col items-start justify-left -mt-4 w-full h-[600px]">
             <Tabs defaultValue="warn-user" className="w-full h-full">
-              <TabsList className="w-full">
+              <TabsList className="w-full rounded-none mt-1">
                 <TabsTrigger value="warn-user">Warn</TabsTrigger>
                 <TabsTrigger value="ban-user">Ban</TabsTrigger>
                 <TabsTrigger value="timeout-user">Timeout</TabsTrigger>
                 <TabsTrigger value="kick-user">Kick</TabsTrigger>
               </TabsList>
-              <TabsContent value="warn-user" className="rounded-lg h-[100%]">
-                <div className="flex flex-col items-start gap-3 justify-left p-3 h-full w-full">
+              <TabsContent value="warn-user" className="rounded-lg h-[600px]">
+                <div className="flex flex-col items-start gap-3 justify-left p-4 h-full w-full">
                   <h2 className="text-lg font-semibold text-zinc-300">
                     Warn{" "}
                     {guildMemberData?.discordUser?.globalName ||
@@ -631,11 +652,11 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                   </h2>
                   <form
                     onSubmit={warnUser}
-                    className="flex flex-col gap-2 h-full w-full"
+                    className="flex flex-col justify-between gap-2 h-[400px] w-full"
                   >
-                    <div className="flex flex-row justify-between gap-4 w-full">
+                    <div className="flex flex-col justify-between gap-4 w-full">
                       <div className="flex flex-col gap-1 w-full">
-                        <Label htmlFor="warnReason">
+                        <Label htmlFor="warnReason" className="text-white">
                           Whats the reason for the warn?
                         </Label>
                         <Input
@@ -645,10 +666,10 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                         />
                       </div>
                       <div className="flex flex-col gap-1 w-full">
-                        <Label htmlFor="warnTimestamp">
+                        <Label htmlFor="warnTimestamp" className="text-white">
                           When do you want the warn to expire?
                         </Label>
-                        <DatePicker
+                        <DatePickerDrawer
                           onChange={(value: any) => setWarnTimestamp(value)}
                         />
                         <input
@@ -659,21 +680,24 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                         />
                       </div>
                     </div>
-                    <div className="grow">&nbsp;</div>
-                    <div className="flex flex-row justify-between items-center w-full">
+                    <div className="flex flex-col gap-2 justify-between items-center w-full">
                       <Label className="text-sm text-zinc-400 font-normal">
                         Please note: this method will automatically warn the
                         user, and create a case for logging.
                       </Label>
-                      <Button type="submit" variant="destructive">
+                      <Button
+                        type="submit"
+                        variant="destructive"
+                        className="w-full"
+                      >
                         Warn user
                       </Button>
                     </div>
                   </form>
                 </div>
               </TabsContent>
-              <TabsContent value="ban-user" className="rounded-lg h-[100%]">
-                <div className="flex flex-col items-start gap-3 justify-left p-3 h-full w-full">
+              <TabsContent value="ban-user" className="rounded-lg h-[600px]">
+                <div className="flex flex-col items-start gap-3 justify-left p-4 h-full w-full">
                   <h2 className="text-lg font-semibold text-zinc-300">
                     Ban{" "}
                     {guildMemberData?.discordUser?.globalName ||
@@ -681,30 +705,34 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                   </h2>
                   <form
                     onSubmit={banUser}
-                    className="flex flex-col gap-2 h-full w-full"
+                    className="flex flex-col justify-between gap-2 h-[400px] w-full"
                   >
-                    <div className="flex flex-row justify-between gap-4 w-full">
+                    <div className="flex flex-col justify-between gap-4 w-full">
                       <div className="flex flex-col gap-1 w-full">
-                        <Label htmlFor="banReason">
+                        <Label htmlFor="banReason" className="text-white">
                           Whats the reason for the ban?
                         </Label>
                         <Input
                           name="banReason"
                           placeholder="e.g: swearing in the server"
-                          className="w-full"
+                          className="w-full text-white"
                         />
                       </div>
                       <div className="flex flex-col gap-1 w-full">
-                        <Label htmlFor="deleteMsgDays">
+                        <Label htmlFor="deleteMsgDays" className="text-white">
                           Enter in how many days to delete messages from:
                         </Label>
                         <div className="flex flex-row items-center gap-1">
                           <Input
                             name="deleteMsgDays"
                             placeholder="Max: 7"
-                            className="w-full"
+                            className="w-full text-white"
                           />
-                          <Input disabled value="days" className="w-[20%]" />
+                          <Input
+                            disabled
+                            value="days"
+                            className="w-[100px] text-white"
+                          />
                         </div>
                         <Label
                           htmlFor="deleteMsgDays"
@@ -715,13 +743,16 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                         </Label>
                       </div>
                     </div>
-                    <div className="grow">&nbsp;</div>
-                    <div className="flex flex-row justify-between items-center w-full">
+                    <div className="flex flex-col gap-2 justify-center items-center w-full">
                       <Label className="text-sm text-zinc-400 font-normal">
                         Please note: this method will automatically ban the
                         user, and create a case for logging.
                       </Label>
-                      <Button type="submit" variant="destructive">
+                      <Button
+                        type="submit"
+                        variant="destructive"
+                        className="w-full"
+                      >
                         Ban user
                       </Button>
                     </div>
@@ -729,7 +760,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                 </div>
               </TabsContent>
               <TabsContent value="timeout-user" className="rounded-lg h-[100%]">
-                <div className="flex flex-col items-start gap-3 justify-left p-3 h-full w-full">
+                <div className="flex flex-col items-start gap-3 justify-left p-4 h-full w-full">
                   <h2 className="text-lg font-semibold text-zinc-300">
                     Timeout{" "}
                     {guildMemberData?.discordUser?.globalName ||
@@ -737,28 +768,28 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                   </h2>
                   <form
                     onSubmit={timeoutUser}
-                    className="flex flex-col gap-2 h-full w-full"
+                    className="flex flex-col justify-between gap-2 h-[400px] w-full"
                   >
-                    <div className="flex flex-row justify-between gap-4 w-full">
+                    <div className="flex flex-col justify-between gap-4 w-full">
                       <div className="flex flex-col gap-1 w-full">
-                        <Label htmlFor="timeoutReason">
+                        <Label htmlFor="timeoutReason" className="text-white">
                           Whats the reason for the timeout?
                         </Label>
                         <Input
                           name="timeoutReason"
                           placeholder="e.g: swearing in the server"
-                          className="w-full"
+                          className="w-full text-white"
                         />
                       </div>
                       <div className="flex flex-col gap-1 w-full">
-                        <Label htmlFor="timeoutMinutes">
+                        <Label htmlFor="timeoutMinutes" className="text-white">
                           Enter in when the timeout should expire:
                         </Label>
                         <div className="flex flex-row items-center gap-1">
                           <Input
                             name="timeoutMinutes"
                             placeholder="e.g: 2"
-                            className="w-full"
+                            className="w-full text0white"
                           />
                           <DurationUnitSelect
                             value={timeoutTime}
@@ -781,20 +812,23 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                         </Label>
                       </div>
                     </div>
-                    <div className="grow">&nbsp;</div>
-                    <div className="flex flex-row justify-between items-center w-full">
+                    <div className="flex flex-col gap-2 justify-between items-center w-full">
                       <Label className="text-sm text-zinc-400 font-normal">
                         Please note: this method will automatically time the
                         user out, and create a case for logging.
                       </Label>
-                      <Button type="submit" variant="destructive">
+                      <Button
+                        type="submit"
+                        variant="destructive"
+                        className="w-full"
+                      >
                         Timeout user
                       </Button>
                     </div>
                   </form>
                 </div>
               </TabsContent>
-              <TabsContent value="kick-user" className="rounded-lg h-[100%]">
+              <TabsContent value="kick-user" className="rounded-lg h-full">
                 <div className="flex flex-col items-start gap-3 justify-left p-3 h-full w-full">
                   <h2 className="text-lg font-semibold text-zinc-300">
                     Kick{" "}
@@ -803,27 +837,30 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                   </h2>
                   <form
                     onSubmit={kickUser}
-                    className="flex flex-col gap-2 h-full w-full"
+                    className="flex flex-col justify-between gap-2 h-[400px] w-full"
                   >
                     <div className="flex flex-row justify-between gap-4 w-full">
                       <div className="flex flex-col gap-1 w-full">
-                        <Label htmlFor="kickReason">
+                        <Label htmlFor="kickReason" className="text-white">
                           Whats the reason for the kick?
                         </Label>
                         <Input
                           name="kickReason"
                           placeholder="e.g: swearing in the server"
-                          className="w-full"
+                          className="w-full text-white"
                         />
                       </div>
                     </div>
-                    <div className="grow">&nbsp;</div>
-                    <div className="flex flex-row justify-between items-center w-full">
+                    <div className="flex flex-col gap-2 justify-between items-center w-full">
                       <Label className="text-sm text-zinc-400 font-normal">
                         Please note: this method will automatically kick the
                         user, and create a case for logging.
                       </Label>
-                      <Button type="submit" variant="destructive">
+                      <Button
+                        type="submit"
+                        variant="destructive"
+                        className="w-full"
+                      >
                         Kick user
                       </Button>
                     </div>
@@ -833,12 +870,11 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
             </Tabs>
           </div>
         </TabsContent>
-        <TabsContent value="user-bans" className="w-[500px] h-[600px]">
+        <TabsContent value="user-bans" className="w-full h-full">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
             <h2 className="text-xl font-semibold text-zinc-300">Bans</h2>
-            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
-              {memberBanData !== null &&
-                memberBanData.data?.length > 0 &&
+            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll h-[400px]">
+              {memberBanData?.data?.length > 0 &&
                 memberBanData.data?.map((caseItem: any) => (
                   <Link
                     key={caseItem.caseID}
@@ -863,34 +899,32 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     </Button>
                   </Link>
                 ))}
-              {memberBanData === null ||
-                (memberBanData.length === 0 && (
-                  <Button
-                    disabled
-                    className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
-                  >
-                    <span>There are no recorded bans for this user.</span>
-                  </Button>
-                ))}
+              {memberBanData?.data?.length === 0 && (
+                <Button
+                  disabled
+                  className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                >
+                  <span>There are no recorded bans for this user.</span>
+                </Button>
+              )}
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="user-warns" className="w-[500px] h-[600px]">
+        <TabsContent value="user-warns" className="w-full h-full">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
             <h2 className="text-xl font-semibold text-zinc-300">Warns</h2>
-            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
-              {memberWarnData !== null &&
-                memberWarnData.data?.length > 0 &&
+            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll h-[400px]">
+              {memberWarnData?.data?.length > 0 &&
                 memberWarnData.data?.map((caseItem: any) => (
                   <Link
                     key={caseItem.caseID}
                     href={`/:d:/app/server/${serverId}/cases/${caseItem.caseID}`}
                     className="w-full"
                   >
-                    <Button className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
-                      <div className="flex flex-row items-center justify-between w-full">
+                    <Button className="cursor-pointer w-auto h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
+                      <div className="flex flex-col items-center justify-start w-full">
                         <div className="flex flex-col gap-1 items-start justify-start">
-                          <span className="capitalize">
+                          <span className="capitalize text-wrap text-left">
                             {caseItem.case_info.case_type}{" "}
                             {caseItem.user_info.globalName} from{" "}
                             {serverData?.data.dsData.name}
@@ -901,116 +935,131 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                               "DD MMM YYYY",
                             )}
                           </span>
-                          <span>Case ID: {caseItem.caseID}</span>
+                          <span className="text-wrap text-left">
+                            Case ID: {caseItem.caseID}
+                          </span>
                         </div>
-                        <ChevronRight className="h-4 w-4 text-zinc-400" />
+                        <div className="mt-2 flex flex-row items-center justify-between w-full">
+                          <span>View</span>
+                          <ChevronRight className="h-4 w-4 text-zinc-400" />
+                        </div>
                       </div>
                     </Button>
                   </Link>
                 ))}
-              {memberWarnData === null ||
-                (memberWarnData.length === 0 && (
-                  <Button
-                    disabled
-                    className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
-                  >
-                    <span>There are no recorded warns for this user.</span>
-                  </Button>
-                ))}
+              {memberWarnData?.data?.length === 0 && (
+                <Button
+                  disabled
+                  className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                >
+                  <span>There are no recorded warns for this user.</span>
+                </Button>
+              )}
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="user-timeouts" className="w-[500px] h-[600px]">
+        <TabsContent value="user-timeouts" className="w-full h-full">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
             <h2 className="text-xl font-semibold text-zinc-300">Timeouts</h2>
-            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
-              {memberTimeoutData !== null &&
-                memberTimeoutData !== null &&
-                memberTimeoutData.data?.length > 0 &&
+            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll h-[400px]">
+              {memberTimeoutData?.data?.length > 0 &&
                 memberTimeoutData.data?.map((caseItem: any) => (
                   <Link
                     key={caseItem.caseID}
                     href={`/:d:/app/server/${serverId}/cases/${caseItem.caseID}`}
                     className="w-full"
                   >
-                    <Button className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
-                      <div className="flex flex-row items-center justify-between w-full">
+                    <Button className="cursor-pointer w-auto h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
+                      <div className="flex flex-col items-center justify-start w-full">
                         <div className="flex flex-col gap-1 items-start justify-start">
-                          <span className="capitalize">
+                          <span className="capitalize text-wrap text-left">
                             {caseItem.case_info.case_type}{" "}
                             {caseItem.user_info.globalName} from{" "}
                             {serverData?.data.dsData.name}
                           </span>
                           <span>
                             Timeout duration:{" "}
-                            {caseItem.case_info.timeout_duration || 0}{" "}
+                            {formatTime(
+                              caseItem.case_info.timeout_duration,
+                              caseItem.case_info.timeout_time,
+                            ) || 0}{" "}
                             {caseItem.case_info.timeout_time || "seconds"}
                           </span>
-                          <span>Case ID: {caseItem.caseID}</span>
+                          <span className="text-wrap text-left">
+                            Case ID: {caseItem.caseID}
+                          </span>
                         </div>
-                        <ChevronRight className="h-4 w-4 text-zinc-400" />
+                        <div className="mt-2 flex flex-row items-center justify-between w-full">
+                          <span>View</span>
+                          <ChevronRight className="h-4 w-4 text-zinc-400" />
+                        </div>
                       </div>
                     </Button>
                   </Link>
                 ))}
-              {memberTimeoutData === null ||
-                (memberTimeoutData.length === 0 && (
-                  <Button
-                    disabled
-                    className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
-                  >
-                    <span>There are no recorded timeouts for this user.</span>
-                  </Button>
-                ))}
+              {memberTimeoutData?.data?.length === 0 && (
+                <Button
+                  disabled
+                  className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                >
+                  <span>There are no recorded timeouts for this user.</span>
+                </Button>
+              )}
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="user-kicks" className="w-[500px] h-[600px]">
+        <TabsContent value="user-kicks" className="w-full h-full">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
             <h2 className="text-xl font-semibold text-zinc-300">Kicks</h2>
-            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
-              {memberKickData !== null &&
-                memberKickData.data?.length > 0 &&
-                memberKickData.data?.map((caseItem: any) => (
+            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll h-[400px]">
+              {memberKickData?.data?.length > 0 &&
+                memberKickData?.data?.map((caseItem: any) => (
                   <Link
                     key={caseItem.caseID}
                     href={`/:d:/app/server/${serverId}/cases/${caseItem.caseID}`}
                     className="w-full"
                   >
-                    <Button className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
-                      <div className="flex flex-row items-center justify-between w-full">
+                    <Button className="cursor-pointer w-auto h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
+                      <div className="flex flex-col items-center justify-start w-full">
                         <div className="flex flex-col gap-1 items-start justify-start">
-                          <span className="capitalize">
+                          <span className="capitalize text-wrap text-left">
                             {caseItem.case_info.case_type}{" "}
                             {caseItem.user_info.globalName} from{" "}
                             {serverData?.data.dsData.name}
                           </span>
-                          <span>Case ID: {caseItem.caseID}</span>
+                          <span className="text-wrap text-left">
+                            Case ID: {caseItem.caseID}
+                          </span>
                         </div>
-                        <ChevronRight className="h-4 w-4 text-zinc-400" />
+                        <div className="mt-2 flex flex-row items-center justify-between w-full">
+                          <span>View</span>
+                          <ChevronRight className="h-4 w-4 text-zinc-400" />
+                        </div>
                       </div>
                     </Button>
                   </Link>
                 ))}
-              {memberKickData === null ||
-                (memberKickData.length === 0 && (
-                  <Button
-                    disabled
-                    className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
-                  >
-                    <span>There are no recorded kicks for this user.</span>
-                  </Button>
-                ))}
+              {memberKickData?.data?.length === 0 && (
+                <Button
+                  disabled
+                  className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                >
+                  <span>There are no recorded kicks for this user.</span>
+                </Button>
+              )}
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="audit-log" className="w-[500px] h-[600px]">
+        <TabsContent value="audit-log" className="w-full h-full">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
             <h2 className="text-xl font-semibold text-zinc-300">Audit Log</h2>
-            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
+            <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll h-[400px]">
               {memberLogData.data?.map((logItem: any) => (
-                <Button className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
-                  <div className="flex flex-row items-center justify-between w-full">
+                <Button
+                  key={logItem.logID}
+                  className="cursor-pointer w-auto h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                >
+                  <div className="flex flex-col items-center justify-start w-full">
                     <div className="flex flex-col gap-1 items-start justify-start">
                       <span className="text-wrap text-left">
                         {logItem.actions_taken}
@@ -1018,7 +1067,9 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                       <span>
                         Executor ID: {logItem.executorID || "Unknown"}
                       </span>
-                      <span>Log ID: {logItem.logID}</span>
+                      <span className="text-wrap text-left">
+                        Log ID: {logItem.logID}
+                      </span>
                       <span>
                         Executed on:{" "}
                         {moment(logItem.timestamp).format(

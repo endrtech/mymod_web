@@ -71,55 +71,8 @@ export default async function SettingsPage({
 
   return (
     <main className="w-full h-screen" suppressHydrationWarning>
-      {/* Video background if it's an mp4 */}
-      {isVideo && (
-        <>
-          <video
-            className="absolute inset-0 w-full h-full object-cover z-0"
-            src={bg}
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
-          <div
-            className="absolute z-[1] left-0 w-[100vw] h-full"
-            style={{
-              backgroundImage: bg
-                ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"})), url('${bg}')`
-                : "none",
-              backgroundColor: bg ? undefined : "black",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-            }}
-          ></div>
-        </>
-      )}
-
-      {/* Gradient/image background if not a video */}
-      {!isVideo && (
-        <div
-          className="absolute inset-0 w-full h-full z-0"
-          style={{
-            backgroundImage: bg
-              ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"})), url('${bg}')`
-              : "none",
-            backgroundColor: bg ? undefined : "black",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-          }}
-        />
-      )}
       <div className="relative z-[10] w-full h-full">
-        <div
-          className="w-full h-[50px] rounded-[20px] blur-[40px]"
-          style={{
-            background: `radial-gradient(circle at top center, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_1 : "#00BFFF"}99 10%, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_2 : "#8A2BE6"}66 40%, ${currentServerData?.data.mmData.module_config.appearance ? currentServerData?.data.mmData.module_config.appearance.gradient.color_3 : "#FF0080"}4D 70%)`,
-          }}
-        ></div>
-        <div className="flex flex-col items-left mt-[15px] w-full p-6">
+        <div className="flex flex-col items-left mt-[15px] w-full p-4">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -146,19 +99,19 @@ export default async function SettingsPage({
           <div className="flex flex-row items-center justify-between w-full">
             <h1 className="text-4xl font-bold text-zinc-300">Settings</h1>
           </div>
-          <div className="flex flex-row items-center justify-between w-full h-auto my-4 z-0">
+          <div className="flex flex-col md:flex-row items-center justify-between w-full h-auto my-4 z-0">
             <Tabs
               orientation="vertical"
               defaultValue="general"
-              className="flex flex-row items-start justify-start w-full h-[70vh]"
+              className="flex flex-col md:flex-row items-start justify-start w-full h-full md:h-[70vh]"
             >
-              <TabsList className="flex flex-col gap-2 h-full w-[18%] justify-start text-left dark overflow-y-auto">
+              <TabsList className="flex flex-row md:flex-col gap-2 h-full w-full md:w-[18%] justify-start text-left dark overflow-y-auto">
                 <h4 className="text-sm uppercase text-left w-full font-medium text-zinc-500 p-2">
                   General
                 </h4>
                 <TabsTrigger
                   value="overview"
-                  className="w-full max-h-[40px] p-2 flex flex-row items-center justify-start gap-2 text-left"
+                  className="w-full h-fit md:max-h-[40px] p-2 flex flex-row items-center justify-start gap-2 text-left"
                 >
                   <Cog className="p-1 rounded-sm bg-zinc-900 text-white min-w-[25px] min-h-[25px]" />
                   <span className="text-left">Overview</span>
@@ -243,6 +196,9 @@ export default async function SettingsPage({
                   <Sparkles className="p-1 rounded-sm bg-linear-[45deg,#0090F7,#BA62FC,#F2416B,#F55600] text-white min-w-[25px] min-h-[25px] flex flex-row items-center justify-center" />
                   <span className="text-left">MYMOD Intelligence</span>
                 </TabsTrigger>
+                <span className="block md:hidden w-[2px] h-full bg-zinc-900 rounded-full">
+                  &nbsp;
+                </span>
                 <h4 className="text-sm uppercase text-left w-full font-medium text-zinc-500 p-2">
                   App Settings
                 </h4>
@@ -453,7 +409,7 @@ export default async function SettingsPage({
             </Tabs>
           </div>
         </div>
-        <Toaster className="dark" />
+        <Toaster className="dark" closeButton />
       </div>
     </main>
   );
