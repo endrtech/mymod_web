@@ -107,7 +107,7 @@ export function DataTable<TData, TValue>({
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className={`${geistSans.className} dark z-[999]`}
+            className={`${montserrat.className} dark z-[999]`}
           >
             {table
               .getAllColumns()
@@ -129,7 +129,7 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className={`${geistSans.className} rounded-md w-full`}>
+      <div className={`${montserrat.className} rounded-md w-full`}>
         <Table className="dark w-full">
           <TableHeader className="dark w-full">
             {table.getHeaderGroups().map((headerGroup) => (
