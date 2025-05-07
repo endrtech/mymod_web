@@ -33,6 +33,7 @@ export default async function RootLayout({
         >
           <PostHogProvider>
             <NextTopLoader color="#29D" height={3} showSpinner={false} />
+            <meta name="google-adsense-account" content="ca-pub-1135455202651115">
             <Suspense fallback={<LoadingOverlay />}>{children}</Suspense>
           </PostHogProvider>
         </body>

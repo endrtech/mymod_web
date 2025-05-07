@@ -62,11 +62,20 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
       "font-geist",
   );
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     const getData = async () => {
       const themes = await getThemes();
       setThemes(themes);
     };
+
     getData();
   }, []);
 
@@ -251,7 +260,11 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
           Want to use a pre-made theme from MYMOD? Look no further. Click on a
           theme to view more information about the theme.
         </h4>
-        <ThemeGalleryDrawer currentServerData={currentServerData} />
+        {isMobile ? (
+          <ThemeGalleryDrawer currentServerData={currentServerData} />
+        ) : (
+          <ThemeGalleryMain currentServerData={currentServerData} />
+        )}
         <br />
         <h4 className="text-xl text-left w-full font-bold text-zinc-300">
           Gradient Colors
