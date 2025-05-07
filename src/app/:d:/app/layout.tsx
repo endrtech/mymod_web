@@ -14,6 +14,7 @@ import { AppNavigation } from "@/components/AppNavigation";
 import { Toaster } from "@/components/ui/sonner";
 import { redirect } from "next/navigation";
 import { MainSidebarTrigger } from "@/components/MainSidebarTrigger";
+import { ApplicationNavBar } from "@/components/application/ApplicationNavBar";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -40,29 +41,9 @@ export default async function RootLayout({
 
   return (
     <div className={`${montserrat.className} antialiased w-full h-screen`}>
-      <div className="flex flex-row items-start justify-start">
-        <SidebarProvider
-          style={
-            {
-              "--sidebar-width": `300px`,
-            } as React.CSSProperties
-          }
-          className="border-0"
-        >
-          <Sidebar
-            collapsible="offcanvas"
-            className="overflow-hidden [&>[data-sidebar=sidebar]]:flex-row border-zinc-900"
-          >
-            <AppNavigation
-              guildsData={guildsData}
-              notificationsData={notificationsData}
-            />
-          </Sidebar>
-          <SidebarInset className="flex flex-col items-start justify-start w-full h-screen overflow-y-auto">
-            {children}
-          </SidebarInset>
-          <MainSidebarTrigger />
-        </SidebarProvider>
+      <ApplicationNavBar notificationsData={notificationsData} />
+      <div className="flex flex-col items-start justify-start overflow-hidden">
+        {children}
       </div>
       <Toaster className="dark" />
     </div>

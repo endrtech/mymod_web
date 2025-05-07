@@ -42,7 +42,7 @@ export default async function DiscordApp({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card>
+            <Card className="bg-black border-zinc-900">
               <CardHeader>
                 <CardTitle>Total Members</CardTitle>
               </CardHeader>
@@ -54,7 +54,7 @@ export default async function DiscordApp({
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-black border-zinc-900">
               <CardHeader>
                 <CardTitle>Cases</CardTitle>
               </CardHeader>
@@ -66,7 +66,7 @@ export default async function DiscordApp({
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-black border-zinc-900">
               <CardHeader>
                 <CardTitle>Active Users</CardTitle>
               </CardHeader>
@@ -78,7 +78,7 @@ export default async function DiscordApp({
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-black border-zinc-900">
               <CardHeader>
                 <CardTitle>New This Week</CardTitle>
               </CardHeader>
@@ -93,7 +93,7 @@ export default async function DiscordApp({
 
           <div className="flex w-full items-end justify-start gap-2 mb-8">
             <Tabs defaultValue="week" className="w-full">
-              <TabsList className="mt-6">
+              <TabsList className="mt-6 bg-black">
                 <TabsTrigger value="week">Past Week</TabsTrigger>
                 <TabsTrigger value="month">Past Month</TabsTrigger>
                 <TabsTrigger value="year">Past Year</TabsTrigger>
@@ -120,7 +120,7 @@ export default async function DiscordApp({
               </TabsContent>
               <TabsContent
                 value="year"
-                className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 gap-4 mb-8"
+                className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 mb-8"
               >
                 <OverviewChart
                   data={usersChart.year}
