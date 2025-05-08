@@ -36,7 +36,7 @@ export default function OnboardingFlow() {
             transition={{ duration: 0.8 }}
           >
             <Image
-              src="/endr_person_think.png"
+              src="/mymod_intelligence.png"
               width={100}
               height={100}
               alt="MYMOD"
@@ -48,7 +48,7 @@ export default function OnboardingFlow() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            What can you do in MYMOD?
+            MYMOD Intelligence. Moderation supercharged.
           </motion.h1>
           <motion.h1
             className={`${geistSans.className} text-lg text-white font-medium`}
@@ -56,92 +56,75 @@ export default function OnboardingFlow() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            MYMOD comes with many features out of the box, but we&apos;d like to
-            highlight a few.
+            MYMOD Intelligence is the AI platform designed to help you use MYMOD
+            faster.
           </motion.h1>
           <motion.div
-            className={`${geistSans.className} dark text-white grid grid-cols-4 gap-4`}
+            className={`${geistSans.className} dark text-white grid grid-cols-3 gap-4`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            <Card className="bg-gradient-to-br from-purple-800 to-background border-none shadow-xl">
+            <Card className="bg-black">
               <CardHeader>
                 <CardTitle className="text-xl">
-                  Get help, wherever you need it.
+                  Find info about your members.
                 </CardTitle>
-                <CardAction>
-                  <Badge variant="secondary">EARLY ACCESS</Badge>
-                </CardAction>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  MYMOD comes with ENDR Intelligence, a powerful AI platform
-                  designed to help your work in MYMOD easier.
+                  You can ask whos in your server, or get an automated summary
+                  of a specific member.
                 </CardDescription>
                 <br />
-                <Link href={"/onboarding/about-mymod-intelligence"}>
-                  <Button variant="outline">
-                    Learn more <ChevronRight />
-                  </Button>
-                </Link>
+                <Image
+                  src={"/mymod_intelligence_onboarding/appendix_1.svg"}
+                  width={300}
+                  height={300}
+                  alt="Appendix 1"
+                />
               </CardContent>
             </Card>
-            <Card className="bg-gradient-to-br from-blue-800 to-background border-none shadow-xl">
+            <Card className="bg-black">
               <CardHeader>
                 <CardTitle className="text-xl">
-                  Keep track of every punishment.
+                  Get an overview over a members cases.
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  MYMOD uses Cases to create and action punishments and
-                  moderation actions against users in your server. Add comments,
-                  or have multiple actions all done at the same time with ease.
+                  You can ask for information on what cases a user has, or about
+                  a specific one.
                 </CardDescription>
                 <br />
-                <Link href={"/onboarding/about-cases"}>
-                  <Button variant="outline">
-                    Learn more <ChevronRight />
-                  </Button>
-                </Link>
+                <Image
+                  src={"/mymod_intelligence_onboarding/appendix_2.png"}
+                  width={400}
+                  height={400}
+                  alt="Appendix 2"
+                />
               </CardContent>
             </Card>
-            <Card className="bg-gradient-to-br from-orange-800 to-background border-none shadow-xl">
+            <Card className="bg-black">
               <CardHeader>
                 <CardTitle className="text-xl">
-                  Manage everything about your server.
+                  Moderate a user with just a prompt.
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  MYMOD has built-in server management, allowing you to update
-                  almost anything about your server. Soon, you&apos;ll be able
-                  to do the same with your members.
+                  You can ask MYMOD Intelligence to easily punish a user.
+                  Currently, you can only warn users. Soon, you&apos;ll be able
+                  to use all moderation actions, and also use MYMOD Intelligence
+                  via Discord.
                 </CardDescription>
                 <br />
-                <Link href={"/onboarding/server-management"}>
-                  <Button variant="outline">
-                    Learn more <ChevronRight />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-            <Card className="bg-gradient-to-br from-green-800 to-background border-none shadow-xl">
-              <CardHeader>
-                <CardTitle className="text-xl">
-                  An extensive plugin platform.
-                </CardTitle>
-                <CardAction>
-                  <Badge variant="secondary">COMING SOON</Badge>
-                </CardAction>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  MYMOD is designed to be modular at its core, meaning you can
-                  build plugins that work with existing bots or tools that feed
-                  into your MYMOD Dashboard.
-                </CardDescription>
+                <Image
+                  src={"/mymod_intelligence_onboarding/appendix_3.png"}
+                  width={400}
+                  height={400}
+                  alt="Appendix 3"
+                />
               </CardContent>
             </Card>
           </motion.div>
@@ -151,12 +134,22 @@ export default function OnboardingFlow() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            <Link href={"/onboarding/finish"}>
+            <Link href={"/onboarding/overview"}>
               <Button variant="outline">
-                Finish <ChevronRight />
+                Head back <ChevronRight />
               </Button>
             </Link>
           </motion.div>
+          <motion.h1
+            className={`${geistSans.className} text-sm text-white font-normal max-w-1/3`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+          >
+            MYMOD Intelligence is an early access, free feature, and may become
+            a Premium feature in the future. This feature is enabled by default,
+            and can be disabled in Settings.
+          </motion.h1>
         </div>
       </div>
     </>

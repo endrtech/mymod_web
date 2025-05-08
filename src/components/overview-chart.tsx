@@ -52,7 +52,7 @@ export default function OverviewChart({
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="w-full h-[300px] dark">
-          <LineChart
+          <BarChart
             accessibilityLayer
             data={data}
             margin={{
@@ -76,14 +76,14 @@ export default function OverviewChart({
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
-            <Line
+            <Bar
               dataKey="count"
               type="natural"
               fill="var(--color-count)"
               fillOpacity={0.4}
               stroke="var(--color-count)"
             />
-          </LineChart>
+          </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">

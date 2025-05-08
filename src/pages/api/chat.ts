@@ -7,7 +7,10 @@ import { warnGuildMember } from "@/app/actions/guilds/members/warnGuildMember";
 import type { NextApiRequest, NextApiResponse } from "next";
 import OpenAI from "openai";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -30,24 +33,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             name: "getCurrentGuildMembers",
             description: "Get current guild members from the current server.",
             parameters: {},
-          }
+          },
         },
         {
           type: "function",
           function: {
             name: "getGuildMember",
-            description: "Returns information about a specified guild member. If a user asks for something else, such as to warn a user, DO NOT CALL THIS FUNCTION.",
+            description:
+              "Returns information about a specified guild member. If a user asks for something else, such as to warn a user, DO NOT CALL THIS FUNCTION.",
             parameters: {
               type: "object",
               properties: {
                 searchUser: {
                   type: "string",
-                  description: "The member name to search for. If the question is unrelated to finding a member, do not use this function."
-                }
+                  description:
+                    "The member name to search for. If the question is unrelated to finding a member, do not use this function.",
+                },
               },
-              required: ["searchUser"]
-            }
-          }
+              required: ["searchUser"],
+            },
+          },
         },
         {
           type: "function",
@@ -59,38 +64,42 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               properties: {
                 searchQuery: {
                   type: "string",
-                  description: "The member to search for to pull information regarding their cases."
-                }
+                  description:
+                    "The member to search for to pull information regarding their cases.",
+                },
               },
-              required: ["searchQuery"]
-            }
-          }
+              required: ["searchQuery"],
+            },
+          },
         },
         {
           type: "function",
           function: {
             name: "warnGuildMember",
-            description: "Directly warns the specified user and creates a log case. Do not use `getGuildMember` or `getCurrentGuildMembers` EVER.",
+            description:
+              "Directly warns the specified user and creates a log case. DO NOT use 'getGuildMember', unless you do not have enough information from the provided prompt.",
             parameters: {
               type: "object",
               properties: {
                 memberName: {
                   type: "string",
-                  description: "The member's username. If you are being provided information from `getGuildMember` or `getCurrentGuildMembers`, use the users username, NOT what you have been provided in the question."
+                  description:
+                    "The member's display name. If you are being provided information from `getGuildMember` or `getCurrentGuildMembers`, use the users display name, NOT what you have been provided in the question.",
                 },
                 warnReason: {
                   type: "string",
-                  description: "The reason for the warn."
+                  description: "The reason for the warn.",
                 },
                 warnExpires: {
                   type: "string",
-                  description: "When the warn expires. Convert this value into an ISO string when received."
-                }
+                  description:
+                    "When the warn expires. Convert this value into an ISO string when received.",
+                },
               },
-              required: ["memberName", "warnReason", "warnExpires"]
-            }
-          }
-        }
+              required: ["memberName", "warnReason", "warnExpires"],
+            },
+          },
+        },
       ],
     });
 
@@ -133,72 +142,94 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (!member) {
               return res.status(200).json({
                 role: "assistant",
-                content: "I am unable to complete this request for you. Try again later."
-              })
+                content:
+                  "I am unable to complete this request for you. Try again later.",
+              });
             }
 
-            const summaryResponse_getGuildMember = await client.chat.completions.create({
-              model: "gpt-4.1-mini",
-              messages: [
-                {
-                  role: "user",
-                  content: `Give me a summary on the following data. Have some detail, but limit your response to under 500 characters. Do not include information about the avatar image, or their display name, for example. Just respond with the summary, no other information.\n${JSON.stringify(member.data)}`
-                }
-              ]
-            })
+            const summaryResponse_getGuildMember =
+              await client.chat.completions.create({
+                model: "gpt-4.1-mini",
+                messages: [
+                  {
+                    role: "user",
+                    content: `Give me a summary on the following data. Have some detail, but limit your response to under 500 characters. Do not include information about the avatar image, or their display name, for example. Just respond with the summary, no other information.\n${JSON.stringify(member.data)}`,
+                  },
+                ],
+              });
 
-            return res.status(200).json(summaryResponse_getGuildMember.choices[0].message);
+            return res
+              .status(200)
+              .json(summaryResponse_getGuildMember.choices[0].message);
           }
           case "getMemberCases": {
             const args_getGuildMemberCases = JSON.parse(fnArgs);
-            const member_getGuildMemberCases = await searchMember(server, args_getGuildMemberCases.searchQuery)
-            const cases = await getGuildMember(server, member_getGuildMemberCases.data[0]?.userId);
+            const member_getGuildMemberCases = await searchMember(
+              server,
+              args_getGuildMemberCases.searchQuery,
+            );
+            const cases = await getGuildMember(
+              server,
+              member_getGuildMemberCases.data[0]?.userId,
+            );
 
             if (!member_getGuildMemberCases) {
               return res.status(200).json({
                 role: "assistant",
-                content: "I am unable to complete this request for you. Try again later."
-              })
+                content:
+                  "I am unable to complete this request for you. Try again later.",
+              });
             }
 
-            const summaryResponse_getGuildMemberCases = await client.chat.completions.create({
-              model: "gpt-4.1-mini",
-              messages: [
-                {
-                  role: "user",
-                  content: `Give me a summary on the following data. Have some detail, but limit your response to under 500 characters. Do not include information about the avatar images, for example. Just respond with the summary, no other information. If the JSON is empty, just return that there isn't any cases for this member. \n${JSON.stringify(cases.memberCases)}`
-                }
-              ]
-            })
+            const summaryResponse_getGuildMemberCases =
+              await client.chat.completions.create({
+                model: "gpt-4.1-mini",
+                messages: [
+                  {
+                    role: "user",
+                    content: `Give me a summary on the following data. Have some detail, but limit your response to under 500 characters. Do not include information about the avatar images, for example. Just respond with the summary, no other information. If the JSON is empty, just return that there isn't any cases for this member. \n${JSON.stringify(cases.memberCases)}`,
+                  },
+                ],
+              });
 
-            return res.status(200).json(summaryResponse_getGuildMemberCases.choices[0].message)
+            return res
+              .status(200)
+              .json(summaryResponse_getGuildMemberCases.choices[0].message);
           }
           case "warnGuildMember": {
             const args_warnGuildMember = JSON.parse(fnArgs);
-            const member_warnGuildMember = await searchMember(server, args_warnGuildMember.memberName);
-            const response_warnGuildMember = await warnGuildMember(server, member_warnGuildMember.data[0]?.userId, {
-              warnReason: args_warnGuildMember.warnReason,
-              createdById: user,
-              warnTimestamp: args_warnGuildMember.warnExpires,
-            })
+            const member_warnGuildMember = await searchMember(
+              server,
+              args_warnGuildMember.memberName,
+            );
+            const response_warnGuildMember = await warnGuildMember(
+              server,
+              member_warnGuildMember.data[0]?.userId,
+              {
+                warnReason: args_warnGuildMember.warnReason,
+                createdById: user,
+                warnTimestamp: args_warnGuildMember.warnExpires,
+              },
+            );
 
-            if(response_warnGuildMember === 200) {
+            if (response_warnGuildMember === 200) {
               return res.status(200).json({
                 role: "assistant",
                 content: `${member_warnGuildMember.data[0]?.displayName} has been warned. Let me know if you need assistance with anything else!`,
-              })
+              });
             } else {
               return res.status(200).json({
                 role: "assistant",
                 content: `${member_warnGuildMember.data[0]?.displayName} has been warned, however, I got the following error when completing it: ${response_warnGuildMember}`,
-              })
+              });
             }
           }
           default:
             return res.status(200).json({
               role: "assistant",
-              content: "Sorry, I am unable to assist with that. Please try again later."
-            })
+              content:
+                "Sorry, I am unable to assist with that. Please try again later.",
+            });
         }
       }
     }
@@ -216,7 +247,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 }
 /**
- * 
+ *
  * // pages/api/chat.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 

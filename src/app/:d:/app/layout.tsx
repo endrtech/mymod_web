@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/sidebar";
 import { AppNavigation } from "@/components/AppNavigation";
 import { Toaster } from "@/components/ui/sonner";
-import { redirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
 import { MainSidebarTrigger } from "@/components/MainSidebarTrigger";
 import { ApplicationNavBar } from "@/components/application/ApplicationNavBar";
 
@@ -21,7 +21,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "MYMOD :: Home",
+  title: "MYMOD - Home",
   description: "Welcome to the futue of moderation.",
 };
 
@@ -32,11 +32,11 @@ export default async function RootLayout({
   manage: React.ReactNode;
 }>) {
   const discordData = await getDiscordUser();
-  const guildsData = await getUserGuilds(discordData?.id);
+  const guildsData = (await getUserGuilds(discordData?.id)) || 400;
   const notificationsData = await getUserNotifications(discordData?.id);
 
-  if (discordData.message === "401: Unauthorized") {
-    return redirect("/connect-discord");
+  if (!discordData?.id && (guildsData === 500 || guildsData?.length === 0)) {
+    permanentRedirect("/onboarding");
   }
 
   return (

@@ -47,10 +47,7 @@ export default async function DiscordApp({
                 <CardTitle>Total Members</CardTitle>
               </CardHeader>
               <CardContent className="dark text-white">
-                <p className="text-2xl font-bold">{stats?.members}</p>
-                <p className="text-sm text-muted-foreground">
-                  +{stats?.memberChange || 0}% from last week
-                </p>
+                <p className="text-2xl font-bold">{stats?.members} members</p>
               </CardContent>
             </Card>
 
@@ -59,10 +56,7 @@ export default async function DiscordApp({
                 <CardTitle>Cases</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold">{stats?.cases}</p>
-                <p className="text-sm text-muted-foreground">
-                  +{stats?.casesChange}% from last week
-                </p>
+                <p className="text-2xl font-bold">{stats?.cases} cases</p>
               </CardContent>
             </Card>
 
@@ -71,9 +65,8 @@ export default async function DiscordApp({
                 <CardTitle>Active Users</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold">{stats?.activeUsers}</p>
-                <p className="text-sm text-muted-foreground">
-                  +{stats?.activeChange} since last hour
+                <p className="text-2xl font-bold">
+                  {stats?.activeUsers} currently active
                 </p>
               </CardContent>
             </Card>
@@ -83,7 +76,9 @@ export default async function DiscordApp({
                 <CardTitle>New This Week</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold">{stats?.newThisWeek}</p>
+                <p className="text-2xl font-bold">
+                  {stats?.newThisWeek} new user(s)
+                </p>
                 <p className="text-sm text-muted-foreground">
                   joined in the past 7 days
                 </p>

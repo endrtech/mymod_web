@@ -43,7 +43,7 @@ export default function OnboardingFlow() {
     if (user.id) {
       permanentRedirect("/onboarding/discord-linked");
     } else {
-      permanentRedirect("#");
+      setCtaClicked(false);
     }
   };
 
@@ -63,7 +63,7 @@ export default function OnboardingFlow() {
             transition={{ duration: 0.8 }}
           >
             <Image
-              src="/mymod_emblem.svg"
+              src="/endr_exclaimation.png"
               width={100}
               height={100}
               alt="MYMOD"
@@ -107,9 +107,8 @@ export default function OnboardingFlow() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            You will be taken to Accounts Centre, where you can connect your
-            account under "Connected accounts." Once your done, come back here
-            to continue.
+            You will be taken to Discord to connect your account, then to
+            Accounts Centre. Once done, come back here to confirm.
           </motion.h1>
         </div>
       </div>

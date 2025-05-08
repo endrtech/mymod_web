@@ -9,12 +9,20 @@ import { getUserGuilds } from "@/app/actions/getUserGuilds";
 import { getDiscordUser } from "@/app/actions/getDiscordUser";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function OnboardingFlow() {
   return (
     <>
       <motion.div
-        className="absolute bg-[url('https://i.imgur.com/SktGH2I.png')] bg-cover bg-center w-full h-screen overflow-hidden z-0"
+        className="absolute bg-[url('https://i.imgur.com/ri130So.png')] bg-contain bg-right bg-no-repeat w-full h-screen overflow-hidden z-0"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5 }}
@@ -27,7 +35,7 @@ export default function OnboardingFlow() {
             transition={{ duration: 0.8 }}
           >
             <Image
-              src="/endr_exclaimation.png"
+              src="/mymod_emblem.svg"
               width={100}
               height={100}
               alt="MYMOD"
@@ -39,16 +47,17 @@ export default function OnboardingFlow() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            Let&apos;s add a server.
+            Manage everything in your server with ease.
           </motion.h1>
           <motion.h1
-            className={`${geistSans.className} text-lg text-white font-medium`}
+            className={`${geistSans.className} text-lg text-white font-medium max-w-[60%]`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            To use MYMOD, our connector bot needs to be added to a server. Add
-            MYMOD to one now.
+            MYMOD extends Discord server management, with a custom built
+            Settings page, allowing you to update settings from Discord,
+            applying a theme, and more.
           </motion.h1>
           <motion.div
             className={`${geistSans.className} dark text-white cursor-pointer`}
@@ -56,27 +65,11 @@ export default function OnboardingFlow() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            {process.env.NEXT_PUBLIC_DEV_MODE === "true" ? (
-              <Link
-                href={
-                  "https://discord.com/oauth2/authorize?client_id=1156892648712454214&permissions=1634705730726&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Fonboarding%2Fserver-connected&integration_type=0&scope=bot+identify"
-                }
-              >
-                <Button variant="outline">
-                  Connect a server <ChevronRight />
-                </Button>
-              </Link>
-            ) : (
-              <Link
-                href={
-                  "https://discord.com/oauth2/authorize?client_id=1156892648712454214&permissions=1634705730726&response_type=code&redirect_uri=https%3A%2F%2Fmymod.endr.tech%2Fonboarding%2Fserver-connected&integration_type=0&scope=bot+identify"
-                }
-              >
-                <Button variant="outline">
-                  Connect a server <ChevronRight />
-                </Button>
-              </Link>
-            )}
+            <Link href={"/onboarding/overview"}>
+              <Button variant="outline">
+                Head back <ChevronRight />
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </div>
