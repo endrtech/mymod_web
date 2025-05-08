@@ -12,15 +12,16 @@ import {
 } from "@/components/ui/sidebar";
 import { AppNavigation } from "@/components/AppNavigation";
 import { Toaster } from "@/components/ui/sonner";
-import { redirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
 import { MainSidebarTrigger } from "@/components/MainSidebarTrigger";
+import { ApplicationNavBar } from "@/components/application/ApplicationNavBar";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "MYMOD :: Home",
+  title: "MYMOD - Home",
   description: "Welcome to the futue of moderation.",
 };
 
@@ -31,38 +32,18 @@ export default async function RootLayout({
   manage: React.ReactNode;
 }>) {
   const discordData = await getDiscordUser();
-  const guildsData = await getUserGuilds(discordData?.id);
+  const guildsData = (await getUserGuilds(discordData?.id)) || 400;
   const notificationsData = await getUserNotifications(discordData?.id);
 
-  if (discordData.message === "401: Unauthorized") {
-    return redirect("/connect-discord");
+  if (!discordData?.id && (guildsData === 500 || guildsData?.length === 0)) {
+    permanentRedirect("/onboarding");
   }
 
   return (
     <div className={`${montserrat.className} antialiased w-full h-screen`}>
-      <div className="flex flex-row items-start justify-start">
-        <SidebarProvider
-          style={
-            {
-              "--sidebar-width": `300px`,
-            } as React.CSSProperties
-          }
-          className="border-0"
-        >
-          <Sidebar
-            collapsible="offcanvas"
-            className="overflow-hidden [&>[data-sidebar=sidebar]]:flex-row border-zinc-900"
-          >
-            <AppNavigation
-              guildsData={guildsData}
-              notificationsData={notificationsData}
-            />
-          </Sidebar>
-          <SidebarInset className="flex flex-col items-start justify-start w-full h-screen overflow-y-auto">
-            {children}
-          </SidebarInset>
-          <MainSidebarTrigger />
-        </SidebarProvider>
+      <ApplicationNavBar notificationsData={notificationsData} />
+      <div className="flex flex-col items-start justify-start overflow-hidden">
+        {children}
       </div>
       <Toaster className="dark" />
     </div>

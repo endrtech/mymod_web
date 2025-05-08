@@ -42,48 +42,43 @@ export default async function DiscordApp({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card>
+            <Card className="bg-black border-zinc-900">
               <CardHeader>
                 <CardTitle>Total Members</CardTitle>
               </CardHeader>
               <CardContent className="dark text-white">
-                <p className="text-2xl font-bold">{stats?.members}</p>
-                <p className="text-sm text-muted-foreground">
-                  +{stats?.memberChange || 0}% from last week
-                </p>
+                <p className="text-2xl font-bold">{stats?.members} members</p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-black border-zinc-900">
               <CardHeader>
                 <CardTitle>Cases</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold">{stats?.cases}</p>
-                <p className="text-sm text-muted-foreground">
-                  +{stats?.casesChange}% from last week
-                </p>
+                <p className="text-2xl font-bold">{stats?.cases} cases</p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-black border-zinc-900">
               <CardHeader>
                 <CardTitle>Active Users</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold">{stats?.activeUsers}</p>
-                <p className="text-sm text-muted-foreground">
-                  +{stats?.activeChange} since last hour
+                <p className="text-2xl font-bold">
+                  {stats?.activeUsers} currently active
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-black border-zinc-900">
               <CardHeader>
                 <CardTitle>New This Week</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold">{stats?.newThisWeek}</p>
+                <p className="text-2xl font-bold">
+                  {stats?.newThisWeek} new user(s)
+                </p>
                 <p className="text-sm text-muted-foreground">
                   joined in the past 7 days
                 </p>
@@ -93,7 +88,7 @@ export default async function DiscordApp({
 
           <div className="flex w-full items-end justify-start gap-2 mb-8">
             <Tabs defaultValue="week" className="w-full">
-              <TabsList className="mt-6">
+              <TabsList className="mt-6 bg-black">
                 <TabsTrigger value="week">Past Week</TabsTrigger>
                 <TabsTrigger value="month">Past Month</TabsTrigger>
                 <TabsTrigger value="year">Past Year</TabsTrigger>
@@ -120,7 +115,7 @@ export default async function DiscordApp({
               </TabsContent>
               <TabsContent
                 value="year"
-                className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 gap-4 mb-8"
+                className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 mb-8"
               >
                 <OverviewChart
                   data={usersChart.year}

@@ -45,6 +45,7 @@ import {
 import { RefreshApplicationNav } from "@/components/RefreshApplicationNav";
 import { Button } from "@/components/ui/button";
 import { ToggleAISidebar } from "@/components/ToggleAISidebar";
+import { ServerNavBar } from "@/components/application/ServerNavBar";
 
 export const metadata: Metadata = {
   title: `MYMOD`,
@@ -68,6 +69,8 @@ export default async function RootLayout({
     serverId,
     discordData?.id,
   );
+
+  metadata.title = `MYMOD - ${currentServerData?.data.dsData.name}`;
 
   if (currentServerData?.data.mmData.module_config.appearance?.font) {
     font = currentServerData?.data.mmData.module_config.appearance?.font;
@@ -100,7 +103,7 @@ export default async function RootLayout({
               className="absolute z-[1] left-0 w-[100vw] h-screen"
               style={{
                 backgroundImage: bg
-                  ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlay_percent ? currentServerData?.data.mmData.module_config.appearance?.overlay_percent : "0.9"})), url('${bg}')`
+                  ? `linear-gradient(to bottom, rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlayPercent ? currentServerData?.data.mmData.module_config.appearance?.overlayPercent : "0.9"}), rgba(0,0,0,${currentServerData?.data.mmData.module_config.appearance?.overlayPercent ? currentServerData?.data.mmData.module_config.appearance?.overlayPercent : "0.9"})), url('${bg}')`
                   : "none",
                 backgroundColor: bg ? undefined : "black",
                 backgroundPosition: "center",
@@ -133,13 +136,13 @@ export default async function RootLayout({
           }}
         ></div>
         <div
-          className={`flex z-[10] relative flex-col items-left justify-left w-full h-screen ${font}`} suppressHydrationWarning={true}
+          className={`flex z-[10] relative flex-col items-left justify-left w-full h-screen ${font}`}
+          suppressHydrationWarning={true}
         >
-          <div className="z-[20] flex items-center justify-end gap-2 mr-4 mt-2">
-            <RefreshApplicationNav />
-            <ToggleAISidebar />
+          <ServerNavBar serverId={serverId} />
+          <div className="w-full h-full overflow-y-scroll pt-28">
+            {children}
           </div>
-          <div className="w-full h-full overflow-y-scroll">{children}</div>
         </div>
         {currentServerData.data?.mmData.module_config.mymod_intelligence
           .enabled === true && (

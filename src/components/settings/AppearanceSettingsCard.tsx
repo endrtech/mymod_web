@@ -101,7 +101,7 @@ export const AppearanceSettingsCard = ({ currentServerData }: any) => {
             currentServerData?.data.mmData.module_config.appearance?.color_3,
           overlayPercent:
             currentServerData?.data.mmData.module_config.appearance
-              ?.overlay_percent || "0.9",
+              ?.overlayPercent || "0.9",
         };
 
   const bg =

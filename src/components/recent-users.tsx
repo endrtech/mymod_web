@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function RecentUsers({ users }: any) {
   return (
-    <Card className="w-full h-[100%]">
+    <Card className="w-full h-[100%] bg-black border-zinc-900">
       <CardHeader>
         <CardTitle>Recent Joins</CardTitle>
         <p className="text-sm text-muted-foreground">
