@@ -331,7 +331,7 @@ export const ServerNavBar = ({ serverId }: any) => {
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
-          {!isMobile && <SearchCommand serverId={serverId} />}
+          {/*{!isMobile && <SearchCommand serverId={serverId} />}*/}
         </div>
       </Card>
     </div>
