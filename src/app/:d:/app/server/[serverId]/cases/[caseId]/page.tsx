@@ -83,7 +83,6 @@ export default async function CasePage({
   const guildRelationshipData = await getCurrentGuildRelationships(serverId);
   const currentServerData = await getCurrentGuild(serverId);
   const memberData = await getGuildMember(serverId, caseData?.assignee_info.id);
-  const caseMemberData = await getGuildMember(serverId, caseData?.user_info.id);
   const bg =
     currentServerData?.data.mmData.module_config.appearance?.background;
   const isVideo = bg?.endsWith(".mp4");
@@ -560,32 +559,54 @@ export default async function CasePage({
                           <br />
                           <span className="text-sm font-normal flex flex-row gap-2 py-2">
                             <Image
-                              src={caseMemberData?.discordUser.avatarURL}
-                              alt={caseMemberData?.discordUser.username}
+                              src={caseData?.user_info.displayAvatarURL}
+                              alt={caseData?.user_info.username}
                               width={25}
                               height={25}
                               className="rounded-full"
                             />
                             <span className="grow capitalize">
-                              {caseMemberData?.discordUser.globalName ||
-                                caseMemberData?.discordUser.username}
+                              {caseData?.user_info.globalName ||
+                                caseData?.user_info.username}
                             </span>
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <a className="text-blue-500 hover:underline">
-                                  View
-                                </a>
-                              </DialogTrigger>
-                              <DialogContent className="dark text-white p-0 bg-black min-w-[1000px]">
-                                <DialogTitle className="pt-3 px-2 text-md flex flex-row items-center justify-start gap-2">
-                                  <UserPen size={18} /> Member Information
-                                </DialogTitle>
-                                <ViewMemberDialog
-                                  serverId={serverId}
-                                  userId={caseMemberData?.discordUser.id}
-                                />
-                              </DialogContent>
-                            </Dialog>
+                            {caseData?.case_info.case_type.includes("warn") && (
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <a className="text-blue-500 hover:underline">
+                                    View
+                                  </a>
+                                </DialogTrigger>
+                                <DialogContent className="dark text-white p-0 bg-black min-w-[1000px]">
+                                  <DialogTitle className="pt-3 px-2 text-md flex flex-row items-center justify-start gap-2">
+                                    <UserPen size={18} /> Member Information
+                                  </DialogTitle>
+                                  <ViewMemberDialog
+                                    serverId={serverId}
+                                    userId={caseData?.user_info.id}
+                                  />
+                                </DialogContent>
+                              </Dialog>
+                            )}
+                            {caseData?.case_info.case_type.includes(
+                              "timeout",
+                            ) && (
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <a className="text-blue-500 hover:underline">
+                                    View
+                                  </a>
+                                </DialogTrigger>
+                                <DialogContent className="dark text-white p-0 bg-black min-w-[1000px]">
+                                  <DialogTitle className="pt-3 px-2 text-md flex flex-row items-center justify-start gap-2">
+                                    <UserPen size={18} /> Member Information
+                                  </DialogTitle>
+                                  <ViewMemberDialog
+                                    serverId={serverId}
+                                    userId={caseData?.user_info.id}
+                                  />
+                                </DialogContent>
+                              </Dialog>
+                            )}
                           </span>
                           <Separator />
                         </div>

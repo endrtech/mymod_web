@@ -52,7 +52,7 @@ export const ServerSwitcher = () => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="bg-zinc-800/40 text-white inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors shadow-sm hover:bg-zinc-600/40 hover:text-white border-none h-9 px-4 py-2 w-auto justify-between"
+          className="bg-zinc-800/40 text-white inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors shadow-sm hover:bg-zinc-600/40 hover:text-white border-none truncate h-9 px-4 py-2 w-[200px] justify-between"
         >
           {value ? (
             <span className="relative flex shrink-0 overflow-hidden rounded-full mr-2 h-5 w-5">
@@ -67,9 +67,11 @@ export const ServerSwitcher = () => {
           ) : (
             ""
           )}
-          {value
-            ? servers.find((server: any) => server.id === value)?.name
-            : "Select a server..."}
+          <span className="max-w-sm truncate">
+            {value
+              ? servers.find((server: any) => server.id === value)?.name
+              : "Select a server..."}
+          </span>
           <ChevronsUpDown className="opacity-50 ml-auto" />
         </Button>
       </PopoverTrigger>
