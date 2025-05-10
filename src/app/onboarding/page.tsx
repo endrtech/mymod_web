@@ -21,6 +21,8 @@ export default function OnboardingFlow() {
         const getServers = await getUserGuilds(user?.id);
         if (getServers?.length === 0) {
           setNextStep("/onboarding/connect-server");
+        } else {
+          setNextStep("/onboarding/overview");
         }
       }
     };
