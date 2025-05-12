@@ -1,8 +1,11 @@
+"use server";
 import axios from "axios";
+import { cookies } from "next/headers";
 
 export const createTheme = async () => {
+  const sessionToken = (await cookies()).get("__session");
   const response = await axios.post(
-    "https://api.mymod.endr.tech/api/modules/theme_gallery",
+    "http://localhost:3030/api/modules/theme_gallery",
     {
       name: "",
       description: "",
@@ -12,6 +15,11 @@ export const createTheme = async () => {
       background: "",
       font: "",
       overlayPercent: "",
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${sessionToken?.value}`,
+      },
     },
   );
 

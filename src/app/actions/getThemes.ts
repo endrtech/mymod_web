@@ -1,8 +1,16 @@
+"use server";
 import axios from "axios";
+import { cookies } from "next/headers";
 
 export const getThemes = async () => {
+  const sessionToken = (await cookies()).get("__session");
   const response = await axios.get(
-    "https://api.mymod.endr.tech/api/modules/theme_gallery?status=active",
+    "http://localhost:3030/api/modules/theme_gallery?status=active",
+    {
+      headers: {
+        Authorization: `Bearer ${sessionToken?.value}`,
+      },
+    },
   );
 
   if (response.status === 200) {

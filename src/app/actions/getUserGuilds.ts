@@ -1,9 +1,17 @@
+"use server";
 import axios, { AxiosResponse } from "axios";
+import { cookies } from "next/headers";
 
 export async function getUserGuilds(userId: string): Promise<any | number> {
+  const sessionToken = (await cookies()).get("__session");
   try {
     const resp: AxiosResponse = await axios.get(
-      `https://api.mymod.endr.tech/api/users/${userId}/guilds`,
+      `http://localhost:3030/api/users/${userId}/guilds`,
+      {
+        headers: {
+          Authorization: `Bearer ${sessionToken?.value}`,
+        },
+      },
     );
 
     if (resp.status === 200) {

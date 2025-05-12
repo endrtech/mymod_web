@@ -1,4 +1,6 @@
+"use server";
 import axios from "axios";
+import { cookies } from "next/headers";
 
 export async function reassignCase(
   caseId: string,
@@ -7,9 +9,15 @@ export async function reassignCase(
     executorId: any;
   },
 ) {
+  const sessionToken = (await cookies()).get("__session");
   const resp = await axios.post(
-    `https://api.mymod.endr.tech/api/cases/reassign/${caseId}`,
+    `http://localhost:3030/api/cases/reassign/${caseId}`,
     body,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionToken?.value}`,
+      },
+    },
   );
 
   if (resp.status === 200) {
