@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export const getTheme = async (themeId: any) => {
   const sessionToken = (await cookies()).get("__session");
   const response = await axios.get(
-    `http://localhost:3030/api/modules/theme_gallery/${themeId}`,
+    `https://api.mymod.endr.tech/api/modules/theme_gallery/${themeId}`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

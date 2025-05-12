@@ -5,7 +5,7 @@ import axios from "axios";
 
 export async function getKpis() {
   const response = await axios.get(
-    "http://localhost:3030/api/dashboard/guilds",
+    "https://api.mymod.endr.tech/api/dashboard/guilds",
   );
   const today = new Date();
   const lastMonth = new Date(today);
