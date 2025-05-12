@@ -1,8 +1,16 @@
+"use server";
 import axios from "axios";
+import { cookies } from "next/headers";
 
 export async function getCurrentGuildRelationships(serverId: string) {
+  const sessionToken = (await cookies()).get("__session");
   const resp = await axios.get(
-    `https://api.mymod.endr.tech/api/integrations/guild_relationships/${serverId}`,
+    `http://localhost:3030/api/integrations/guild_relationships/${serverId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionToken?.value}`,
+      },
+    },
   );
 
   if (resp.status === 200) {

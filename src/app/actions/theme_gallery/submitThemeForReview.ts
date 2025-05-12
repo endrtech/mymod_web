@@ -1,12 +1,15 @@
+"use server";
 import axios from "axios";
+import { cookies } from "next/headers";
 
 export const submitThemeForReview = async (
   themeId: any,
   userId: any,
   body: any,
 ) => {
+  const sessionToken = (await cookies()).get("__session");
   const response = await axios.post(
-    `https://api.mymod.endr.tech/api/modules/theme_gallery/${userId}/${themeId}`,
+    `http://localhost:3030/api/modules/theme_gallery/${userId}/${themeId}`,
     {
       name: body.name,
       description: body.description,
@@ -17,6 +20,11 @@ export const submitThemeForReview = async (
       font: body.font,
       overlayPercent: body.overlayPercent,
       status: body.status,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${sessionToken?.value}`,
+      },
     },
   );
 

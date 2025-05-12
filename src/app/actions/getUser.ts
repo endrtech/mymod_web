@@ -1,10 +1,15 @@
+"use server";
 import axios from "axios";
+import { cookies } from "next/headers";
 
 export async function getUser(userId: string) {
+  const sessionToken = (await cookies()).get("__session");
   try {
-    const resp = await axios.get(
-      `https://api.mymod.endr.tech/api/users/${userId}`,
-    );
+    const resp = await axios.get(`http://localhost:3030/api/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${sessionToken?.value}`,
+      },
+    });
     if (resp.status === 200) {
       return resp.data;
     } else {
