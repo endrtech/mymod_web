@@ -12,14 +12,19 @@ export default function LoadingOverlay() {
 
   // Initial load
   useEffect(() => {
-    const done = () => setIsVisible(false)
+    const runLoader = async () => {
+      const done = () => setIsVisible(false)
+      const sessionToken = document.cookie.includes("__session");
 
-    if (document.readyState === "complete") {
-      done()
-    } else {
-      window.addEventListener("load", done)
-      return () => window.removeEventListener("load", done)
+      if (document.readyState === "complete" && sessionToken) {
+        done()
+      } else {
+        window.addEventListener("load", done)
+        return () => window.removeEventListener("load", done)
+      }
     }
+
+    runLoader();
   }, [])
 
   // Show on client-side navigation
