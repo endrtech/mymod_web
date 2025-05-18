@@ -18,11 +18,7 @@ export default function OnboardingFlow() {
     const getData = async () => {
       const user = await getDiscordUser();
       if (!user?.id) {
-        setNextStep(
-          process.env.NEXT_PUBLIC_DEV_MODE === "false"
-            ? "https://accounts.mymod.endr.tech/user"
-            : "https://intent-bunny-32.accounts.dev/user",
-        );
+        setNextStep("https://accounts.mymod.endr.tech/user");
       } else {
         const getServers = await getUserGuilds(user?.id);
         if (getServers?.length === 0) {
