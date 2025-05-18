@@ -131,127 +131,87 @@ export const ThemeGalleryMain = ({ currentServerData }: any) => {
                 <RefreshCw className="h-4 w-4 animate-spin-slow" />
                 Updated {getTimeAgo(lastUpdated)}
               </div>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Avatar className="w-8 h-8 rounded-full">
-                    <AvatarImage
-                      src={`https://cdn.discordapp.com/avatars/${userData?.id}/${userData?.avatar}`}
-                      alt={userData?.globalName || userData?.username}
-                    />
-                  </Avatar>
-                </PopoverTrigger>
-                <PopoverContent
-                  align="end"
-                  className="p-2 dark w-fit text-white"
-                >
-                  <div className="flex flex-row items-center justify-start gap-2 p-4 bg-background rounded-lg border-1 border-zinc-800 mb-2">
-                    <Avatar className="w-12 h-12 rounded-full shadow-lg shadow-background">
-                      <AvatarImage
-                        src={`https://cdn.discordapp.com/avatars/${userData?.id}/${userData?.avatar}`}
-                        alt={userData?.globalName || userData?.username}
-                      />
-                    </Avatar>
-                    <div className="flex flex-col items-start">
-                      <span className="text-xl font-semibold ml-1">
-                        {userData?.globalName || userData?.username}
-                      </span>
-                      <span className="text-sm text-zinc-400 bg-zinc-800 px-2 rounded-full">
-                        @{userData?.username}
-                      </span>
-                    </div>
+              <ThemeGallery_ThemeCreator user={userData?.id} />
+              <Dialog>
+                <DialogTrigger asChild>
+                  <div className="flex flex-row p-2 hover:bg-zinc-900 transition-all rounded-md items-center duration-200 gap-2 text-left">
+                    <Paintbrush className="text-purple-500" size={15} />
+                    <span className="text-xs font-bold">
+                      My Themes
+                    </span>
                   </div>
-                  <div className="flex flex-row w-full gap-2">
-                    <ThemeGallery_ThemeCreator user={userData?.id} />
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <div className="dark hover:bg-zinc-800 p-2 rounded-lg transition-all duration-200 h-auto text-white text-left w-[60%]">
-                          <div className="flex flex-col gap-2 items-start text-left">
-                            <Paintbrush className="text-purple-500" size={30} />
-                            <div className="flex flex-col gap-1 items-start">
-                              <span className="text-md font-bold">
-                                My Themes
-                              </span>
-                              <span className="text-wrap text-sm">
-                                View themes you've created, and their status.
-                              </span>
-                            </div>
+                </DialogTrigger>
+                <DialogContent className="dark text-white">
+                  <DialogTitle>Your Themes</DialogTitle>
+                  <DialogDescription>
+                    To modify a theme, head to Theme Creator.
+                  </DialogDescription>
+                  <div className="flex flex-col gap-2 max-h-[60%] overflow-y-auto">
+                    {createdThemesData?.data?.map((theme: any) => (
+                      <Card
+                        key={theme.id}
+                        className="overflow-hidden w-full md:w-[370] h-[200px] p-0 border border-zinc-900"
+                      >
+                        <div className="overflow-hidden relative w-full h-full">
+                          {/* Video background if .mp4 */}
+                          {theme?.background.endsWith(".mp4") && (
+                            <>
+                              <video
+                                className="absolute inset-0 w-full h-full object-cover z-0"
+                                src={theme.background}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                              />
+                              <div className="relative w-full h-full z-[2] bg-black/90"></div>
+                            </>
+                          )}
+
+                          {/* Image background if not video */}
+                          {!theme?.background.endsWith(".mp4") && (
+                            <div
+                              className="absolute inset-0 w-full h-full z-0"
+                              style={{
+                                backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('${theme.background}')`,
+                                backgroundSize: "cover",
+                                backgroundRepeat: "no-repeat",
+                                backgroundPosition: "center",
+                              }}
+                            />
+                          )}
+
+                          {/* Gradient Overlay */}
+                          <div
+                            className="absolute overflow-hidden top-0 left-0 w-full h-[50px] rounded-[20px] blur-[40px] z-[10]"
+                            style={{
+                              background: `radial-gradient(circle at top center, ${theme.color_1}99 10%, ${theme.color_2}66 40%, ${theme.color_3}4D 70%)`,
+                            }}
+                          />
+
+                          {/* Content Overlay */}
+                          <div className="absolute inset-0 z-[40] self-end flex flex-col items-start justify-start p-4 text-white">
+                            <p className="text-lg font-semibold">
+                              {theme.name}
+                            </p>
+                            <p className="text-sm font-normal">
+                              {theme.description}
+                            </p>
+                            <p className="text-sm font-normal">
+                              Status:{" "}
+                              {theme.status === "pending_review"
+                                ? "Under review"
+                                : theme.status === "active"
+                                  ? "Active"
+                                  : "Draft"}
+                            </p>
                           </div>
                         </div>
-                      </DialogTrigger>
-                      <DialogContent className="dark text-white">
-                        <DialogTitle>Your Themes</DialogTitle>
-                        <DialogDescription>
-                          To modify a theme, head to Theme Creator.
-                        </DialogDescription>
-                        <div className="flex flex-col gap-2 max-h-[60%] overflow-y-auto">
-                          {createdThemesData?.data?.map((theme: any) => (
-                            <Card
-                              key={theme.id}
-                              className="overflow-hidden w-full md:w-[370] h-[200px] p-0 border border-zinc-900"
-                            >
-                              <div className="overflow-hidden relative w-full h-full">
-                                {/* Video background if .mp4 */}
-                                {theme?.background.endsWith(".mp4") && (
-                                  <>
-                                    <video
-                                      className="absolute inset-0 w-full h-full object-cover z-0"
-                                      src={theme.background}
-                                      autoPlay
-                                      loop
-                                      muted
-                                      playsInline
-                                    />
-                                    <div className="relative w-full h-full z-[2] bg-black/90"></div>
-                                  </>
-                                )}
-
-                                {/* Image background if not video */}
-                                {!theme?.background.endsWith(".mp4") && (
-                                  <div
-                                    className="absolute inset-0 w-full h-full z-0"
-                                    style={{
-                                      backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('${theme.background}')`,
-                                      backgroundSize: "cover",
-                                      backgroundRepeat: "no-repeat",
-                                      backgroundPosition: "center",
-                                    }}
-                                  />
-                                )}
-
-                                {/* Gradient Overlay */}
-                                <div
-                                  className="absolute overflow-hidden top-0 left-0 w-full h-[50px] rounded-[20px] blur-[40px] z-[10]"
-                                  style={{
-                                    background: `radial-gradient(circle at top center, ${theme.color_1}99 10%, ${theme.color_2}66 40%, ${theme.color_3}4D 70%)`,
-                                  }}
-                                />
-
-                                {/* Content Overlay */}
-                                <div className="absolute inset-0 z-[40] self-end flex flex-col items-start justify-start p-4 text-white">
-                                  <p className="text-lg font-semibold">
-                                    {theme.name}
-                                  </p>
-                                  <p className="text-sm font-normal">
-                                    {theme.description}
-                                  </p>
-                                  <p className="text-sm font-normal">
-                                    Status:{" "}
-                                    {theme.status === "pending_review"
-                                      ? "Under review"
-                                      : theme.status === "active"
-                                        ? "Active"
-                                        : "Draft"}
-                                  </p>
-                                </div>
-                              </div>
-                            </Card>
-                          ))}
-                        </div>
-                      </DialogContent>
-                    </Dialog>
+                      </Card>
+                    ))}
                   </div>
-                </PopoverContent>
-              </Popover>
+                </DialogContent>
+              </Dialog>
               <Input
                 type="text"
                 placeholder="Search for a theme..."

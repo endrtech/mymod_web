@@ -160,7 +160,7 @@ export const DiscordSettingsCard = ({
                     </SelectTrigger>
                     <SelectContent side="bottom" className="dark">
                       <SelectItem value="null">None</SelectItem>
-                      {guildChannels.data?.map((channel: any) => (
+                      {guildChannels?.map((channel: any) => (
                         <SelectItem key={channel.id} value={channel.id}>
                           <Volume2 /> {channel.name}
                         </SelectItem>

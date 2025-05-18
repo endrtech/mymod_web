@@ -15,6 +15,7 @@ import {
   Briefcase,
   Grid3X3,
   Grip,
+  Loader2,
   MessageSquare,
   PaintRoller,
   Users,
@@ -109,231 +110,243 @@ export const ServerNavBar = ({ serverId }: any) => {
 
   return (
     <div className="fixed top-14 left-0 z-[20] w-full text-white">
-      <Card className="p-0 m-0 h-10 text-white w-full bg-black/50 backdrop-blur-2xl border-none border-b-1 border-zinc-800 rounded-none flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center justify-start gap-4 pl-4">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <span className="flex flex-row items-center gap-1">
-                  <Users size={12} /> {currentServerMembersData?.length}
-                </span>
-              </TooltipTrigger>
-              <TooltipContent align="start" side="bottom" className="z-[99]">
-                <span className="text-md z-40 font-bold text-white">
-                  {currentServerMembersData?.length}
-                  <br />
-                  members
-                </span>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <span className="flex flex-row items-center gap-1">
-                  <MessageSquare size={12} />{" "}
-                  {currentServerData?.data.dsData.channels.length}
-                </span>
-              </TooltipTrigger>
-              <TooltipContent align="start" side="bottom">
-                <span className="text-md z-40 font-bold text-white">
-                  {currentServerData?.data.dsData.channels.length}
-                  <br />
-                  channels
-                </span>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <span className="flex flex-row items-center gap-1">
-                  <PaintRoller size={12} />{" "}
-                  {currentServerData?.data.dsData.roles.length}
-                </span>
-              </TooltipTrigger>
-              <TooltipContent align="start" side="bottom">
-                <span className="text-md z-40 font-bold text-white">
-                  {currentServerData?.data.dsData.roles.length}
-                  <br />
-                  roles
-                </span>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Separator
-            orientation="vertical"
-            className="border-zinc-700 bg-zinc-700"
-          />
-        </div>
-        {isMobile && (
-          <Select onValueChange={(e) => setSelectedPage(e)}>
-            <SelectTrigger className="w-[280px] border-none bg-zinc-800/40 text-white inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors shadow-sm hover:bg-zinc-600/40 hover:text-white h-6 px-4 py-2 justify-between">
-              <SelectValue placeholder="Select a page" />
-            </SelectTrigger>
-            <SelectContent className="bg-black text-white border-zinc-900">
-              {hasAccess("overview") && (
-                <Link
-                  href={`/:d:/app/server/${currentServerData?.data.dsData.id}`}
-                >
-                  <SelectItem
-                    value="/"
-                    className="cursor-pointer dark text-white h-8"
-                  >
-                    <span>Overview</span>
-                  </SelectItem>
-                </Link>
-              )}
-              {hasAccess("members") && (
-                <Link
-                  href={`/:d:/app/server/${currentServerData?.data.dsData.id}/members`}
-                >
-                  <SelectItem
-                    value="/members"
-                    className="cursor-pointer dark text-white h-8"
-                  >
-                    <span>Members</span>
-                  </SelectItem>
-                </Link>
-              )}
-              {hasAccess("audit_log") && (
-                <Link
-                  href={`/:d:/app/server/${currentServerData?.data.dsData.id}/audit-log`}
-                >
-                  <SelectItem
-                    value="/audit-log"
-                    className="cursor-pointer dark text-white h-8"
-                  >
-                    <span>Logs</span>
-                  </SelectItem>
-                </Link>
-              )}
-              {hasAccess("team") && (
-                <Link
-                  href={`/:d:/app/server/${currentServerData?.data.dsData.id}/team`}
-                >
-                  <SelectItem
-                    value="/team"
-                    className="cursor-pointer dark text-white h-8"
-                  >
-                    <span>Team</span>
-                  </SelectItem>
-                </Link>
-              )}
-              {hasAccess("settings") && (
-                <Link
-                  href={`/:d:/app/server/${currentServerData?.data.dsData.id}/settings`}
-                >
-                  <SelectItem
-                    value="/settings"
-                    className="cursor-pointer dark text-white h-8"
-                  >
-                    <span>Settings</span>
-                  </SelectItem>
-                </Link>
-              )}
-            </SelectContent>
-          </Select>
-        )}
-        {!isMobile && (
-          <div className="flex flex-row items-center justify-start gap-3">
-            {hasAccess("overview") && (
-              <Link
-                href={`/:d:/app/server/${currentServerData?.data.dsData.id}`}
-              >
-                <Button
-                  variant="link"
-                  className="cursor-pointer dark text-white h-8"
-                >
-                  <span>Overview</span>
-                </Button>
-              </Link>
+      {
+        currentServerData && (
+          <Card className="p-0 m-0 h-10 text-white w-full bg-black/50 backdrop-blur-2xl border-none border-b-1 border-zinc-800 rounded-none flex flex-row items-center justify-between">
+            <div className="flex flex-row items-center justify-start gap-4 pl-4">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <span className="flex flex-row items-center gap-1">
+                      <Users size={12} /> {currentServerMembersData?.length}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent align="start" side="bottom" className="z-[99]">
+                    <span className="text-md z-40 font-bold text-white">
+                      {currentServerMembersData?.length}
+                      <br />
+                      members
+                    </span>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <span className="flex flex-row items-center gap-1">
+                      <MessageSquare size={12} />{" "}
+                      {currentServerData?.data.dsData.channels.length}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent align="start" side="bottom">
+                    <span className="text-md z-40 font-bold text-white">
+                      {currentServerData?.data.dsData.channels.length}
+                      <br />
+                      channels
+                    </span>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <span className="flex flex-row items-center gap-1">
+                      <PaintRoller size={12} />{" "}
+                      {currentServerData?.data.dsData.roles.length}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent align="start" side="bottom">
+                    <span className="text-md z-40 font-bold text-white">
+                      {currentServerData?.data.dsData.roles.length}
+                      <br />
+                      roles
+                    </span>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <Separator
+                orientation="vertical"
+                className="border-zinc-700 bg-zinc-700"
+              />
+            </div>
+            {isMobile && (
+              <Select onValueChange={(e) => setSelectedPage(e)}>
+                <SelectTrigger className="w-[280px] border-none bg-zinc-800/40 text-white inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors shadow-sm hover:bg-zinc-600/40 hover:text-white h-6 px-4 py-2 justify-between">
+                  <SelectValue placeholder="Select a page" />
+                </SelectTrigger>
+                <SelectContent className="bg-black text-white border-zinc-900">
+                  {hasAccess("overview") && (
+                    <Link
+                      href={`/:d:/app/server/${currentServerData?.data.dsData.id}`}
+                    >
+                      <SelectItem
+                        value="/"
+                        className="cursor-pointer dark text-white h-8"
+                      >
+                        <span>Overview</span>
+                      </SelectItem>
+                    </Link>
+                  )}
+                  {hasAccess("members") && (
+                    <Link
+                      href={`/:d:/app/server/${currentServerData?.data.dsData.id}/members`}
+                    >
+                      <SelectItem
+                        value="/members"
+                        className="cursor-pointer dark text-white h-8"
+                      >
+                        <span>Members</span>
+                      </SelectItem>
+                    </Link>
+                  )}
+                  {hasAccess("audit_log") && (
+                    <Link
+                      href={`/:d:/app/server/${currentServerData?.data.dsData.id}/audit-log`}
+                    >
+                      <SelectItem
+                        value="/audit-log"
+                        className="cursor-pointer dark text-white h-8"
+                      >
+                        <span>Logs</span>
+                      </SelectItem>
+                    </Link>
+                  )}
+                  {hasAccess("team") && (
+                    <Link
+                      href={`/:d:/app/server/${currentServerData?.data.dsData.id}/team`}
+                    >
+                      <SelectItem
+                        value="/team"
+                        className="cursor-pointer dark text-white h-8"
+                      >
+                        <span>Team</span>
+                      </SelectItem>
+                    </Link>
+                  )}
+                  {hasAccess("settings") && (
+                    <Link
+                      href={`/:d:/app/server/${currentServerData?.data.dsData.id}/settings`}
+                    >
+                      <SelectItem
+                        value="/settings"
+                        className="cursor-pointer dark text-white h-8"
+                      >
+                        <span>Settings</span>
+                      </SelectItem>
+                    </Link>
+                  )}
+                </SelectContent>
+              </Select>
             )}
-            {hasAccess("members") && (
-              <Link
-                href={`/:d:/app/server/${currentServerData?.data.dsData.id}/members`}
-              >
-                <Button
-                  variant="link"
-                  className="cursor-pointer dark text-white h-8"
-                >
-                  <span>Members</span>
-                </Button>
-              </Link>
-            )}
-            {hasAccess("audit_log") && (
-              <Link
-                href={`/:d:/app/server/${currentServerData?.data.dsData.id}/audit-log`}
-              >
-                <Button
-                  variant="link"
-                  className="cursor-pointer dark text-white h-8"
-                >
-                  <span>Logs</span>
-                </Button>
-              </Link>
-            )}
-            {hasAccess("team") && (
-              <Link
-                href={`/:d:/app/server/${currentServerData?.data.dsData.id}/team`}
-              >
-                <Button
-                  variant="link"
-                  className="cursor-pointer dark text-white h-8"
-                >
-                  <span>Team</span>
-                </Button>
-              </Link>
-            )}
-            {hasAccess("settings") && (
-              <Link
-                href={`/:d:/app/server/${currentServerData?.data.dsData.id}/settings`}
-              >
-                <Button
-                  variant="link"
-                  className="cursor-pointer dark text-white h-8"
-                >
-                  <span>Settings</span>
-                </Button>
-              </Link>
-            )}
-          </div>
-        )}
-        <div className="flex flex-row items-center justify-start gap-2 ml-auto mr-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="dark text-white hover:bg-black"
-              >
-                <Grip />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="bg-black border-zinc-900"
-            >
-              <div className="grid grid-cols-3 gap-3">
-                {hasAccess("mymod_cases") && (
+            {!isMobile && (
+              <div className="flex flex-row items-center justify-start gap-3">
+                {hasAccess("overview") && (
                   <Link
-                    href={`/:d:/app/server/${currentServerData?.data.dsData.id}/cases`}
+                    href={`/:d:/app/server/${currentServerData?.data.dsData.id}`}
                   >
                     <Button
-                      className="flex flex-col items-center justify-center w-18 h-18 overflow-hidden truncate dark text-white p-4"
-                      variant="outline"
+                      variant="link"
+                      className="cursor-pointer dark text-white h-8"
                     >
-                      <Briefcase className="p-1 rounded-sm bg-blue-500 text-white min-w-[25px] min-h-[25px]" />
-                      Cases
+                      <span>Overview</span>
+                    </Button>
+                  </Link>
+                )}
+                {hasAccess("members") && (
+                  <Link
+                    href={`/:d:/app/server/${currentServerData?.data.dsData.id}/members`}
+                  >
+                    <Button
+                      variant="link"
+                      className="cursor-pointer dark text-white h-8"
+                    >
+                      <span>Members</span>
+                    </Button>
+                  </Link>
+                )}
+                {hasAccess("audit_log") && (
+                  <Link
+                    href={`/:d:/app/server/${currentServerData?.data.dsData.id}/audit-log`}
+                  >
+                    <Button
+                      variant="link"
+                      className="cursor-pointer dark text-white h-8"
+                    >
+                      <span>Logs</span>
+                    </Button>
+                  </Link>
+                )}
+                {hasAccess("team") && (
+                  <Link
+                    href={`/:d:/app/server/${currentServerData?.data.dsData.id}/team`}
+                  >
+                    <Button
+                      variant="link"
+                      className="cursor-pointer dark text-white h-8"
+                    >
+                      <span>Team</span>
+                    </Button>
+                  </Link>
+                )}
+                {hasAccess("settings") && (
+                  <Link
+                    href={`/:d:/app/server/${currentServerData?.data.dsData.id}/settings`}
+                  >
+                    <Button
+                      variant="link"
+                      className="cursor-pointer dark text-white h-8"
+                    >
+                      <span>Settings</span>
                     </Button>
                   </Link>
                 )}
               </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          {/*{!isMobile && <SearchCommand serverId={serverId} />}*/}
-        </div>
-      </Card>
+            )}
+            <div className="flex flex-row items-center justify-start gap-2 ml-auto mr-4">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="dark text-white hover:bg-black"
+                  >
+                    <Grip />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="bg-black border-zinc-900"
+                >
+                  <div className="grid grid-cols-3 gap-3">
+                    {hasAccess("mymod_cases") && (
+                      <Link
+                        href={`/:d:/app/server/${currentServerData?.data.dsData.id}/cases`}
+                      >
+                        <Button
+                          className="flex flex-col items-center justify-center w-18 h-18 overflow-hidden truncate dark text-white p-4"
+                          variant="outline"
+                        >
+                          <Briefcase className="p-1 rounded-sm bg-blue-500 text-white min-w-[25px] min-h-[25px]" />
+                          Cases
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {/*{!isMobile && <SearchCommand serverId={serverId} />}*/}
+            </div>
+          </Card>
+        )
+      }
+      {
+        !currentServerData && (
+          <Card className="p-0 m-0 h-10 text-white w-full bg-black/50 backdrop-blur-2xl border-none border-b-1 border-zinc-800 rounded-none flex flex-row items-center gap-3 justify-center">
+            <Loader2 className="animate-spin" />
+            <span>Loading navigation...</span>
+          </Card>
+        )
+      }
     </div>
   );
 };

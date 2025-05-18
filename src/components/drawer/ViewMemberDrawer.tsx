@@ -789,7 +789,7 @@ export const ViewMemberDrawer = ({ serverId, userId }: any) => {
                           <Input
                             name="timeoutMinutes"
                             placeholder="e.g: 2"
-                            className="w-full text0white"
+                            className="w-full text-white"
                           />
                           <DurationUnitSelect
                             value={timeoutTime}

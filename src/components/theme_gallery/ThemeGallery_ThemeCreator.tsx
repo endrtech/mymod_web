@@ -127,18 +127,10 @@ export const ThemeGallery_ThemeCreator = ({ user }: any) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div
-          onClick={() => setOpen}
-          className="dark hover:bg-zinc-800 p-2 rounded-lg transition-all duration-200 h-auto text-white text-left w-[60%]"
-        >
-          <div className="flex flex-col gap-2 items-start text-left">
-            <Plus className="text-green-500" size={30} />
-            <div className="flex flex-col gap-1 items-start">
-              <span className="text-md font-bold">Theme Creator</span>
-              <span className="text-wrap text-sm">Build, edit, and publish themes using Theme Creator.</span>
-            </div>
+          <div onClick={() => setOpen} className="flex flex-row p-2 hover:bg-zinc-900 transition-all rounded-md items-center duration-200 gap-2 text-left">
+            <Plus className="text-green-500" size={15} />
+            <span className="text-xs font-bold">Theme Creator</span>
           </div>
-        </div>
       </DialogTrigger>
       <DialogContent className="bg-transparent fixed min-w-[100%] p-0 dark text-white rounded-none min-h-[100%]">
         <Card className="rounded-none border-none bg-black flex flex-col items-start justify-start gap-0 p-0 m-0">

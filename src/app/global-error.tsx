@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Geist } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -13,15 +14,18 @@ const geistSans = Geist({
 
 export default function Error({
   error,
-  reset,
 }: {
   error: Error & { digest?: string };
-  reset: () => void;
 }) {
+  const router = useRouter();
   useEffect(() => {
     // Log the error to an error reporting service
     console.error(error);
   }, [error]);
+
+  const reset = () => {
+    router.back();
+  }
 
   return (
     <html>
