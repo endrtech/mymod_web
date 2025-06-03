@@ -37,7 +37,7 @@ export default async function RootLayout({
 
   if (!user.userId) {
     return redirect(
-      `http${process.env.NEXT_PUBLIC_DEV_MODE === "true" ? "" : "s"}://${process.env.NEXT_PUBLIC_ENDR_ID_AUTH_URL}/oauth/authorize?clientId=${process.env.NEXT_PUBLIC_ENDR_ID_APP_ID}`,
+      "/",
     );
   }
   
