@@ -121,7 +121,7 @@ export default async function handler(
 
         switch (fnName) {
           case "getCurrentGuildMembers": {
-            const members = await getCurrentGuildMembers(server);
+            const members = await getCurrentGuildMembers(server, "ai");
 
             const summaryResponse = await client.chat.completions.create({
               model: "gpt-4.1-mini",
@@ -137,7 +137,7 @@ export default async function handler(
           }
           case "getGuildMember": {
             const args = JSON.parse(fnArgs);
-            const member = await searchMember(server, args.searchUser);
+            const member = await searchMember(server, args.searchUser, "ai");
 
             if (!member) {
               return res.status(200).json({
@@ -153,7 +153,7 @@ export default async function handler(
                 messages: [
                   {
                     role: "user",
-                    content: `Give me a summary on the following data. Have some detail, but limit your response to under 500 characters. Do not include information about the avatar image, or their display name, for example. Just respond with the summary, no other information.\n${JSON.stringify(member.data)}`,
+                    content: `Give me a summary on the following data. Have some detail, but limit your response to under 500 characters. Do not include information about the avatar image, or their display name, for example. Be sure to use display names/global names where possible, and convert any dates into a readable format.\n${JSON.stringify(member.data)}`,
                   },
                 ],
               });
@@ -167,10 +167,12 @@ export default async function handler(
             const member_getGuildMemberCases = await searchMember(
               server,
               args_getGuildMemberCases.searchQuery,
+              "ai"
             );
             const cases = await getGuildMember(
               server,
               member_getGuildMemberCases.data[0]?.userId,
+              "ai"
             );
 
             if (!member_getGuildMemberCases) {
@@ -201,6 +203,7 @@ export default async function handler(
             const member_warnGuildMember = await searchMember(
               server,
               args_warnGuildMember.memberName,
+              "ai"
             );
             const response_warnGuildMember = await warnGuildMember(
               server,
@@ -210,6 +213,7 @@ export default async function handler(
                 createdById: user,
                 warnTimestamp: args_warnGuildMember.warnExpires,
               },
+              "ai"
             );
 
             if (response_warnGuildMember === 200) {

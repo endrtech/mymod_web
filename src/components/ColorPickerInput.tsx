@@ -20,7 +20,7 @@ export function ColorPickerInput({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="w-[100%] dark text-white justify-start text-left font-normal"
+          className="w-[100%] text-foreground justify-start text-left font-normal"
         >
           <div className="flex items-center gap-2">
             <div

@@ -65,11 +65,11 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button onClick={() => setOpen(!open)} variant="outline" size="icon" className="dark text-white">
+                <Button onClick={() => setOpen(!open)} variant="outline" size="icon">
                     <Plus />
                 </Button>
             </DialogTrigger>
-            <DialogContent className="dark text-white min-w-[60%]">
+            <DialogContent className="min-w-[60%]">
                 <DialogTitle>Create a Case</DialogTitle>
                 <form onSubmit={createCaseFrm}>
                     <div className="flex flex-row gap-10 w-full">
@@ -81,7 +81,7 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select a user..." />
                                     </SelectTrigger>
-                                    <SelectContent className="dark text-white">
+                                    <SelectContent>
                                         {
                                             guildMembers?.map((member: any) => (
                                                 <SelectItem value={member.id} className="flex flex-row items-center gap-2">
@@ -107,7 +107,7 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select a MYMOD user..." />
                                     </SelectTrigger>
-                                    <SelectContent className="dark text-white">
+                                    <SelectContent>
                                         {
                                             guildRelationships.relData?.map((member: any) => (
                                                 <SelectItem value={member.userId} className="flex flex-row items-center gap-2">
@@ -178,21 +178,18 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                                 <div className="flex flex-row items-center justify-between gap-2">
                                     <Label>Ban user</Label>
                                     <Switch
-                                        className="dark"
                                         onCheckedChange={(e) => handleToggle("ban_user", e)}
                                     />
                                 </div>
                                 <div className="flex flex-row items-center justify-between gap-2">
                                     <Label>Kick user</Label>
                                     <Switch
-                                        className="dark"
                                         onCheckedChange={(e) => handleToggle("kick_user", e)}
                                     />
                                 </div>
                                 <div className="flex flex-row items-center justify-between gap-2">
                                     <Label>Timeout user</Label>
                                     <Switch
-                                        className="dark"
                                         onCheckedChange={(e) => handleToggle("timeout_user", e)}
                                     />
                                 </div>
@@ -202,14 +199,12 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                                 <div className="flex flex-row items-center justify-between gap-2">
                                     <Label>Delete all messages sent by user</Label>
                                     <Switch
-                                        className="dark"
                                         onCheckedChange={(e) => handleToggle("purge_usr_msg", e)}
                                     />
                                 </div>
                                 <div className="flex flex-row items-center justify-between gap-2">
                                     <Label>Auto-complete case after creation</Label>
                                     <Switch
-                                        className="dark"
                                         onCheckedChange={(e) => handleToggle("auto_close", e)}
                                     />
                                 </div>
@@ -219,7 +214,6 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                                 <div className="flex flex-row items-center justify-between gap-2">
                                     <Label>Send DM to user advising of case outcome</Label>
                                     <Switch
-                                        className="dark"
                                         onCheckedChange={(e) =>
                                             handleToggle("send_dm_case_outcome", e)
                                         }
@@ -228,7 +222,6 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                                 <div className="flex flex-row items-center justify-between gap-2">
                                     <Label>Broadcast case details to case log channel</Label>
                                     <Switch
-                                        className="dark"
                                         onCheckedChange={(e) => handleToggle("broadcast_log_msg", e)}
                                     />
                                 </div>
@@ -238,11 +231,11 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                         <br />
                         <div className="flex flex-row items-center justify-end gap-2">
                             <DialogClose asChild>
-                                <Button variant="ghost" className="dark text-zinc-400">
+                                <Button variant="ghost">
                                     Close
                                 </Button>
                             </DialogClose>
-                            <Button variant="outline" type="submit" className="dark text-white">
+                            <Button variant="outline" type="submit">
                                 Create case
                             </Button>
                         </div>

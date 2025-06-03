@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { geistSans } from "../:d:/app/server/[serverId]/fonts";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import Link from "next/link";
 
 export default function OnboardingFlow() {
   const [nextStep, setNextStep] = useState("#");
+  const controls = useAnimation();
 
   useEffect(() => {
     const getData = async () => {
@@ -27,7 +28,22 @@ export default function OnboardingFlow() {
       }
     };
     getData();
-  }, []);
+
+    // Start the button press animation sequence
+    const sequence = async () => {
+      await controls.start({
+        scale: 0.95,
+        y: 5,
+        transition: { duration: 0.2 }
+      });
+      await controls.start({
+        scale: 1,
+        y: 0,
+        transition: { duration: 0.2 }
+      });
+    };
+    sequence();
+  }, [controls]);
 
   return (
     <>
@@ -40,16 +56,32 @@ export default function OnboardingFlow() {
       <div className="absolute z-10 w-full h-screen bg-gradient-to-r from-black to-transparent">
         <div className="flex flex-col items-start justify-center h-screen px-8 gap-4">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            className="relative"
+            animate={controls}
+            initial={{ scale: 1, y: 0 }}
           >
-            <Image
-              src="/mymod_emblem.svg"
-              width={100}
-              height={100}
-              alt="MYMOD"
+            <motion.div
+              className="absolute inset-0 bg-gray-800 rounded-lg"
+              style={{ transform: "translateZ(-10px)" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
             />
+            <motion.div
+              className="relative bg-black rounded-lg p-4 shadow-lg"
+              style={{ transform: "translateZ(0)" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Image
+                src="/mymod_emblem.svg"
+                width={100}
+                height={100}
+                alt="MYMOD"
+                className="relative z-10"
+              />
+            </motion.div>
           </motion.div>
           <motion.h1
             className={`${geistSans.className} text-4xl text-white font-bold`}

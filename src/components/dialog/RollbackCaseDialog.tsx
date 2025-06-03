@@ -22,12 +22,12 @@ export const RollbackCaseDialog = ({ serverId, caseData }: any) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="dark w-auto text-white px-2">
+                <Button variant="ghost" size="icon" className="w-auto px-2">
                     <RefreshCcw className="text-blue-500" size={16} />
                     Rollback Case
                 </Button>
             </DialogTrigger>
-            <DialogContent className="dark text-white">
+            <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
                         Are you absolutely sure you want to rollback this case?

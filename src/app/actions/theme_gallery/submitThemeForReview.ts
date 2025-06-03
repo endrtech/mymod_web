@@ -9,7 +9,7 @@ export const submitThemeForReview = async (
 ) => {
   const sessionToken = (await cookies()).get("__session");
   const response = await axios.post(
-    `https://api.mymod.endr.tech/api/modules/theme_gallery/${userId}/${themeId}`,
+    `http://localhost:3030/api/modules/theme_gallery/${userId}/${themeId}`,
     {
       name: body.name,
       description: body.description,

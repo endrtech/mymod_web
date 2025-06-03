@@ -69,12 +69,12 @@ export const EditCaseDialog = ({ serverId, caseData }: any) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button onClick={() => setOpen} variant="ghost" size="icon" className="dark w-auto px-2 text-white">
+                <Button onClick={() => setOpen} variant="ghost" size="icon" className="w-auto px-2">
                     <Pencil className="text-yellow-500" size={16} />
                     Edit
                 </Button>
             </DialogTrigger>
-            <DialogContent className="dark text-white min-w-[60%]">
+            <DialogContent className="min-w-[60%]">
                 <DialogTitle>Edit Case: </DialogTitle>
                 <div className="flex flex-row gap-10 w-full">
                     <div className="w-[50%]">
@@ -85,7 +85,7 @@ export const EditCaseDialog = ({ serverId, caseData }: any) => {
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select a user..." />
                                 </SelectTrigger>
-                                <SelectContent className="dark text-white">
+                                <SelectContent>
                                     {
                                         guildMembers?.map((member: any) => (
                                             <SelectItem value={member.id} className="flex flex-row items-center gap-2">
@@ -111,7 +111,7 @@ export const EditCaseDialog = ({ serverId, caseData }: any) => {
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select a MYMOD user..." />
                                 </SelectTrigger>
-                                <SelectContent className="dark text-white">
+                                <SelectContent>
                                     {
                                         guildRelationships.relData?.map((member: any) => (
                                             <SelectItem value={member.userId} className="flex flex-row items-center gap-2">
@@ -176,37 +176,37 @@ export const EditCaseDialog = ({ serverId, caseData }: any) => {
                     <div className="grid grid-cols-2 gap-4 p-1 w-full items-start">
                         <div className="flex flex-row items-center justify-between gap-2">
                             <Label>Ban user</Label>
-                            <Switch className="dark" onCheckedChange={(e) => handleToggle("ban_user", e)} checked={actionsTaken.includes("ban_user") ? true : false} />
+                            <Switch onCheckedChange={(e) => handleToggle("ban_user", e)} checked={actionsTaken.includes("ban_user") ? true : false} />
                         </div>
                         <div className="flex flex-row items-center justify-between gap-2">
                             <Label>Kick user</Label>
-                            <Switch className="dark" onCheckedChange={(e) => handleToggle("kick_user", e)} checked={actionsTaken.includes("kick_user") ? true : false} />
+                            <Switch onCheckedChange={(e) => handleToggle("kick_user", e)} checked={actionsTaken.includes("kick_user") ? true : false} />
                         </div>
                         <div className="flex flex-row items-center justify-between gap-2">
                             <Label>Unban user</Label>
-                            <Switch className="dark" onCheckedChange={(e) => handleToggle("unban_user", e)} checked={actionsTaken.includes("unban_user") ? true : false} />
+                            <Switch onCheckedChange={(e) => handleToggle("unban_user", e)} checked={actionsTaken.includes("unban_user") ? true : false} />
                         </div>
                         <div className="flex flex-row items-center justify-between gap-2">
                             <Label>Timeout user</Label>
-                            <Switch className="dark" onCheckedChange={(e) => handleToggle("timeout_user", e)} checked={actionsTaken.includes("timeout_user") ? true : false} />
+                            <Switch onCheckedChange={(e) => handleToggle("timeout_user", e)} checked={actionsTaken.includes("timeout_user") ? true : false} />
                         </div>
                         <div className="flex flex-row items-center justify-between gap-2">
                             <Label>Delete all messages sent by user</Label>
-                            <Switch className="dark" onCheckedChange={(e) => handleToggle("purge_usr_msg", e)} checked={actionsTaken.includes("purge_usr_msg") ? true : false} />
+                            <Switch onCheckedChange={(e) => handleToggle("purge_usr_msg", e)} checked={actionsTaken.includes("purge_usr_msg") ? true : false} />
                         </div>
                         <div className="flex flex-row items-center justify-between gap-2">
                             <Label>Auto-complete case after creation</Label>
-                            <Switch className="dark" onCheckedChange={(e) => handleToggle("auto_close", e)} checked={actionsTaken.includes("auto_close") ? true : false} />
+                            <Switch onCheckedChange={(e) => handleToggle("auto_close", e)} checked={actionsTaken.includes("auto_close") ? true : false} />
                         </div>
                         <div className="flex flex-row items-center justify-between gap-2">
                             <Label>Send DM to user advising of case outcome</Label>
-                            <Switch className="dark" onCheckedChange={(e) =>
+                            <Switch onCheckedChange={(e) =>
                                 handleToggle("send_dm_case_outcome", e)
                             } checked={actionsTaken.includes("send_dm_case_outcome") ? true : false} />
                         </div>
                         <div className="flex flex-row items-center justify-between gap-2">
                             <Label>Broadcast case details to case log channel</Label>
-                            <Switch className="dark" onCheckedChange={(e) => handleToggle("broadcast_log_msg", e)} checked={actionsTaken.includes("broadcast_log_msg") ? true : false} />
+                            <Switch onCheckedChange={(e) => handleToggle("broadcast_log_msg", e)} checked={actionsTaken.includes("broadcast_log_msg") ? true : false} />
                         </div>
                     </div>
                     <br />
@@ -214,11 +214,11 @@ export const EditCaseDialog = ({ serverId, caseData }: any) => {
                     <br />
                     <div className="flex flex-row items-center justify-end gap-2">
                         <DialogClose asChild>
-                            <Button variant="ghost" className="dark text-zinc-400">
+                            <Button variant="ghost" className="text-muted-foreground">
                                 Close
                             </Button>
                         </DialogClose>
-                        <Button onClick={() => editCaseFrm()} variant="outline" type="submit" className="dark text-white">
+                        <Button onClick={() => editCaseFrm()} variant="outline" type="submit">
                             Edit case
                         </Button>
                     </div>

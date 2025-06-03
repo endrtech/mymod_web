@@ -15,6 +15,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { permanentRedirect, redirect } from "next/navigation";
 import { MainSidebarTrigger } from "@/components/MainSidebarTrigger";
 import { ApplicationNavBar } from "@/components/application/ApplicationNavBar";
+import { ClerkProvider } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -31,6 +33,14 @@ export default async function RootLayout({
   children: React.ReactNode;
   manage: React.ReactNode;
 }>) {
+  const user = await auth();
+
+  if (!user.userId) {
+    return redirect(
+      `http${process.env.NEXT_PUBLIC_DEV_MODE === "true" ? "" : "s"}://${process.env.NEXT_PUBLIC_ENDR_ID_AUTH_URL}/oauth/authorize?clientId=${process.env.NEXT_PUBLIC_ENDR_ID_APP_ID}`,
+    );
+  }
+  
   const discordData = await getDiscordUser();
   const guildsData = (await getUserGuilds(discordData?.id)) || 400;
   const notificationsData = await getUserNotifications(discordData?.id);
@@ -40,12 +50,12 @@ export default async function RootLayout({
   }
 
   return (
-    <div className={`${montserrat.className} antialiased w-full h-screen`}>
-      <ApplicationNavBar notificationsData={notificationsData} />
-      <div className="flex flex-col items-start justify-start overflow-hidden">
-        {children}
+      <div className={`${montserrat.className} antialiased w-full h-screen`}>
+        <ApplicationNavBar notificationsData={notificationsData} />
+        <div className="flex flex-col items-start justify-start overflow-hidden">
+          {children}
+        </div>
+        <Toaster className="dark" />
       </div>
-      <Toaster className="dark" />
-    </div>
   );
 }

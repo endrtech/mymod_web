@@ -62,7 +62,7 @@ export const DiscordSettingsCard = ({
 
   if (serverData !== null) {
     return (
-      <Card className="w-full h-[100%] bg-black border-zinc-700 p-2">
+      <Card className="w-full h-[100%] bg-background border-muted text-foreground! p-2">
         <CardContent className="p-2 overflow-y-auto h-[100%]">
           <div className="flex flex-col gap-2 items-start w-full">
             <h4 className="text-xl text-left w-full font-bold text-zinc-300">
@@ -288,7 +288,7 @@ export const DiscordSettingsCard = ({
               <Button
                 variant="outline"
                 size="icon"
-                className="self-end md:self-start dark text-white"
+                className="dark text-white"
                 onClick={() =>
                   updateSettingsForGuild(
                     "verification_level",
@@ -335,7 +335,7 @@ export const DiscordSettingsCard = ({
               <Button
                 variant="outline"
                 size="icon"
-                className="self-end md:self-start dark text-white"
+                className="dark text-white"
                 onClick={() =>
                   updateSettingsForGuild("nsfw_level", serverNsfwLevel)
                 }

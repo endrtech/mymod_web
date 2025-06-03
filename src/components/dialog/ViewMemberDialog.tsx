@@ -177,17 +177,17 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
   };
 
   return (
-    <div className="flex flex-col items-start justify-left w-full bg-black">
+    <div className="flex flex-col items-start justify-left w-full bg-background">
       <Tabs
         defaultValue="general"
         value={tabValue}
         className="flex flex-row items-start justify-left w-full"
       >
-        <TabsList className="w-[150px] h-full flex flex-col items-start justify-start p-2 rounded-none rounded-tr-lg rounded-bl-lg bg-zinc-800">
-          <h2 className="text-xl font-semibold text-zinc-300 pt-4 pb-4">
+        <TabsList className="w-[150px] h-full flex flex-col items-start justify-start p-2 rounded-none rounded-tr-lg rounded-bl-lg bg-background border-r-1 border-t-1 border-muted">
+          <h2 className="text-xl font-semibold text-foreground pt-4 pb-4">
             Menu
           </h2>
-          <h4 className="text-sm uppercase font-medium text-zinc-500 pt-4 pb-4">
+          <h4 className="text-sm uppercase font-medium text-muted-foreground pt-4 pb-4">
             General
           </h4>
           <TabsTrigger
@@ -222,7 +222,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
             <Briefcase className="h-4 w-4" />
             <span>Cases</span>
           </TabsTrigger>
-          <h4 className="text-sm uppercase font-medium text-zinc-500 pt-4 pb-4">
+          <h4 className="text-sm uppercase font-medium text-muted-foreground pt-4 pb-4">
             Moderation
           </h4>
           <TabsTrigger
@@ -298,7 +298,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
             )}
             {memberKickData === null && <Loader2 className="animate-spin" />}
           </TabsTrigger>
-          <h4 className="text-sm uppercase font-medium text-zinc-500 pt-4 pb-4">
+          <h4 className="text-sm uppercase font-medium text-muted-foreground pt-4 pb-4">
             Reporting
           </h4>
           <TabsTrigger
@@ -315,7 +315,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
         <TabsContent value="general" className="w-[500px] h-[600px]">
           <div className="flex flex-col items-center justify-start w-full h-full">
             <Card className="p-0 w-full h-full border-none">
-              <CardContent className="p-0 h-[600px] w-full bg-black border-t-1 border-l-1 border-zinc-800 rounded-none rounded-tl-lg">
+              <CardContent className="p-0 h-[600px] w-full bg-background border-t-1 border-l-1 border-muted rounded-none rounded-tl-lg">
                 <div className="flex flex-col items-start justify-left p-0">
                   {bannerURL !== undefined ? (
                     <Image
@@ -327,7 +327,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     />
                   ) : (
                     <div
-                      className={`w-full h-[100px] bg-zinc-800 rounded-tl-md flex items-center justify-center`}
+                      className={`w-full h-[100px] bg-muted rounded-tl-md flex items-center justify-center`}
                     >
                       &nbsp;
                     </div>
@@ -341,22 +341,22 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                       alt="Avatar"
                       width={70}
                       height={70}
-                      className="rounded-full -mt-[35px] ml-2 border-4 border-black"
+                      className="rounded-full -mt-[35px] ml-2 border-4 border-background"
                     />
                   ) : (
                     <Loader2
                       size={70}
-                      className="animate-spin rounded-full -mt-[35px] ml-2 border-4 bg-black border-black"
+                      className="animate-spin rounded-full -mt-[35px] ml-2 border-4 bg-background border-background"
                     />
                   )}
                   <div className="flex flex-col items-start justify-left -mt-2 p-4 w-full">
                     {guildMemberData?.discordUser && (
                       <>
-                        <h2 className="text-xl font-semibold text-zinc-300">
+                        <h2 className="text-xl font-semibold text-foreground">
                           {guildMemberData?.discordUser?.globalName ||
                             guildMemberData?.discordUser?.username}
                         </h2>
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-sm text-muted-foreground">
                           {guildMemberData?.discordUser?.username}
                         </p>
                       </>
@@ -367,7 +367,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     <div className="flex flex-row flex-wrap items-center justify-start mt-2 gap-2">
                       <Badge
                         variant="outline"
-                        className="text-zinc-300 bg-zinc-800"
+                        className="text-muted-foreground bg-background"
                       >
                         {guildMemberData !== null ? (
                           guildMemberData?.discordUser?.bot === false ? (
@@ -381,7 +381,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                       </Badge>
                       <Badge
                         variant="outline"
-                        className="text-zinc-300 bg-zinc-800"
+                        className="text-muted-foreground bg-background"
                       >
                         {guildMemberData !== null ? (
                           guildMemberData?.guildMember?.pending === true ? (
@@ -402,7 +402,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     </div>
                     <div className="flex flex-col items-start justify-left mt-4 w-full">
                       <Button
-                        className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                        className="cursor-pointer w-full text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                         onClick={() => setTabValue("roles")}
                       >
                         <div className="flex flex-row items-center justify-between w-full">
@@ -422,7 +422,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                         </div>
                       </Button>
                       <Button
-                        className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                        className="cursor-pointer w-full text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                         onClick={() => setTabValue("permissions")}
                       >
                         <div className="flex flex-row items-center justify-between w-full">
@@ -442,7 +442,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                         </div>
                       </Button>
                       <Button
-                        className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                        className="cursor-pointer w-full text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                         onClick={() => setTabValue("user-bans")}
                       >
                         <div className="flex flex-row items-center justify-between w-full">
@@ -463,7 +463,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                         </div>
                       </Button>
                       <Button
-                        className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                        className="cursor-pointer w-full text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                         onClick={() => setTabValue("user-warns")}
                       >
                         <div className="flex flex-row items-center justify-between w-full">
@@ -484,7 +484,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                         </div>
                       </Button>
                       <Button
-                        className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                        className="cursor-pointer w-full text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                         onClick={() => setTabValue("user-timeouts")}
                       >
                         <div className="flex flex-row items-center justify-between w-full">
@@ -505,7 +505,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                         </div>
                       </Button>
                       <Button
-                        className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                        className="cursor-pointer w-full text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                         onClick={() => setTabValue("user-kicks")}
                       >
                         <div className="flex flex-row items-center justify-between w-full">
@@ -526,7 +526,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                         </div>
                       </Button>
                       <Button
-                        className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                        className="cursor-pointer w-full text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                         onClick={() => setTabValue("cases")}
                       >
                         <div className="flex flex-row items-center justify-between w-full">
@@ -549,12 +549,12 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
         </TabsContent>
         <TabsContent value="roles" className="w-[500px] h-[600px]">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
-            <h2 className="text-xl font-semibold text-zinc-300">Roles</h2>
+            <h2 className="text-xl font-semibold text-foreground">Roles</h2>
             <div className="flex flex-col items-start justify-left mt-4 w-full">
               {guildMemberData?.memberRoles?.map((role: any) => (
                 <Button
                   key={role.id}
-                  className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                  className="cursor-pointer w-full text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                 >
                   <div className="flex flex-row items-center justify-between w-full">
                     <div className="flex flex-row items-center justify-start">
@@ -568,12 +568,12 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
         </TabsContent>
         <TabsContent value="permissions" className="w-[500px] h-[600px]">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
-            <h2 className="text-xl font-semibold text-zinc-300">Permissions</h2>
+            <h2 className="text-xl font-semibold text-foreground">Permissions</h2>
             <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
               {guildMemberData?.memberPermissions?.map((permission: any) => (
                 <Button
                   key={permission}
-                  className="cursor-pointer w-full text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                  className="cursor-pointer w-full text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                 >
                   <div className="flex flex-row items-center justify-between w-full">
                     <div className="flex flex-row items-center justify-start">
@@ -587,7 +587,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
         </TabsContent>
         <TabsContent value="cases" className="w-[500px] h-[600px]">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
-            <h2 className="text-xl font-semibold text-zinc-300">Cases</h2>
+            <h2 className="text-xl font-semibold text-foreground">Cases</h2>
             <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
               {guildMemberData?.memberCases?.map((caseItem: any) => (
                 <Link
@@ -595,7 +595,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                   href={`/:d:/app/server/${serverId}/cases/${caseItem.caseID}`}
                   className="w-full"
                 >
-                  <Button className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
+                  <Button className="cursor-pointer w-full h-auto text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted">
                     <div className="flex flex-row items-center justify-between w-full">
                       <div className="flex flex-col gap-1 items-start justify-start">
                         <span className="capitalize">
@@ -624,7 +624,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
               </TabsList>
               <TabsContent value="warn-user" className="rounded-lg h-[100%]">
                 <div className="flex flex-col items-start gap-3 justify-left p-3 h-full w-full">
-                  <h2 className="text-lg font-semibold text-zinc-300">
+                  <h2 className="text-lg font-semibold text-foreground">
                     Warn{" "}
                     {guildMemberData?.discordUser?.globalName ||
                       guildMemberData?.discordUser?.username}
@@ -661,7 +661,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     </div>
                     <div className="grow">&nbsp;</div>
                     <div className="flex flex-row justify-between items-center w-full">
-                      <Label className="text-sm text-zinc-400 font-normal">
+                      <Label className="text-sm text-muted-foreground font-normal">
                         Please note: this method will automatically warn the
                         user, and create a case for logging.
                       </Label>
@@ -674,7 +674,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
               </TabsContent>
               <TabsContent value="ban-user" className="rounded-lg h-[100%]">
                 <div className="flex flex-col items-start gap-3 justify-left p-3 h-full w-full">
-                  <h2 className="text-lg font-semibold text-zinc-300">
+                  <h2 className="text-lg font-semibold text-foreground">
                     Ban{" "}
                     {guildMemberData?.discordUser?.globalName ||
                       guildMemberData?.discordUser?.username}
@@ -717,7 +717,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     </div>
                     <div className="grow">&nbsp;</div>
                     <div className="flex flex-row justify-between items-center w-full">
-                      <Label className="text-sm text-zinc-400 font-normal">
+                      <Label className="text-sm text-muted-foreground font-normal">
                         Please note: this method will automatically ban the
                         user, and create a case for logging.
                       </Label>
@@ -730,7 +730,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
               </TabsContent>
               <TabsContent value="timeout-user" className="rounded-lg h-[100%]">
                 <div className="flex flex-col items-start gap-3 justify-left p-3 h-full w-full">
-                  <h2 className="text-lg font-semibold text-zinc-300">
+                  <h2 className="text-lg font-semibold text-foreground">
                     Timeout{" "}
                     {guildMemberData?.discordUser?.globalName ||
                       guildMemberData?.discordUser?.username}
@@ -783,7 +783,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     </div>
                     <div className="grow">&nbsp;</div>
                     <div className="flex flex-row justify-between items-center w-full">
-                      <Label className="text-sm text-zinc-400 font-normal">
+                      <Label className="text-sm text-muted-foreground font-normal">
                         Please note: this method will automatically time the
                         user out, and create a case for logging.
                       </Label>
@@ -796,7 +796,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
               </TabsContent>
               <TabsContent value="kick-user" className="rounded-lg h-[100%]">
                 <div className="flex flex-col items-start gap-3 justify-left p-3 h-full w-full">
-                  <h2 className="text-lg font-semibold text-zinc-300">
+                  <h2 className="text-lg font-semibold text-foreground">
                     Kick{" "}
                     {guildMemberData?.discordUser?.globalName ||
                       guildMemberData?.discordUser?.username}
@@ -819,7 +819,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     </div>
                     <div className="grow">&nbsp;</div>
                     <div className="flex flex-row justify-between items-center w-full">
-                      <Label className="text-sm text-zinc-400 font-normal">
+                      <Label className="text-sm text-muted-foreground font-normal">
                         Please note: this method will automatically kick the
                         user, and create a case for logging.
                       </Label>
@@ -835,7 +835,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
         </TabsContent>
         <TabsContent value="user-bans" className="w-[500px] h-[600px]">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
-            <h2 className="text-xl font-semibold text-zinc-300">Bans</h2>
+            <h2 className="text-xl font-semibold text-foreground">Bans</h2>
             <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
               {memberBanData !== null &&
                 memberBanData.data?.length > 0 &&
@@ -845,7 +845,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     href={`/:d:/app/server/${serverId}/cases/${caseItem.caseID}`}
                     className="w-full"
                   >
-                    <Button className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
+                    <Button className="cursor-pointer w-full h-auto text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted">
                       <div className="flex flex-row items-center justify-between w-full">
                         <div className="flex flex-col gap-1 items-start justify-start">
                           <span className="capitalize">
@@ -867,7 +867,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                 (memberBanData.length === 0 && (
                   <Button
                     disabled
-                    className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                    className="w-full h-auto text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                   >
                     <span>There are no recorded bans for this user.</span>
                   </Button>
@@ -877,7 +877,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
         </TabsContent>
         <TabsContent value="user-warns" className="w-[500px] h-[600px]">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
-            <h2 className="text-xl font-semibold text-zinc-300">Warns</h2>
+            <h2 className="text-xl font-semibold text-foreground">Warns</h2>
             <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
               {memberWarnData !== null &&
                 memberWarnData.data?.length > 0 &&
@@ -887,7 +887,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     href={`/:d:/app/server/${serverId}/cases/${caseItem.caseID}`}
                     className="w-full"
                   >
-                    <Button className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
+                    <Button className="cursor-pointer w-full h-auto text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted">
                       <div className="flex flex-row items-center justify-between w-full">
                         <div className="flex flex-col gap-1 items-start justify-start">
                           <span className="capitalize">
@@ -912,7 +912,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                 (memberWarnData.length === 0 && (
                   <Button
                     disabled
-                    className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                    className="w-full h-auto text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                   >
                     <span>There are no recorded warns for this user.</span>
                   </Button>
@@ -922,7 +922,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
         </TabsContent>
         <TabsContent value="user-timeouts" className="w-[500px] h-[600px]">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
-            <h2 className="text-xl font-semibold text-zinc-300">Timeouts</h2>
+            <h2 className="text-xl font-semibold text-foreground">Timeouts</h2>
             <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
               {memberTimeoutData !== null &&
                 memberTimeoutData !== null &&
@@ -933,7 +933,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     href={`/:d:/app/server/${serverId}/cases/${caseItem.caseID}`}
                     className="w-full"
                   >
-                    <Button className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
+                    <Button className="cursor-pointer w-full h-auto text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted">
                       <div className="flex flex-row items-center justify-between w-full">
                         <div className="flex flex-col gap-1 items-start justify-start">
                           <span className="capitalize">
@@ -957,7 +957,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                 (memberTimeoutData.length === 0 && (
                   <Button
                     disabled
-                    className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                    className="w-full h-auto text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                   >
                     <span>There are no recorded timeouts for this user.</span>
                   </Button>
@@ -967,7 +967,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
         </TabsContent>
         <TabsContent value="user-kicks" className="w-[500px] h-[600px]">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
-            <h2 className="text-xl font-semibold text-zinc-300">Kicks</h2>
+            <h2 className="text-xl font-semibold text-foreground">Kicks</h2>
             <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
               {memberKickData !== null &&
                 memberKickData.data?.length > 0 &&
@@ -977,7 +977,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                     href={`/:d:/app/server/${serverId}/cases/${caseItem.caseID}`}
                     className="w-full"
                   >
-                    <Button className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
+                    <Button className="cursor-pointer w-full h-auto text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted">
                       <div className="flex flex-row items-center justify-between w-full">
                         <div className="flex flex-col gap-1 items-start justify-start">
                           <span className="capitalize">
@@ -996,7 +996,7 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
                 (memberKickData.length === 0 && (
                   <Button
                     disabled
-                    className="w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500"
+                    className="w-full h-auto text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted"
                   >
                     <span>There are no recorded kicks for this user.</span>
                   </Button>
@@ -1006,10 +1006,10 @@ export const ViewMemberDialog = ({ serverId, userId }: any) => {
         </TabsContent>
         <TabsContent value="audit-log" className="w-[500px] h-[600px]">
           <div className="flex flex-col items-start justify-left p-4 mt-2 w-full">
-            <h2 className="text-xl font-semibold text-zinc-300">Audit Log</h2>
+            <h2 className="text-xl font-semibold text-foreground">Audit Log</h2>
             <div className="flex flex-col items-start justify-left mt-4 w-full overflow-y-scroll max-h-[500px]">
               {memberLogData.data?.map((logItem: any) => (
-                <Button className="cursor-pointer w-full h-auto text-zinc-300 rounded-none border-b-1 border-zinc-900 bg-transparent hover:bg-transparent hover:border-zinc-500">
+                <Button className="cursor-pointer w-full h-auto text-foreground rounded-none border-b-1 border-muted bg-background hover:bg-background hover:border-muted">
                   <div className="flex flex-row items-center justify-between w-full">
                     <div className="flex flex-col gap-1 items-start justify-start">
                       <span className="text-wrap text-left">

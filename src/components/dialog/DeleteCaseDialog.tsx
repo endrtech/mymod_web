@@ -26,12 +26,12 @@ export const DeleteCaseDialog = ({ serverId, caseId }: any) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="dark w-auto text-white px-2">
+                <Button variant="ghost" size="icon" className="w-auto px-2">
                     <Trash size={16} className="text-red-500" />
                     Delete
                 </Button>
             </DialogTrigger>
-            <DialogContent className={`${montserrat.className} dark text-white`}>
+            <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
                         Are you absolutely sure you want to delete this
@@ -44,7 +44,7 @@ export const DeleteCaseDialog = ({ serverId, caseId }: any) => {
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                    <Button onClick={caseDeleteSubmit} variant="destructive" className="dark text-white">
+                    <Button onClick={caseDeleteSubmit} variant="destructive">
                         Yes, I&apos;m sure
                     </Button>
                     <DialogClose asChild>

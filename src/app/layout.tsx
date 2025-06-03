@@ -8,6 +8,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { PostHogProvider } from "../components/PostHogProvider";
 import { montserrat } from "./:d:/app/server/[serverId]/fonts";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "MYMOD :: Login",
@@ -17,28 +18,23 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const user = await auth();
-
-  if (!user.userId) {
-    return redirect(
-      `http${process.env.DEV_MODE === "true" ? "" : "s"}://${process.env.NEXT_PUBLIC_ENDR_ID_AUTH_URL}/oauth/authorize?clientId=${process.env.NEXT_PUBLIC_ENDR_ID_APP_ID}`,
-    );
-  }
 
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
-          className={`${montserrat.className} antialiased w-full h-screen bg-black`}
+          className={`${montserrat.className} antialiased w-full h-screen bg-background`}
         >
-          <PostHogProvider>
-            <NextTopLoader color="#29D" height={3} showSpinner={false} />
-            <meta
-              name="google-adsense-account"
-              content="ca-pub-1135455202651115"
-            />
-            <Suspense fallback={<LoadingOverlay />}>{children}</Suspense>
-          </PostHogProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+          >
+            <PostHogProvider>
+              <NextTopLoader color="#29D" height={3} showSpinner={false} />
+              <Suspense fallback={<LoadingOverlay />}>{children}</Suspense>
+            </PostHogProvider>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

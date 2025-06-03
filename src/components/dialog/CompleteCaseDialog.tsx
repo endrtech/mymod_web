@@ -21,12 +21,12 @@ export const CompleteCaseDialog = ({ serverId, caseData }: any) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="dark w-auto text-white px-2">
+                <Button variant="ghost" size="icon" className="w-auto px-2">
                     <Check size={16} className="text-green-500" />
                     Complete Case
                 </Button>
             </DialogTrigger>
-            <DialogContent className="dark text-white">
+            <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
                         Are you absolutely sure you want to mark this case as complete?

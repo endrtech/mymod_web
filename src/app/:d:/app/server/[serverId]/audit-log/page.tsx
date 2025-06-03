@@ -1,8 +1,3 @@
-import { getCurrentGuildMembers } from "@/app/actions/getCurrentGuildMembers";
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Geist } from "next/font/google";
 import getCurrentGuild from "@/app/actions/getCurrentGuild";
 import {
@@ -13,15 +8,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Slash } from "lucide-react";
 import { getCurrentGuildAuditLog } from "@/app/actions/getCurrentGuildAuditLog";
 import moment from "moment";
@@ -43,9 +29,6 @@ export default async function ServerMembers({
   const currentServerData = await getCurrentGuild((await params).serverId);
   const serverAuditLog =
     (await getCurrentGuildAuditLog((await params).serverId)) || [];
-  const bg =
-    currentServerData?.data.mmData.module_config.appearance?.background;
-  const isVideo = bg?.endsWith(".mp4");
 
   for (const auditLog of serverAuditLog?.data) {
     auditLogDataArray.push({

@@ -30,13 +30,13 @@ export default function MessageList({ messages }: { messages: any[] }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className={`p-3 rounded-xl text-sm w-fit max-w-[100%] text-wrap text-white prose prose-invert break-words ${msg.role === "user" ? "ml-auto bg-zinc-900 border-1 border-zinc-800" : "mr-auto bg-black border-1 border-zinc-800"
+            className={`p-3 rounded-xl text-sm w-fit max-w-[100%] text-wrap text-foreground prose prose-invert break-words ${msg.role === "user" ? "ml-auto bg-muted border-1 border-muted" : "mr-auto bg-background border-1 border-muted"
               }`}
             suppressHydrationWarning={true}
           >
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
               table: ({ children }) => (
-                <Table className="dark w-full text-sm">
+                <Table className="w-full text-sm">
                   {children}
                 </Table>
               ),

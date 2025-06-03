@@ -40,11 +40,11 @@ export const AuditLogImportDialog = ({ serverId }: any) => {
         <>
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="default">Import from Discord</Button>
+                <Button variant="outline">Import from Discord</Button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="dark">
+            <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle className="text-white">
+                    <AlertDialogTitle>
                         Are you sure you want to import audit logs from
                         Discord?
                     </AlertDialogTitle>
@@ -64,7 +64,7 @@ export const AuditLogImportDialog = ({ serverId }: any) => {
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel className="text-zinc-400">
+                    <AlertDialogCancel className="text-muted-foreground">
                         I&apos;ve changed my mind
                     </AlertDialogCancel>
                     <AlertDialogAction onClick={() => importDSAuditData()}>

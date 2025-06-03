@@ -16,14 +16,14 @@ export default function ChatInput({ onSend }: { onSend: (msg: string) => void })
     return (
         <div className="flex gap-2">
             <input
-                className="flex-grow bg-black border border-zinc-800 rounded-full px-3 text-white text-sm"
+                className="flex-grow bg-background border border-muted rounded-full px-3 text-foreground text-sm"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 placeholder="Type your message..."
             />
             <Button
-                className="bg-zinc-900 p-4 rounded-full text-white font-medium"
+                className="bg-background p-4 rounded-full text-foreground font-medium"
                 onClick={handleSend}
                 size="icon"
             >

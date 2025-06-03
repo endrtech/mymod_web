@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function RecentUsers({ users }: any) {
   return (
-    <Card className="w-full h-[100%] bg-black border-zinc-900">
+    <Card className="w-full h-[100%] bg-background border-muted">
       <CardHeader>
         <CardTitle>Recent Joins</CardTitle>
         <p className="text-sm text-muted-foreground">
@@ -34,7 +34,7 @@ export default function RecentUsers({ users }: any) {
                 <p className="text-sm text-muted-foreground">{user.userId}</p>
               </div>
             </div>
-            <p className="text-sm font-medium text-white self-end md:self-start">
+            <p className="text-sm font-medium text-muted-foreground self-end md:self-start">
               Joined {new Date(user.joinedTimestamp).toLocaleDateString()}
             </p>
           </div>

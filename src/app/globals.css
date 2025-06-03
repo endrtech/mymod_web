@@ -178,7 +178,7 @@
     }
 
     body {
-        @apply bg-background text-foreground;
+        @apply bg-transparent text-foreground;
     }
 }
 
@@ -261,6 +261,28 @@ polygon {
     filter: blur(40px);
     animation: gradient-move 10s ease infinite;
     opacity: 0.5;
+}
+
+.beta-chat-gradient-bg {
+    background:
+        radial-gradient(
+            circle at 20% 80%,
+            rgba(0, 164, 255, 0.4),
+            transparent 40%
+        ),
+        radial-gradient(
+            circle at 70% 90%,
+            rgba(186, 0, 255, 0.3),
+            transparent 50%
+        ),
+        radial-gradient(
+            circle at 50% 70%,
+            rgba(255, 0, 128, 0.3),
+            transparent 60%
+        );
+    background-size: 300% 300%;
+    filter: blur(40px);
+    animation: gradient-move 10s ease infinite;
 }
 
 .send-btn-gradient {
@@ -431,4 +453,32 @@ polygon {
     background: linear-gradient(135deg, #0090f7, #ba62fc, #f2416b, #f55600);
     background-size: 300% 300%;
     animation: gradient-glow 6s ease infinite;
+}
+
+.dragRegion {
+    -webkit-app-region: drag;
+    user-select: none;
+    cursor: move;
+}
+
+.noDrag {
+    -webkit-app-region: no-drag;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-foreground/50 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-foreground/70;
 }

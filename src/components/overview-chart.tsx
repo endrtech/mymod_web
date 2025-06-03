@@ -45,13 +45,13 @@ export default function OverviewChart({
   } satisfies ChartConfig;
 
   return (
-    <Card className="bg-black border-zinc-900">
+    <Card className="bg-background border-muted">
       <CardHeader>
         <CardTitle>New Members</CardTitle>
         <CardDescription>Showing user joins over time</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="w-full h-[300px] dark">
+        <ChartContainer config={chartConfig} className="w-full h-[300px]">
           <BarChart
             accessibilityLayer
             data={data}
@@ -66,7 +66,7 @@ export default function OverviewChart({
               tickLine={false}
               axisLine={false}
               tickMargin={10}
-              interval={Math.floor(data.length / 10)}
+              interval={Math.floor(data?.length / 10)}
               minTickGap={10}
               tickFormatter={(value) => {
                 return value;
