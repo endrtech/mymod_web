@@ -6,7 +6,7 @@ export async function getGuildMember(serverId: string, memberId: string, request
   if (!requestType) {
     const sessionToken = (await cookies()).get("__session");
     const resp = await axios.get(
-      `http://localhost:3030/api/guilds/${serverId}/members/${memberId}`,
+      `https://api.mymod.endr.tech/api/guilds/${serverId}/members/${memberId}`,
       {
         headers: {
           Authorization: `Bearer ${sessionToken?.value}`,
@@ -21,7 +21,7 @@ export async function getGuildMember(serverId: string, memberId: string, request
     }
   } else if (requestType === "ai") {
     const resp = await axios.get(
-      `http://localhost:3030/api/guilds/${serverId}/members/${memberId}`,
+      `https://api.mymod.endr.tech/api/guilds/${serverId}/members/${memberId}`,
       {
         headers: {
           'X-MYMOD-Client-User-Authentication': `${process.env.MYMOD_CLIENT_USER_AUTH_KEY}`,

@@ -7,7 +7,7 @@ export const createCase = async (body: any) => {
   const sessionToken = (await cookies()).get("__session");
   console.log(body);
   const resp = await axios.post(
-    `http://localhost:3030/api/cases/new`,
+    `https://api.mymod.endr.tech/api/cases/new`,
     body,
     {
       headers: {

@@ -21,7 +21,7 @@ export async function getAllStats() {
 
   try {
     const response = await axios.get(
-      `http://localhost:3030/api/dashboard`,
+      `https://api.mymod.endr.tech/api/dashboard`,
       {
         headers: {
           "Content-Type": "application/json",

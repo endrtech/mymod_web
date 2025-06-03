@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export async function getCaseData(caseId: string) {
   const sessionToken = (await cookies()).get("__session");
   const resp = await axios.get(
-    `http://localhost:3030/api/cases/${caseId}`,
+    `https://api.mymod.endr.tech/api/cases/${caseId}`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,
