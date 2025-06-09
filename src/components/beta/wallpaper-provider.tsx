@@ -4,34 +4,15 @@ import { barlowSemiCondensed, geistSans, hankenGrotesk, inter, poppins, roboto }
 import { useServerStore } from "@/store/server-store";
 import { useEffect, useState } from "react";
 import { SidebarInset } from "../ui/sidebar";
+import {useSuspenseQuery} from "@tanstack/react-query";
+import {getServerById} from "@/queries/servers";
+import {useServer} from "@/context/server-provider";
 
 export const WallpaperProvider = ({ children }: { children: React.ReactNode }) => {
-    const [currentServerData, setCurrentServerData] = useState<any>();
     const serverId = useServerStore((state) => state.currentServerId);
-    const setServerId = useServerStore((state) => state.setServerId);
+    const { currentServerId } = useServer();
 
-    const getData = async () => {
-        if (serverId === null) {
-            const lsServerId = window.localStorage.getItem("currentServerId");
-            setServerId(lsServerId as string);
-
-            const currentServerData = await getCurrentGuild(lsServerId);
-            setCurrentServerData(currentServerData);
-        } else {
-            const currentServerData = await getCurrentGuild(serverId);
-            setCurrentServerData(currentServerData);
-        }
-    }
-    
-    useEffect(() => {
-        getData();
-
-        const interval = setInterval(() => {
-            getData();
-        }, 60000); // refresh every 60 seconds
-
-        return () => clearInterval(interval);
-    }, []);
+    const { data: currentServerData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
 
     let font;
 
@@ -79,7 +60,7 @@ export const WallpaperProvider = ({ children }: { children: React.ReactNode }) =
                     }}
                 />
             )}
-            <div className="absolute inset-0 w-full h-full z-1 bg-gradient-to-b from-background/80 to-background/80 backdrop-blur-sm" />
+            <div className="absolute inset-0 w-full h-full z-1 bg-gradient-to-b from-background/70 to-background/70 backdrop-blur-sm" />
             <SidebarInset
                 className={`z-[10] relative w-full h-screen ${font} bg-transparent`}
                 suppressHydrationWarning={true}

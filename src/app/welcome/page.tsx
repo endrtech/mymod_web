@@ -1,9 +1,9 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { permanentRedirect, usePathname } from "next/navigation"
+import { permanentRedirect } from "next/navigation"
 import Image from "next/image"
-import { motion, AnimatePresence, useAnimation } from "framer-motion"
+import { motion } from "framer-motion"
 import { Volume2, VolumeX } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Howl } from 'howler'
@@ -15,17 +15,10 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import Link from "next/link"
-
-const ROWS = 18;
-const COLS = 36;
-const DOT_SIZE = 10; // px
-
-// Generate a random phase offset for each dot for sporadic animation
-const phaseOffsets = Array.from({ length: ROWS * COLS }, () => Math.random() * Math.PI * 2);
+import StarBorder from "@/components/beta/star-border";
+import Iridescence from "@/components/beta/welcome-bkg";
 
 export default function BetaWelcome() {
-    const [phase, setPhase] = useState(0);
     const [isMuted, setIsMuted] = useState(false);
     const [hasConsent, setHasConsent] = useState(false);
     const [nextStep, setNextStep] = useState(false);
@@ -37,7 +30,7 @@ export default function BetaWelcome() {
             soundRef.current = new Howl({
                 src: ['/welcome.mp3'],
                 loop: true,
-                volume: 0.5,
+                volume: 0.1,
                 autoplay: true,
                 onplay: () => {
                     console.log('Audio started playing');
@@ -78,9 +71,9 @@ export default function BetaWelcome() {
         <>
             <div className="absolute bg-transparent z-[20] top-0 left-0 w-full h-8 dragRegion">&nbsp;</div>
             <Dialog open={!hasConsent} onOpenChange={() => { }}>
-                <DialogContent className="dark text-white sm:max-w-[425px]">
+                <DialogContent className="text-white sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>Let's do this.</DialogTitle>
+                        <DialogTitle>Let&apos;s do this.</DialogTitle>
                         <DialogDescription>
                             This experience includes background music that will play automatically.
                             You can mute it using the button in the bottom right corner.
@@ -91,14 +84,15 @@ export default function BetaWelcome() {
                             onClick={() => setHasConsent(true)}
                             className="w-full"
                         >
-                            Let's go!
+                            Let&apos;s go!
                         </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
 
             {hasConsent && (
-                <div className="dark text-white bg-[url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExN281b3J6OTBnZ25xcmZ4dHlxb3Q1dnBvenpmaGh0YnlkdnR1bTdvciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/8w61HSu6xQjoa2NzKN/giphy.gif')] bg-cover bg-center bg-no-repeat w-full h-screen">
+                <div className="text-black bg-cover bg-center bg-no-repeat w-full h-screen">
+                   <Iridescence />
                     {
                         !nextStep && (
                             <>
@@ -111,9 +105,9 @@ export default function BetaWelcome() {
                                         delay: 0.5,
                                         ease: [0.16, 1, 0.3, 1],
                                     }}
-                                    className="absolute inset-0 flex flex-col items-center justify-center gap-8"
+                                    className="absolute z-[5] inset-0 flex flex-col items-center justify-center gap-8"
                                 >
-                                    <h1 className="text-5xl font-bold text-white text-center tracking-tight pt-12">
+                                    <h1 className="text-5xl font-bold text-black text-center tracking-tight pt-12">
                                         <span className="relative inline-block">
                                             <motion.span
                                                 initial={{ opacity: 0, y: 20 }}
@@ -154,7 +148,7 @@ export default function BetaWelcome() {
                                         }}
                                         className="relative flex items-center"
                                     >
-                                        <Button variant="outline" onClick={() => setNextStep(true)}>
+                                        <Button variant="secondary" onClick={() => setNextStep(true)}>
                                             Get started
                                         </Button>
                                     </motion.div>
@@ -193,9 +187,9 @@ export default function BetaWelcome() {
                                     delay: 0.5,
                                     ease: [0.16, 1, 0.3, 1],
                                 }}
-                                className="absolute inset-0 flex flex-col items-center justify-center gap-8"
+                                className="absolute z-[5] inset-0 flex flex-col items-center justify-center gap-8"
                             >
-                                <h1 className="text-7xl font-bold text-white text-center tracking-tight">
+                                <h1 className="text-7xl font-bold text-black text-center tracking-tight">
                                     <span className="relative inline-block">
                                         <motion.span
                                             initial={{ opacity: 0, y: 20 }}
@@ -249,7 +243,7 @@ export default function BetaWelcome() {
                                     }}
                                     className="relative flex items-center"
                                 >
-                                    <Button variant="outline" onClick={setBetaLSVariable}>
+                                    <Button variant="secondary" onClick={setBetaLSVariable}>
                                         Go to modUI 2 Beta
                                     </Button>
                                 </motion.div>

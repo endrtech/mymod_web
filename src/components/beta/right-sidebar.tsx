@@ -25,32 +25,30 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
-import { ChevronDown } from "lucide-react";
+import {ChevronDown, ChevronLeft} from "lucide-react";
 import Link from "next/link";
 import { usePlatform } from "@/hooks/use-platform";
-import { redirect } from "next/navigation";
+import {permanentRedirect, redirect} from "next/navigation";
 import React, { useState } from "react";
 import getCurrentGuild from "@/app/actions/getCurrentGuild";
+import {useServerStore} from "@/store/server-store";
+import {useServer} from "@/context/server-provider";
+import {useSuspenseQuery} from "@tanstack/react-query";
+import {getServerById} from "@/queries/servers";
 
 export const RightSidebar = () => {
     const isRightSidebarOpen = useSidebarStore((state) => state.isRightSidebarOpen);
     const loggedInUser = useUser();
     const { isElectron } = usePlatform();
-    const [currentServerData, setCurrentServerData] = useState<any>();
+    const serverId = useServerStore((state) => state.currentServerId);
+    const { currentServerId } = useServer();
 
-    React.useEffect(() => {
-        const getData = async () => {
-            const currentServer = window.localStorage.getItem("currentServerId");
-            if (currentServer) {
-                const currentServerData = await getCurrentGuild(currentServer);
-                setCurrentServerData(currentServerData);
-            } else {
-                setCurrentServerData(null);
-            }
-        };
+    const { data: currentServerData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
 
-        getData();
-    }, []);
+    const betaOptOut = () => {
+        window.localStorage.setItem("betaEnabled", "false");
+        return permanentRedirect("/:d:/app");
+    }
 
     return (
         <SidebarProvider open={isRightSidebarOpen}>
@@ -120,6 +118,13 @@ export const RightSidebar = () => {
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </SidebarMenuItem>
+                        {!isElectron && (
+                            <SidebarMenuItem>
+                                <SidebarMenuButton onClick={betaOptOut}>
+                                    <ChevronLeft /> Return to modUI 1
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        )}
                     </SidebarMenu>
                 </SidebarHeader>
                 <SidebarContent>

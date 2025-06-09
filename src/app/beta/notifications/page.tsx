@@ -10,27 +10,22 @@ import { deleteNotification } from "@/app/actions/user/deleteNotification";
 import { toast } from "sonner";
 import * as columns from "./columns";
 import { useEffect, useState } from "react";
+import {useSuspenseQuery} from "@tanstack/react-query";
+import {getDiscordData, getNotifications} from "@/queries/users";
+import {getQueryClient} from "@/lib/query-client";
 
 export default function NotificationsPage() {
     const notificationsUnreadDataArray: Notification[] = [];
     const notificationsReadDataArray: Notification[] = [];
     const notificationsDataArray: Notification[] = [];
+    const queryClient = getQueryClient();
 
     const [notifications, setNotifications] = useState(notificationsDataArray);
-    const [fetchedData, setFetchedData] = useState<any>();
 
-    useEffect(() => {
-        const getData = async () => {
-            const user = await getDiscordUser();
-            const resp = await getUserNotifications(user?.id);
+    const { data: discordData } = useSuspenseQuery(getDiscordData());
+    const { data: notificationsData } = useSuspenseQuery(getNotifications(discordData?.id));
 
-            setFetchedData(resp);
-        }
-
-        getData();
-    }, [])
-
-    fetchedData?.forEach((notification: any) => {
+    notificationsData?.forEach((notification: any) => {
         if (notification.status === "unread") {
             notificationsUnreadDataArray.push({
                 userId: notification.user_info?.userId || notification?.user_info?.id,
@@ -73,6 +68,7 @@ export default function NotificationsPage() {
     const handleMarkAsRead = async (userId: string, notificationId: string) => {
         const res = await markNotificationRead(userId, notificationId);
         if (res === 200) {
+            void queryClient.refetchQueries({ queryKey: ['get_user_notifications', discordData.id] })
             setNotifications(prev =>
                 prev.map(n =>
                     n.notificationId === notificationId ? { ...n, status: "read" } : n
@@ -96,8 +92,9 @@ export default function NotificationsPage() {
 
     return (
         <div className="w-[70vw] h-screen" suppressHydrationWarning>
+            <h1 className="text-2xl font-bold text-foreground py-4">Notifications</h1>
             <Tabs defaultValue="unread" className="w-full">
-                <TabsList>
+                <TabsList className="w-full">
                     <TabsTrigger value="unread" className="flex flex-row items-center gap-2">
                         Unread
                         <Badge variant="outline">{notificationsUnread.length}</Badge>
@@ -111,13 +108,13 @@ export default function NotificationsPage() {
                         <Badge variant="outline">{notificationsDataArray.length}</Badge>
                     </TabsTrigger>
                 </TabsList>
-                <TabsContent value="unread" className="w-full">
+                <TabsContent value="unread" className="w-full bg-background/60 rounded-lg p-4">
                     <DataTable columns={columns} data={notificationsUnreadDataArray} />
                 </TabsContent>
-                <TabsContent value="read" className="w-full">
+                <TabsContent value="read" className="w-full bg-background/60 rounded-lg p-4">
                     <DataTable columns={columns} data={notificationsReadDataArray} />
                 </TabsContent>
-                <TabsContent value="all" className="w-full">
+                <TabsContent value="all" className="w-full bg-background/60 rounded-lg p-4">
                     <DataTable columns={columns} data={notificationsDataArray} />
                 </TabsContent>
             </Tabs>

@@ -1,5 +1,4 @@
 "use client"
-import getCurrentGuild from "@/app/actions/getCurrentGuild";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,39 +16,17 @@ import {
 import { HelpCircle, Slash } from "lucide-react";
 import { DataTable } from "./data-table";
 import { columns, Team } from "./columns";
-import { getCurrentGuildRelationships } from "@/app/actions/getCurrentGuildRelationships";
-import { useEffect, useState } from "react";
 import { useServerStore } from "@/store/server-store";
+import {useSuspenseQuery} from "@tanstack/react-query";
+import {getGuildRelationshipsByServer} from "@/queries/guildrelationships";
+import {useServer} from "@/context/server-provider";
 
 export default function ServerPage() {
   const guildRelationshipDataArray: Team[] = [];
-  const [currentServerData, setCurrentServerData] = useState<any>();
-  const [guildRelationshipData, setGuildRelationshipData] = useState<any>();
   const serverId = useServerStore((state) => state.currentServerId);
-  const setServerId = useServerStore((state) => state.setServerId);
+  const { currentServerId } = useServer();
 
-  useEffect(() => {
-    const getData = async () => {
-      if (serverId === null) {
-        const lsServerId = window.localStorage.getItem("currentServerId");
-        setServerId(lsServerId as string);
-  
-        const currentServerData = await getCurrentGuild(lsServerId);
-        const memberData = await getCurrentGuildRelationships(lsServerId as string);
-
-        setCurrentServerData(currentServerData);
-        setGuildRelationshipData(memberData);
-      } else {
-        const currentServerData = await getCurrentGuild(serverId);
-        const memberData = await getCurrentGuildRelationships(serverId);
-
-        setCurrentServerData(currentServerData);
-        setGuildRelationshipData(memberData);
-      }
-    }
-
-    getData();
-  }, [])
+  const { data: guildRelationshipData } = useSuspenseQuery(getGuildRelationshipsByServer(serverId || currentServerId as string));
 
   guildRelationshipData?.relData.forEach((team: any) => {
     guildRelationshipDataArray.push({

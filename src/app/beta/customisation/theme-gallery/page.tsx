@@ -1,73 +1,37 @@
 "use client"
-import getCurrentGuild from "@/app/actions/getCurrentGuild";
-import { getDiscordUser } from "@/app/actions/getDiscordUser";
-import { getThemes } from "@/app/actions/getThemes";
 import { updateGuildSettings } from "@/app/actions/guilds/updateGuildSettings";
-import { getUserThemes } from "@/app/actions/theme_gallery/getUserThemes";
-import { ThemeGallery_ThemeCreator } from "@/components/theme_gallery/ThemeGallery_ThemeCreator";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogDescription, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsTrigger, TabsList, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useServerStore } from "@/store/server-store";
 import Image from "next/image";
-import { permanentRedirect, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import {permanentRedirect, useRouter} from "next/navigation";
 import { toast } from "sonner";
+import {QueryClient, useMutation, useQuery, useSuspenseQuery} from "@tanstack/react-query";
+import {getAllThemes} from "@/queries/themegallery";
+import {useServer} from "@/context/server-provider";
+import {getServerById} from "@/queries/servers";
+import {getQueryClient} from "@/lib/query-client";
 
 export default function ThemeGallery() {
-    const router = useRouter();
-    const [themes, setThemes] = useState<any>();
-    const [userData, setUserData] = useState<any>();
-    const [createdThemesData, setCreatedThemesData] = useState<any>();
-    const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
     const serverId = useServerStore((state) => state.currentServerId);
-    const setServerId = useServerStore((state) => state.setServerId);
+    const { currentServerId } = useServer();
 
-    const getData = async () => {
-        const response = await getThemes();
-        const response2 = await getDiscordUser();
-        const response3 = await getUserThemes(response2.id);
-        setThemes(response);
-        setUserData(response2);
-        setCreatedThemesData(response3);
-        setLastUpdated(new Date());
-    };
+    const { data: themes } = useSuspenseQuery(getAllThemes());
+    const { data: serverData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
 
-    useEffect(() => {
-        getData();
-
-        const interval = setInterval(() => {
-            getData();
-        }, 60000); // refresh every 60 seconds
-
-        return () => clearInterval(interval);
-    }, []);
-
-    function getTimeAgo(date: Date | null) {
-        if (!date) return "";
-        const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-        if (seconds < 60) return `${seconds}s ago`;
-        const minutes = Math.floor(seconds / 60);
-        return `${minutes}m ago`;
-    }
-
-    const setTheme = async (theme: any) => {
-        const findTheme = themes?.data?.find((t: any) => t.id === theme);
-
-        if (serverId === null) {
-            const lsServerId = window.localStorage.getItem("currentServerId");
-            setServerId(lsServerId as string);
-
-            const currentServerData = await getCurrentGuild(lsServerId);
+    const setThemeMutation = useMutation({
+        mutationKey: ['set_theme'],
+        mutationFn: async (themeId: string) => {
+            const findTheme = themes?.data.find((t: any) => t.id === themeId);
             const response = await updateGuildSettings(
-                currentServerData?.data.dsData.id,
+                serverData.data.dsData.id,
                 "appearance_set_theme",
                 {
-                    background: findTheme?.background,
+                background: findTheme?.background,
                     font: findTheme?.font,
                     themeId: findTheme?.id,
                     color_1: findTheme?.color_1,
@@ -75,36 +39,14 @@ export default function ThemeGallery() {
                     color_3: findTheme?.color_3,
                     overlayPercent: findTheme?.overlayPercent,
                 },
-            );
-    
-            if (response === 200) {
+            )
+            if(response === 200) {
                 toast.success("Theme applied successfully.");
-                return permanentRedirect("/beta/customisation/theme-gallery");
-            }
-        } else {
-            const currentServerData = await getCurrentGuild(serverId);
-            const response = await updateGuildSettings(
-                currentServerData?.data.dsData.id,
-                "appearance_set_theme",
-                {
-                    background: findTheme?.background,
-                    font: findTheme?.font,
-                    themeId: findTheme?.id,
-                    color_1: findTheme?.color_1,
-                    color_2: findTheme?.color_2,
-                    color_3: findTheme?.color_3,
-                    overlayPercent: findTheme?.overlayPercent,
-                },
-            );
-    
-            if (response === 200) {
-                toast.success("Theme applied successfully.");
-                return permanentRedirect("/beta/customisation/theme-gallery");
+            } else {
+                return toast.error("Unable to apply theme. Please contact support.");
             }
         }
-
-        
-    };
+    })
 
     return (
         <div className="w-full h-screen text-foreground">
@@ -122,25 +64,26 @@ export default function ThemeGallery() {
             <Tabs
                 defaultValue="featured"
                 className="flex flex-col w-full items-start">
-                <div className="flex flex-row items-center gap-2 justify-start px-4 py-2">
-                    <Input
-                        type="text"
-                        placeholder="Search for a theme..."
-                    />
+                {/*<div className="flex flex-row items-center gap-2 justify-between w-full px-4 py-2">
                     <TabsList className="bg-background text-foreground flex flex-row items-center gap-2">
                         <TabsTrigger value="featured">Featured</TabsTrigger>
                         <TabsTrigger value="featured" disabled>
                             Favourites
                         </TabsTrigger>
                     </TabsList>
-                </div>
+                    <Input
+                        type="text"
+                        placeholder="Search for a theme..."
+                        className="w-1/3 bg-background text-foreground"
+                    />
+                </div>*/}
                 <TabsContent value="featured" className="w-full p-2 ">
                     <div className="flex flex-col items-start justify-start gap-1 px-4 py-1">
                         <span className="text-md font-semibold text-foreground">Featured Themes</span>
                         <span className="text-sm font-normal text-muted-foreground">
                             These themes are curated by MYMOD staff, and by the community.
                         </span>
-                        <span className="text-sm font-normal text-white py-1 px-2 rounded-md border-1 border-yellow-500 bg-yellow-700">
+                        <span className="text-sm font-normal text-foreground py-1 px-2 rounded-md border-1 border-yellow-500 bg-yellow-500/40">
                             NOTE: Themes are applied at server-level, not at user-level. Soon, you will be able to apply themes system-wide for your profile, rather than a server.
                         </span>
                     </div>
@@ -184,14 +127,14 @@ export default function ThemeGallery() {
 
                                                 {/* Gradient Overlay */}
                                                 <div
-                                                    className="absolute overflow-hidden top-0 left-0 w-full h-[50px] rounded-[20px] blur-[40px] z-[10]"
+                                                    className="relative overflow-hidden top-0 left-0 w-full h-[50px] rounded-[20px] blur-[40px] z-[20]"
                                                     style={{
                                                         background: `radial-gradient(circle at top center, ${theme.color_1}99 10%, ${theme.color_2}66 40%, ${theme.color_3}4D 70%)`,
                                                     }}
                                                 />
 
                                                 {/* Content Overlay */}
-                                                <div className="bg-background/90 absolute inset-0 z-[40] self-end flex flex-col items-start justify-start p-4 text-foreground">
+                                                <div className="bg-gradient-to-b from-transparent to-background absolute inset-0 z-[40] self-end flex flex-col items-start justify-end p-4 text-foreground">
                                                     <p className="text-lg font-semibold">
                                                         {theme.name}
                                                     </p>
@@ -224,7 +167,7 @@ export default function ThemeGallery() {
                                             </div>
                                         </Card>
                                     </DialogTrigger>
-                                    <DialogContent className="dark min-w-[80vw] flex flex-col text-white">
+                                    <DialogContent className="min-w-[80vw] flex flex-col">
                                         <DialogTitle>
                                             Install the {theme.name} theme
                                         </DialogTitle>
@@ -232,16 +175,16 @@ export default function ThemeGallery() {
                                             {theme.description}
                                         </DialogDescription>
                                         <br />
-                                        <h4 className="text-sm uppercase text-left w-full font-bold text-zinc-500 py-2">
+                                        <h4 className="text-sm uppercase text-left w-full font-bold text-muted-foreground py-2">
                                             What you get
                                         </h4>
                                         <div className="flex flex-row w-full items-start gap-2">
                                             <div className="flex flex-col w-full items-start gap-2">
-                                                <h4 className="text-lg text-left w-full font-bold text-zinc-300">
+                                                <h4 className="text-lg text-left w-full font-bold text-foreground">
                                                     Gradient
                                                 </h4>
                                                 <Card
-                                                    className={`overflow-hidden w-full h-[200px] bg-black p-0 border border-zinc-900`}
+                                                    className={`overflow-hidden w-full h-[200px] bg-background p-0 border border-muted`}
                                                 >
                                                     <div className={`relative w-full h-full`}>
                                                         {/* Gradient */}
@@ -259,7 +202,7 @@ export default function ThemeGallery() {
                                                     Wallpaper
                                                 </h4>
                                                 <Card
-                                                    className={`overflow-hidden w-full h-[200px] bg-black p-0 border border-zinc-900`}
+                                                    className={`overflow-hidden w-full h-[200px] bg-background p-0 border border-muted`}
                                                 >
                                                     {theme?.background.endsWith(".mp4") && (
                                                         <>
@@ -271,9 +214,6 @@ export default function ThemeGallery() {
                                                                 muted
                                                                 playsInline
                                                             />
-                                                            <div className="relative w-full h-full z-[2] bg-black/90">
-                                                                &nbsp;
-                                                            </div>
                                                         </>
                                                     )}
 
@@ -282,7 +222,7 @@ export default function ThemeGallery() {
                                                         <div
                                                             className="relative inset-0 w-full h-full z-0"
                                                             style={{
-                                                                backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,${theme.overlayPercent}), rgba(0,0,0,${theme.overlayPercent})), url('${theme.background}')`,
+                                                                backgroundImage: `url('${theme.background}')`,
                                                                 backgroundSize: "cover",
                                                                 backgroundRepeat: "no-repeat",
                                                                 backgroundPosition: "center",
@@ -296,7 +236,7 @@ export default function ThemeGallery() {
                                                     Font
                                                 </h4>
                                                 <Card
-                                                    className={`${theme.font} overflow-hidden w-full h-[200px] bg-black p-0 border border-zinc-900`}
+                                                    className={`${theme.font} overflow-hidden w-full h-[200px] bg-background p-0 border border-muted`}
                                                 >
                                                     <div
                                                         className={`relative w-full h-full flex flex-col justify-center p-2`}
@@ -316,9 +256,11 @@ export default function ThemeGallery() {
                                             </div>
                                         </div>
                                         <Button
-                                            onClick={() => setTheme(theme.id)}
+                                            onClick={async () => {
+                                                setThemeMutation.mutate(theme.id);
+                                            }}
                                             variant="outline"
-                                            className="w-auto self-end dark text-white"
+                                            className="w-auto self-end"
                                         >
                                             Apply theme
                                         </Button>

@@ -30,6 +30,10 @@ import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { AISidebarTrigger } from "@/components/AISidebarTrigger";
 import { useEffect, useState } from "react";
 import { useServerStore } from "@/store/server-store";
+import {useSuspenseQuery} from "@tanstack/react-query";
+import {getServerById} from "@/queries/servers";
+import {useServer} from "@/context/server-provider";
+import {getGuildMembers} from "@/queries/guildmembers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,33 +42,11 @@ const geistSans = Geist({
 
 export default function ServerMembers() {
   const memberDataArray: Payment[] = [];
-  const [memberData, setMemberData] = useState<any>();
-  const [currentServerData, setCurrentServerData] = useState<any>();
   const serverId = useServerStore((state) => state.currentServerId);
-  const setServerId = useServerStore((state) => state.setServerId);
+  const { currentServerId } = useServer();
 
-  useEffect(() => {
-    const getData = async () => {
-      if (serverId === null) {
-        const lsServerId = window.localStorage.getItem("currentServerId");
-        setServerId(lsServerId as string);
-  
-        const currentServerData = await getCurrentGuild(lsServerId);
-        const memberData = await getCurrentGuildMembers(lsServerId);
-
-        setCurrentServerData(currentServerData);
-        setMemberData(memberData);
-      } else {
-        const currentServerData = await getCurrentGuild(serverId);
-        const memberData = await getCurrentGuildMembers(serverId);
-
-        setCurrentServerData(currentServerData);
-        setMemberData(memberData);
-      }
-    }
-
-    getData();
-  }, [])
+  const { data: currentServerData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
+  const { data: memberData } = useSuspenseQuery(getGuildMembers(serverId || currentServerId as string));
 
   memberData?.forEach((member: any) => {
     memberDataArray.push({

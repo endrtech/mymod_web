@@ -32,36 +32,17 @@ import { CreateCaseDialog } from "@/components/dialog/CreateCaseDialog";
 import { Toaster } from "@/components/ui/sonner";
 import { useServerStore } from "@/store/server-store";
 import { useEffect, useState } from "react";
+import {useSuspenseQuery} from "@tanstack/react-query";
+import {useServer} from "@/context/server-provider";
+import {getServerById} from "@/queries/servers";
+import {getCases} from "@/queries/cases";
 
 export default function ServerMembers() {
   const memberDataArray: Case[] = [];
-  const [currentServerData, setCurrentServerData] = useState<any>();
-  const [activeCasesData, setActiveCasesData] = useState<any>();
   const serverId = useServerStore((state) => state.currentServerId);
-  const setServerId = useServerStore((state) => state.setServerId);
-
-  useEffect(() => {
-    const getData = async () => {
-      if (serverId === null) {
-        const lsServerId = window.localStorage.getItem("currentServerId");
-        setServerId(lsServerId as string);
-  
-        const currentServerData = await getCurrentGuild(lsServerId);
-        const memberData = await getActiveCases(lsServerId as string);
-
-        setCurrentServerData(currentServerData);
-        setActiveCasesData(memberData);
-      } else {
-        const currentServerData = await getCurrentGuild(serverId);
-        const memberData = await getActiveCases(serverId);
-
-        setCurrentServerData(currentServerData);
-        setActiveCasesData(memberData);
-      }
-    }
-
-    getData();
-  }, [])
+  const { currentServerId } = useServer();
+  const { data: currentServerData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
+  const { data: activeCasesData } = useSuspenseQuery(getCases(serverId || currentServerId as string));
 
   activeCasesData?.forEach((caseItem: any) => {
     memberDataArray.push({
@@ -121,7 +102,6 @@ export default function ServerMembers() {
         <div className="p-6 -mt-12 h-[80vh] overflow-y-auto">
           <DataTable columns={columns} data={memberDataArray} />
         </div>
-        <Toaster />
       </div>
     </div>
   );

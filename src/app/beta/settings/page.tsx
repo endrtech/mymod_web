@@ -44,35 +44,16 @@ import { SettingsAppSettingsCard } from "@/components/beta/settings/SettingsAppS
 import { useEffect, useState } from "react";
 import { useServerStore } from "@/store/server-store";
 import { BetaAppearanceSettingsCard } from "@/components/beta/settings/AppearanceSettingsCard";
+import {useServer} from "@/context/server-provider";
+import {useSuspenseQuery} from "@tanstack/react-query";
+import {getGuildVoiceChannelsById, getServerById} from "@/queries/servers";
 
 export default function SettingsPage() {
-  const [currentGuildChannels, setCurrentGuildChannels] = useState<any>();
-  const [currentServerData, setCurrentServerData] = useState<any>();
   const serverId = useServerStore((state) => state.currentServerId);
-  const setServerId = useServerStore((state) => state.setServerId);
+  const { currentServerId } = useServer();
 
-  useEffect(() => {
-    const getData = async () => {
-      if (serverId === null) {
-        const lsServerId = window.localStorage.getItem("currentServerId");
-        setServerId(lsServerId as string);
-  
-        const currentServerData = await getCurrentGuild(lsServerId);
-        const memberData = await getGuildChannels(lsServerId, "voice");
-
-        setCurrentServerData(currentServerData);
-        setCurrentGuildChannels(memberData);
-      } else {
-        const currentServerData = await getCurrentGuild(serverId);
-        const memberData = await getGuildChannels(serverId, "voice");
-
-        setCurrentServerData(currentServerData);
-        setCurrentGuildChannels(memberData);
-      }
-    }
-
-    getData();
-  }, [])
+  const { data: currentServerData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
+  const { data: currentGuildChannels } = useSuspenseQuery(getGuildVoiceChannelsById(serverId || currentServerId as string));
 
   return (
     <main className="w-[70vw] h-screen" suppressHydrationWarning>
@@ -83,7 +64,7 @@ export default function SettingsPage() {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href={`/beta`}
-                  className="hover:text-white"
+                  className="hover:text-foreground"
                 >
                   Overview
                 </BreadcrumbLink>
@@ -94,7 +75,7 @@ export default function SettingsPage() {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href={`/beta/settings`}
-                  className="hover:text-white"
+                  className="hover:text-foreground"
                 >
                   Settings
                 </BreadcrumbLink>
@@ -311,7 +292,7 @@ export default function SettingsPage() {
                   </Card>
                 </TabsContent>
                 <TabsContent value="boost-perks" className="h-[70vh]">
-                  <Card className="w-full h-[100%] bg-black border-zinc-700 overflow-y-auto p-4">
+                  <Card className="w-full h-[100%] bg-background border-muted overflow-y-auto p-4">
                     <div className="h-auto w-full bg-gradient-to-br from-pink-700 to-purple-800 rounded-lg p-4">
                       <div className="flex flex-col gap-1 items-start text-white">
                         <h4 className="font-semibold">

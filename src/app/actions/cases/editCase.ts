@@ -7,7 +7,7 @@ export const editCase = async (caseId: any, body: any) => {
   const sessionToken = (await cookies()).get("__session");
   console.log(body);
   const resp = await axios.put(
-    `https://api.mymod.endr.tech/api/cases/${caseId}`,
+    `http://localhost:3030/api/cases/${caseId}`,
     body,
     {
       headers: {

@@ -6,7 +6,7 @@ export async function searchMember(serverId: any, query: any, requestType?: any)
   if (!requestType) {
     const sessionToken = (await cookies()).get("__session");
     const resp = await axios.get(
-      `https://api.mymod.endr.tech/api/guilds/${serverId}/members/search/${query}`,
+      `http://localhost:3030/api/guilds/${serverId}/members/search/${query}`,
       {
         headers: {
           Authorization: `Bearer ${sessionToken?.value}`,
@@ -21,7 +21,7 @@ export async function searchMember(serverId: any, query: any, requestType?: any)
     }
   } else if (requestType === "ai") {
     const resp = await axios.get(
-      `https://api.mymod.endr.tech/api/guilds/${serverId}/members/search/${query}`,
+      `http://localhost:3030/api/guilds/${serverId}/members/search/${query}`,
       {
         headers: {
           "X-MYMOD-Client-User-Authentication": `${process.env.MYMOD_CLIENT_USER_AUTH_KEY}`,

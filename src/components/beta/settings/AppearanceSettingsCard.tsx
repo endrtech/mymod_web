@@ -18,6 +18,8 @@ import { ColorPickerInput } from "@/components/ColorPickerInput";
 import { ThemeGalleryMain } from "@/components/theme_gallery/ThemeGalleryMain";
 import { getThemes } from "@/app/actions/getThemes";
 import { ThemeGalleryDrawer } from "@/components/theme_gallery/ThemeGalleryDrawer";
+import {Badge} from "@/components/ui/badge";
+import {Avatar, AvatarImage} from "@/components/ui/avatar";
 
 export const BetaAppearanceSettingsCard = ({ currentServerData }: any) => {
   const router = useRouter();
@@ -92,35 +94,6 @@ export const BetaAppearanceSettingsCard = ({ currentServerData }: any) => {
     currentServerData?.data.mmData.module_config.appearance?.background;
   const isVideo = bg?.endsWith(".mp4");
 
-  const setTheme = async (theme: any) => {
-    const findTheme = themes.find((t) => t.id === theme);
-
-    const response = await updateGuildSettings(
-      currentServerData?.data.dsData.id,
-      "appearance_set_theme",
-      {
-        background: findTheme?.background,
-        font: findTheme?.font,
-        themeId: findTheme?.id,
-        color_1: findTheme?.color_1,
-        color_2: findTheme?.color_2,
-        color_3: findTheme?.color_3,
-        overlayPercent: findTheme?.overlayPercent,
-      },
-    );
-
-    if (response === 200) {
-      toast.success("Theme applied successfully.");
-      router.refresh();
-      setColorStop1(findTheme?.color_1);
-      setColorStop2(findTheme?.color_2);
-      setColorStop3(findTheme?.color_3);
-      setWallpaper(findTheme?.background);
-      setOverlayPercent(findTheme?.overlayPercent);
-      setSelectedFont(findTheme?.font);
-    }
-  };
-
   const updateGradient = async () => {
     const response = await updateGuildSettings(
       currentServerData?.data.dsData.id,
@@ -174,64 +147,57 @@ export const BetaAppearanceSettingsCard = ({ currentServerData }: any) => {
         </h4>
         <h4 className="text-sm text-left w-full font-medium text-muted-foreground">
           All settings changed here affect <b>every member</b> that has access
-          to your server's Dashboard.
+          to your server&apos;s Dashboard. Want to change it up? Use the Theme Gallery on the right.
         </h4>
         <br />
         <h4 className="text-xl text-left w-full font-bold text-foreground">
           Currently selected preset
         </h4>
-        <Card className="overflow-hidden w-full md:w-[370] h-[200px] p-0">
-          <div className="relative w-full h-full">
+        <Card
+            className="overflow-hidden w-full h-[200px] p-0"
+        >
+          <div className="overflow-hidden relative w-full h-full">
             {/* Video background if .mp4 */}
             {currentlySelectedPreset?.background.endsWith(".mp4") && (
-              <>
-                <video
-                  className="absolute inset-0 w-full h-full object-cover z-0"
-                  src={currentlySelectedPreset?.background}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
-                <div
-                  className="relative w-full h-full z-[2]"
-                  style={{
-                    background: `linear-gradient(to bottom, rgba(0,0,0,${currentlySelectedPreset?.overlayPercent}), rgba(0,0,0,${currentlySelectedPreset?.overlayPercent}))`,
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center",
-                  }}
-                ></div>
-              </>
+                <>
+                  <video
+                      className="absolute inset-0 w-full h-full object-cover z-0"
+                      src={currentlySelectedPreset?.background}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                  />
+                </>
             )}
 
             {/* Image background if not video */}
             {!currentlySelectedPreset?.background.endsWith(".mp4") && (
-              <div
-                className="absolute inset-0 w-full h-full z-0"
-                style={{
-                  backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,${overlayPercent}), rgba(0,0,0,${overlayPercent})), url('${currentlySelectedPreset?.background}')`,
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                }}
-              />
+                <div
+                    className="absolute inset-0 w-full h-full z-0"
+                    style={{
+                      backgroundImage: `url('${currentlySelectedPreset?.background}')`,
+                      backgroundSize: "cover",
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
+                    }}
+                />
             )}
 
             {/* Gradient Overlay */}
             <div
-              className="absolute top-0 left-0 w-full h-[50px] rounded-[20px] blur-[40px] z-[30]"
-              style={{
-                background: `radial-gradient(circle at top center, ${currentlySelectedPreset?.color_1}99 10%, ${currentlySelectedPreset?.color_2}66 40%, ${currentlySelectedPreset?.color_3}4D 70%)`,
-              }}
+                className="absolute overflow-hidden top-0 left-0 w-full h-[50px] rounded-[20px] blur-[20px] z-[10]"
+                style={{
+                  background: `radial-gradient(circle at top center, ${currentlySelectedPreset?.color_1}99 10%, ${currentlySelectedPreset?.color_2}66 40%, ${currentlySelectedPreset?.color_3}4D 70%)`,
+                }}
             />
 
             {/* Content Overlay */}
-            <div className="absolute inset-0 z-[40] self-end flex flex-col items-start justify-start p-4 text-white">
+            <div className="bg-gradient-to-b from-transparent to-background/90 absolute inset-0 z-[40] self-end flex flex-col items-start justify-end p-4 text-foreground">
               <p className="text-lg font-semibold">
                 {currentlySelectedPreset?.name}
               </p>
-              <p className="text-sm font-normal">
+              <p className="text-sm font-normal truncate w-full overflow-hidden">
                 {currentlySelectedPreset?.description}
               </p>
             </div>
@@ -325,7 +291,7 @@ export const BetaAppearanceSettingsCard = ({ currentServerData }: any) => {
             )}
           </Card>
           <div className="flex flex-col gap-1 w-full md:w-[200px] items-start justify-start">
-            <h4 className="text-sm text-left w-full font-medium text-zinc-500 pb-1">
+            <h4 className="text-sm text-left w-full font-medium text-muted-foreground pb-1">
               Link to wallpaper
             </h4>
             <Input
@@ -333,9 +299,9 @@ export const BetaAppearanceSettingsCard = ({ currentServerData }: any) => {
               value={wallpaper}
               onChange={(e) => setWallpaper(e.target.value)}
               placeholder="Paste your link here..."
-              className="dark text-white"
+              className="text-foreground"
             />
-            <h4 className="text-sm text-left w-full font-medium text-zinc-500 py-1">
+            <h4 className="text-sm text-left w-full font-medium text-muted-foreground py-1">
               Opacity (in deminal value)
             </h4>
             <Input
@@ -370,10 +336,10 @@ export const BetaAppearanceSettingsCard = ({ currentServerData }: any) => {
             value={selectedFont}
             onValueChange={(e) => setSelectedFont(e)}
           >
-            <SelectTrigger className="dark text-white">
+            <SelectTrigger className="text-foreground w-[400px]">
               <SelectValue placeholder="Select a font..." />
             </SelectTrigger>
-            <SelectContent className="dark text-white">
+            <SelectContent>
               <SelectItem value="font-geist">Geist</SelectItem>
               <SelectItem value="font-inter">Inter</SelectItem>
               <SelectItem value="font-roboto">Roboto</SelectItem>

@@ -1,52 +1,28 @@
 "use client"
-import { Geist } from "next/font/google";
-import getCurrentGuild from "@/app/actions/getCurrentGuild";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Slash } from "lucide-react";
-import { getCurrentGuildAuditLog } from "@/app/actions/getCurrentGuildAuditLog";
 import moment from "moment";
 import { AuditLogImportDialog } from "@/components/dialog/AuditLogImportDialog";
 import { AuditLog, columns } from "./columns";
 import { DataTable } from "./data-table";
-import { useEffect, useState } from "react";
 import { useServerStore } from "@/store/server-store";
+import {useServer} from "@/context/server-provider";
+import {useSuspenseQuery} from "@tanstack/react-query";
+import {getGuildAuditLog, getServerById} from "@/queries/servers";
 
 export default function ServerMembers() {
   const auditLogDataArray: AuditLog[] = [];
-  const [currentServerData, setCurrentServerData] = useState<any>();
-  const [serverAuditLog, setServerAuditLog] = useState<any>(null);
   const serverId = useServerStore((state) => state.currentServerId);
-  const setServerId = useServerStore((state) => state.setServerId);
+  const { currentServerId } = useServer();
 
-  useEffect(() => {
-    const getData = async () => {
-      if (serverId === null) {
-        const lsServerId = window.localStorage.getItem("currentServerId");
-        setServerId(lsServerId as string);
-
-        const currentServerData = await getCurrentGuild(lsServerId);
-        const serverAuditLog = await getCurrentGuildAuditLog(lsServerId);
-
-        setCurrentServerData(currentServerData);
-        setServerAuditLog(serverAuditLog);
-      } else {
-        const currentServerData = await getCurrentGuild(serverId);
-        const serverAuditLog = await getCurrentGuildAuditLog(serverId);
-
-        setCurrentServerData(currentServerData);
-        setServerAuditLog(serverAuditLog);
-      }
-    }
-
-    getData();
-  }, [])
+  const { data: currentServerData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
+  const { data: serverAuditLog } = useSuspenseQuery(getGuildAuditLog(serverId || currentServerId as string));
 
   for (const auditLog of serverAuditLog?.data || []) {
     auditLogDataArray.push({

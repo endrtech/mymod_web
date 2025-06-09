@@ -1,44 +1,42 @@
 "use client"
 import { Separator } from "../ui/separator"
-import { ArrowRight, Bell, Command, SearchIcon, ServerIcon, SidebarIcon, SparklesIcon, UserIcon } from "lucide-react"
+import { Bell, Command, SearchIcon, ServerIcon, UserIcon } from "lucide-react"
 import { Button } from "../ui/button"
-import { useSidebar } from "../ui/sidebar"
 import { useSidebarStore } from "@/store/sidebar-store"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
     Sheet,
-    SheetClose,
     SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import { MobileServerSwitcher } from "./mobile-server-switcher"
-import getCurrentGuild from "@/app/actions/getCurrentGuild"
 import { Avatar, AvatarImage } from "../ui/avatar"
 import { usePlatform } from "@/hooks/use-platform"
 import { ThemeToggle } from "./theme-toggle"
 import Link from "next/link"
-import { permanentRedirect } from "next/navigation"
-import { NotificationDialog } from "./NotificationDialog"
-import getUserNotifications from "@/app/actions/user/getUserNotifications"
-import { getDiscordUser } from "@/app/actions/getDiscordUser"
+import {useQuery, useSuspenseQuery} from "@tanstack/react-query";
+import {getServerById, getServers} from "@/queries/servers";
+import {useServerStore} from "@/store/server-store";
+import {useServer} from "@/context/server-provider";
 
 export const SiteHeader = () => {
-    const { isMac, isElectron, isWindows, isLinux, isLoading } = usePlatform();
-    const [notificationsData, setNotificationsData] = useState<any>();
+    const { isMac, isElectron, isWindows, isLinux } = usePlatform();
     const setLeftSidebarOpen = useSidebarStore((state) => state.setLeftSidebarOpen);
     const isLeftSidebarOpen = useSidebarStore((state) => state.isLeftSidebarOpen);
 
     const setRightSidebarOpen = useSidebarStore((state) => state.setRightSidebarOpen);
     const isRightSidebarOpen = useSidebarStore((state) => state.isRightSidebarOpen);
 
-    const [server, setServer] = useState<any>();
+    const serverId = useServerStore((state) => state.currentServerId) || "";
+    const { currentServerId, setCurrentServerId } = useServer();
+
+    const { data: servers } = useSuspenseQuery(getServers);
+    const { data: server } = useQuery(getServerById(serverId || currentServerId as string || servers[0]?.id));
+
+    if(!currentServerId) {
+        setCurrentServerId(servers[0]?.id as string);
+    }
 
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
@@ -47,28 +45,6 @@ export const SiteHeader = () => {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
-
-    useEffect(() => {
-        const serverId = window.localStorage.getItem("currentServerId");
-        const getData = async () => {
-            if (serverId) {
-                const getServer = await getCurrentGuild(serverId);
-                setServer(getServer);
-            } else {
-                setServer(null);
-            }
-
-            const discordData = await getDiscordUser();
-            const notificationData = await getUserNotifications(discordData?.id);
-            setNotificationsData(notificationData);
-        }
-        getData();
-    }, []);
-
-    const setBetaLSVariable = () => {
-        window.localStorage.setItem("betaEnabled", "false");
-        return permanentRedirect("/:d:/app");
-    }
 
     if (isMobile) {
         return (
@@ -95,7 +71,7 @@ export const SiteHeader = () => {
                                     <div className="ml-16 flex aspect-square size-8 items-center justify-center rounded-lg">
                                         <Avatar className="h-6 w-6 rounded-lg">
                                             <AvatarImage
-                                                src={`https://cdn.discordapp.com/icons/${server.data.dsData.id}/${server.data.dsData.icon}`}
+                                                src={server.data.dsData.icon ? `https://cdn.discordapp.com/icons/${server.data.dsData.id}/${server.data.dsData.icon}` : "https://cdn.discordapp.com/embed/avatars/5.png"}
                                                 alt={server.data.dsData.name}
                                             />
                                         </Avatar>
@@ -158,7 +134,7 @@ export const SiteHeader = () => {
                     >
                         <ServerIcon />
                     </Button>
-                    <Link href="/beta/ai">
+                    {/*<Link href="/beta/ai">
                         <Button
                             className={`h-8 w-8 noDrag`}
                             variant="ghost"
@@ -166,16 +142,16 @@ export const SiteHeader = () => {
                         >
                             <SparklesIcon />
                         </Button>
-                    </Link>
+                    </Link>*/}
                     <Separator orientation="vertical" />
                     <div className="w-full flex-1 flex flex-row items-center justify-center">
                         <div className="flex flex-row items-center justify-center">
                             {server && (
                                 <>
-                                    <div className="ml-16 flex aspect-square size-8 items-center justify-center rounded-lg">
+                                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                                         <Avatar className="h-6 w-6 rounded-lg">
                                             <AvatarImage
-                                                src={`https://cdn.discordapp.com/icons/${server.data.dsData.id}/${server.data.dsData.icon}`}
+                                                src={server.data.dsData.icon ? `https://cdn.discordapp.com/icons/${server.data.dsData.id}/${server.data.dsData.icon}` : "https://cdn.discordapp.com/embed/avatars/5.png"}
                                                 alt={server.data.dsData.name}
                                             />
                                         </Avatar>
@@ -185,7 +161,7 @@ export const SiteHeader = () => {
                             )}
                             {
                                 !server && (
-                                    <div className="ml-16 flex aspect-square size-8 items-center justify-center rounded-lg">
+                                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                                         <Image
                                             src={'/mymod_emblem.svg'}
                                             alt="MYMOD"
@@ -197,15 +173,6 @@ export const SiteHeader = () => {
                             }
                         </div>
                     </div>
-                    <Link href="/:d:/app">
-                        <Button
-                            variant="ghost"
-                            className="noDrag cusor-pointer"
-                            onClick={setBetaLSVariable}
-                        >
-                            Return to modUI 1 <ArrowRight />
-                        </Button>
-                    </Link>
                     <Separator orientation="vertical" />
                     <div className="ml-auto flex items-center gap-2 noDrag">
                         <Link href="/beta/notifications">

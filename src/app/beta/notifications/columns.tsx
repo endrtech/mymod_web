@@ -87,7 +87,7 @@ export const getColumns = (
             />
             <AvatarFallback>{row.getValue("username")}</AvatarFallback>
           </Avatar>
-          <span className="text-sm font-medium text-zinc-300">
+          <span className="text-sm font-medium text-foreground">
             {row.getValue("username")}
           </span>
         </div>
@@ -153,7 +153,7 @@ export const getColumns = (
     },
     cell: ({ row }) => {
       return (
-        <Badge variant="outline" className="capitalize text-xs">
+        <Badge variant="default" className="capitalize text-xs">
           {row.getValue("status") || "Unknown"}
         </Badge>
       );
@@ -177,7 +177,7 @@ export const getColumns = (
     cell: ({ row }) => {
       return (
         <span className="tabular-nums text-sm">
-          {moment(row.getValue("created")).format("DD MMM YYYY, hh:mm a")}
+          {moment(row.getValue("created")).format("DD/MM/YY, hh:mm a")}
         </span>
       );
     },

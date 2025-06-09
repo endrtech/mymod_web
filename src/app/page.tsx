@@ -1,30 +1,41 @@
-import type { Metadata } from "next";
+"use client"
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
-import { Suspense } from "react";
-import LoadingOverlay from "./loading";
-import NextTopLoader from "nextjs-toploader";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import { PostHogProvider } from "../components/PostHogProvider";
-import { montserrat } from "./:d:/app/server/[serverId]/fonts";
+import {useAuth} from "@clerk/nextjs";
+import {permanentRedirect} from "next/navigation";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { LoginForm } from "@/components/beta/login-form";
+import Silk from "@/components/application/login-bkg";
+import {useEffect} from "react";
 
-export default async function Main() {
-  const user = await auth();
+export default function Main() {
+  const { userId } = useAuth();
 
-  if (user.userId) {
-    return redirect("/:d:/app");
-  }
+  useEffect(() => {
+    if (userId) {
+      const betaEnabled = window.localStorage.getItem("betaEnabled");
+      if(betaEnabled === "true") {
+        return permanentRedirect("/beta");
+      } else {
+        return permanentRedirect("/:d:/app");
+      }
+    }
+  }, [userId]);
 
   return (
-    <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-      <div className="flex w-full max-w-sm flex-col gap-6">
-        <a href="#" className="flex items-center gap-2 self-center font-medium">
-          <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+    <div className="bg-muted flex h-screen flex-col items-center justify-center gap-6">
+      <Silk
+          speed={5}
+          scale={1}
+          color="#7B7481"
+          noiseIntensity={1.5}
+          rotation={0}
+
+      />
+      <div className="absolute flex w-full max-w-sm flex-col gap-6">
+        <a href="/" className="flex items-center gap-4 self-center font-medium">
+          <div className="flex size-6 items-center justify-center rounded-md">
             <Avatar
-              className="size-4"
+              className="size-10"
             >
               <AvatarImage
                 src={"/mymod_emblem.svg"}
@@ -32,7 +43,7 @@ export default async function Main() {
               />
             </Avatar>
           </div>
-          Acme Inc.
+          MYMOD
         </a>
         <LoginForm />
       </div>

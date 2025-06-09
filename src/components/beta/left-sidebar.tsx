@@ -1,62 +1,39 @@
 "use client"
-
 import { useSidebarStore } from "@/store/sidebar-store";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from "../ui/sidebar";
-import React, { useState } from "react";
-import { getDiscordUser } from "@/app/actions/getDiscordUser";
-import { getUserGuilds } from "@/app/actions/getUserGuilds";
+import React from "react";
 import { ServerSwitcher } from "./server-switcher";
-import getCurrentGuild from "@/app/actions/getCurrentGuild";
-import { getCurrentGuildMembers } from "@/app/actions/getCurrentGuildMembers";
-import { getUserGuildRelationship } from "@/app/actions/guilds/getUserGuildRelationship";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { BriefcaseIcon, ChevronDown, CogIcon, Grid3x3Icon, GripIcon, MessageSquare, PaintRoller, SearchIcon, Users } from "lucide-react";
+import { BriefcaseIcon, ChevronDown, CogIcon, GripIcon, MessageSquare, PaintRoller, Users } from "lucide-react";
 import { Button } from "../ui/button";
-import { Card } from "../ui/card";
 import Link from "next/link";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import Image from "next/image";
+import {useServerStore} from "@/store/server-store";
+import {useServer} from "@/context/server-provider";
+import {useSuspenseQuery} from "@tanstack/react-query";
+import {getServerById} from "@/queries/servers";
+import {getGuildMembers} from "@/queries/guildmembers";
+import {getGuildRelationship} from "@/queries/guildrelationships";
+import { getDiscordData } from "@/queries/users";
 
 export const LeftSidebar = () => {
   const isLeftSidebarOpen = useSidebarStore((state) => state.isLeftSidebarOpen);
-  const [discordData, setDiscordData] = useState<any>();
-  const [currentServerData, setCurrentServerData] = useState<any>();
-  const [currentServerMembersData, setCurrentServerMembersData] =
-    useState<any>();
-  const [getGuildRelationship, setGuildRelationship] = useState<any>();
+  const serverId = useServerStore((state) => state.currentServerId);
+  const { currentServerId } = useServer();
 
-  React.useEffect(() => {
-    const getData = async () => {
-      const currentServer = window.localStorage.getItem("currentServerId");
-      if (currentServer) {
-        const discordData = await getDiscordUser();
-        const currentServerData = await getCurrentGuild(currentServer);
-        const currentServerMembersData =
-          await getCurrentGuildMembers(currentServer);
-        const getGuildRelationship = await getUserGuildRelationship(
-          currentServer,
-          discordData?.id,
-        );
-
-        setDiscordData(discordData);
-        setCurrentServerData(currentServerData);
-        setCurrentServerMembersData(currentServerMembersData);
-        setGuildRelationship(getGuildRelationship);
-      } else {
-        setCurrentServerData(null);
-      }
-    };
-
-    getData();
-  }, []);
+  const { data: discordData } = useSuspenseQuery(getDiscordData());
+  const { data: currentServerData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
+  const { data: currentServerMembersData } = useSuspenseQuery(getGuildMembers(serverId || currentServerId as string));
+  const { data: guildRelationship } = useSuspenseQuery(getGuildRelationship((serverId || currentServerId as string), discordData.id))
 
   const hasAccess = (module: string) => {
-    const role = getGuildRelationship?.data.role;
+    const role = guildRelationship?.data.role;
     const config = currentServerData?.data.mmData.module_config[module];
 
     if (role === "owner") return true;
@@ -169,7 +146,7 @@ export const LeftSidebar = () => {
                       </Tooltip>
                     </TooltipProvider>
 
-                    {hasAccess('cases') && (
+                    {hasAccess('mymod_cases') && (
                       <Link href="/beta/cases">
                         <Button variant="outline" className="cursor-pointer flex-1 flex flex-row items-center justify-center gap-1">
                           <BriefcaseIcon />
