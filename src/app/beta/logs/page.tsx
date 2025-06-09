@@ -6,23 +6,40 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Slash } from "lucide-react";
+import { Loader2, Slash } from "lucide-react";
 import moment from "moment";
 import { AuditLogImportDialog } from "@/components/dialog/AuditLogImportDialog";
 import { AuditLog, columns } from "./columns";
 import { DataTable } from "./data-table";
 import { useServerStore } from "@/store/server-store";
-import {useServer} from "@/context/server-provider";
-import {useSuspenseQuery} from "@tanstack/react-query";
-import {getGuildAuditLog, getServerById} from "@/queries/servers";
+import { useServer } from "@/context/server-provider";
+import { useQuery } from "@tanstack/react-query";
+import { getGuildAuditLog, getServerById } from "@/queries/servers";
 
 export default function ServerMembers() {
   const auditLogDataArray: AuditLog[] = [];
   const serverId = useServerStore((state) => state.currentServerId);
-  const { currentServerId } = useServer();
+  const { currentServerId, isLoading: isServerContextLoading } = useServer();
 
-  const { data: currentServerData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
-  const { data: serverAuditLog } = useSuspenseQuery(getGuildAuditLog(serverId || currentServerId as string));
+  const effectiveServerId = serverId || currentServerId;
+
+  const { data: currentServerData, isLoading: isServerLoading } = useQuery({
+    ...getServerById(effectiveServerId as string),
+    enabled: !!effectiveServerId
+  });
+
+  const { data: serverAuditLog, isLoading: isAuditLogLoading } = useQuery({
+    ...getGuildAuditLog(effectiveServerId as string),
+    enabled: !!effectiveServerId
+  });
+
+  if (isServerContextLoading || isServerLoading || isAuditLogLoading || !effectiveServerId) {
+    return (
+      <div className="w-[70vw] h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
+  }
 
   for (const auditLog of serverAuditLog?.data || []) {
     auditLogDataArray.push({
@@ -33,6 +50,7 @@ export default function ServerMembers() {
       created: auditLog.timestamp,
     });
   }
+
   return (
     <div className="w-[70vw] h-screen" suppressHydrationWarning>
       <div className="relative z-[10] w-full h-full overflow-hidden">
@@ -69,17 +87,17 @@ export default function ServerMembers() {
               >
                 Recommended next import:{" "}
                 <b>
-                  {currentServerData?.data.mmData.module_config.global_audit
+                  {currentServerData?.data?.mmData?.module_config?.global_audit
                     ? `${moment(
                         new Date(
-                          currentServerData?.data.mmData.module_config?.global_audit?.next_ds_import,
+                          currentServerData?.data?.mmData?.module_config?.global_audit?.next_ds_import,
                         ),
                       ).diff(Date.now(), "days")} day(s)`
                     : "Not completed"}
                 </b>
               </h1>
               <AuditLogImportDialog
-                serverId={currentServerData?.data.dsData.id}
+                serverId={currentServerData?.data?.dsData?.id}
               />
             </div>
           </div>
