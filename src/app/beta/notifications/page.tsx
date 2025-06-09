@@ -10,9 +10,10 @@ import { deleteNotification } from "@/app/actions/user/deleteNotification";
 import { toast } from "sonner";
 import * as columns from "./columns";
 import { useEffect, useState } from "react";
-import {useSuspenseQuery} from "@tanstack/react-query";
-import {getDiscordData, getNotifications} from "@/queries/users";
-import {getQueryClient} from "@/lib/query-client";
+import { useQuery } from "@tanstack/react-query";
+import { getDiscordData, getNotifications } from "@/queries/users";
+import { getQueryClient } from "@/lib/query-client";
+import { Loader2 } from "lucide-react";
 
 export default function NotificationsPage() {
     const notificationsUnreadDataArray: Notification[] = [];
@@ -22,8 +23,19 @@ export default function NotificationsPage() {
 
     const [notifications, setNotifications] = useState(notificationsDataArray);
 
-    const { data: discordData } = useSuspenseQuery(getDiscordData());
-    const { data: notificationsData } = useSuspenseQuery(getNotifications(discordData?.id));
+    const { data: discordData, isLoading: isDiscordLoading } = useQuery(getDiscordData());
+    const { data: notificationsData, isLoading: isNotificationsLoading } = useQuery({
+        ...getNotifications(discordData?.id),
+        enabled: !!discordData?.id
+    });
+
+    if (isDiscordLoading || isNotificationsLoading || !discordData?.id) {
+        return (
+            <div className="w-[70vw] h-screen flex items-center justify-center">
+                <Loader2 className="animate-spin" />
+            </div>
+        );
+    }
 
     notificationsData?.forEach((notification: any) => {
         if (notification.status === "unread") {

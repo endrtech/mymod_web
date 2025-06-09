@@ -8,20 +8,34 @@ import { Dialog, DialogDescription, DialogContent, DialogTitle, DialogTrigger } 
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useServerStore } from "@/store/server-store";
 import Image from "next/image";
-import {permanentRedirect, useRouter} from "next/navigation";
+import { permanentRedirect, useRouter } from "next/navigation";
 import { toast } from "sonner";
-import {QueryClient, useMutation, useQuery, useSuspenseQuery} from "@tanstack/react-query";
-import {getAllThemes} from "@/queries/themegallery";
-import {useServer} from "@/context/server-provider";
-import {getServerById} from "@/queries/servers";
-import {getQueryClient} from "@/lib/query-client";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { getAllThemes } from "@/queries/themegallery";
+import { useServer } from "@/context/server-provider";
+import { getServerById } from "@/queries/servers";
+import { getQueryClient } from "@/lib/query-client";
+import { Loader2 } from "lucide-react";
 
 export default function ThemeGallery() {
     const serverId = useServerStore((state) => state.currentServerId);
-    const { currentServerId } = useServer();
+    const { currentServerId, isLoading: isServerContextLoading } = useServer();
 
-    const { data: themes } = useSuspenseQuery(getAllThemes());
-    const { data: serverData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
+    const effectiveServerId = serverId || currentServerId;
+
+    const { data: themes, isLoading: isThemesLoading } = useQuery(getAllThemes());
+    const { data: serverData, isLoading: isServerLoading } = useQuery({
+        ...getServerById(effectiveServerId as string),
+        enabled: !!effectiveServerId
+    });
+
+    if (isServerContextLoading || isThemesLoading || isServerLoading || !effectiveServerId) {
+        return (
+            <div className="w-full h-screen flex items-center justify-center">
+                <Loader2 className="animate-spin" />
+            </div>
+        );
+    }
 
     const setThemeMutation = useMutation({
         mutationKey: ['set_theme'],
@@ -31,7 +45,7 @@ export default function ThemeGallery() {
                 serverData.data.dsData.id,
                 "appearance_set_theme",
                 {
-                background: findTheme?.background,
+                    background: findTheme?.background,
                     font: findTheme?.font,
                     themeId: findTheme?.id,
                     color_1: findTheme?.color_1,
@@ -40,7 +54,7 @@ export default function ThemeGallery() {
                     overlayPercent: findTheme?.overlayPercent,
                 },
             )
-            if(response === 200) {
+            if (response === 200) {
                 toast.success("Theme applied successfully.");
             } else {
                 return toast.error("Unable to apply theme. Please contact support.");
@@ -64,19 +78,6 @@ export default function ThemeGallery() {
             <Tabs
                 defaultValue="featured"
                 className="flex flex-col w-full items-start">
-                {/*<div className="flex flex-row items-center gap-2 justify-between w-full px-4 py-2">
-                    <TabsList className="bg-background text-foreground flex flex-row items-center gap-2">
-                        <TabsTrigger value="featured">Featured</TabsTrigger>
-                        <TabsTrigger value="featured" disabled>
-                            Favourites
-                        </TabsTrigger>
-                    </TabsList>
-                    <Input
-                        type="text"
-                        placeholder="Search for a theme..."
-                        className="w-1/3 bg-background text-foreground"
-                    />
-                </div>*/}
                 <TabsContent value="featured" className="w-full p-2 ">
                     <div className="flex flex-col items-start justify-start gap-1 px-4 py-1">
                         <span className="text-md font-semibold text-foreground">Featured Themes</span>
@@ -198,72 +199,54 @@ export default function ThemeGallery() {
                                                 </Card>
                                             </div>
                                             <div className="flex flex-col w-full items-start gap-2">
-                                                <h4 className="text-lg text-left w-full font-bold text-zinc-300">
-                                                    Wallpaper
+                                                <h4 className="text-lg text-left w-full font-bold text-foreground">
+                                                    Background
                                                 </h4>
                                                 <Card
                                                     className={`overflow-hidden w-full h-[200px] bg-background p-0 border border-muted`}
                                                 >
-                                                    {theme?.background.endsWith(".mp4") && (
-                                                        <>
-                                                            <video
-                                                                className="relative inset-0 w-full h-fit object-cover z-0"
-                                                                src={theme.background}
-                                                                autoPlay
-                                                                loop
-                                                                muted
-                                                                playsInline
-                                                            />
-                                                        </>
-                                                    )}
+                                                    <div className={`relative w-full h-full`}>
+                                                        {/* Video background if .mp4 */}
+                                                        {theme?.background.endsWith(".mp4") && (
+                                                            <>
+                                                                <video
+                                                                    className="absolute inset-0 w-full h-full object-cover z-0"
+                                                                    src={theme.background}
+                                                                    autoPlay
+                                                                    loop
+                                                                    muted
+                                                                    playsInline
+                                                                />
+                                                            </>
+                                                        )}
 
-                                                    {/* Image background if not video */}
-                                                    {!theme?.background.endsWith(".mp4") && (
-                                                        <div
-                                                            className="relative inset-0 w-full h-full z-0"
-                                                            style={{
-                                                                backgroundImage: `url('${theme.background}')`,
-                                                                backgroundSize: "cover",
-                                                                backgroundRepeat: "no-repeat",
-                                                                backgroundPosition: "center",
-                                                            }}
-                                                        />
-                                                    )}
-                                                </Card>
-                                            </div>
-                                            <div className="flex flex-col w-full items-start gap-2">
-                                                <h4 className="text-lg text-left w-full font-bold text-zinc-300">
-                                                    Font
-                                                </h4>
-                                                <Card
-                                                    className={`${theme.font} overflow-hidden w-full h-[200px] bg-background p-0 border border-muted`}
-                                                >
-                                                    <div
-                                                        className={`relative w-full h-full flex flex-col justify-center p-2`}
-                                                    >
-                                                        <h1 className="text-3xl font-bold">Heading</h1>
-                                                        <h1 className="text-xl font-semibold">
-                                                            Subheading
-                                                        </h1>
-                                                        <h1 className="text-md font-normal">
-                                                            Paragraph
-                                                        </h1>
-                                                        <h1 className="text-sm font-normal text-zinc-400">
-                                                            Subtext
-                                                        </h1>
+                                                        {/* Image background if not video */}
+                                                        {!theme?.background.endsWith(".mp4") && (
+                                                            <div
+                                                                className="absolute inset-0 w-full h-full z-0"
+                                                                style={{
+                                                                    backgroundImage: `url('${theme.background}')`,
+                                                                    backgroundSize: "cover",
+                                                                    backgroundRepeat: "no-repeat",
+                                                                    backgroundPosition: "center",
+                                                                }}
+                                                            />
+                                                        )}
                                                     </div>
                                                 </Card>
                                             </div>
                                         </div>
-                                        <Button
-                                            onClick={async () => {
-                                                setThemeMutation.mutate(theme.id);
-                                            }}
-                                            variant="outline"
-                                            className="w-auto self-end"
-                                        >
-                                            Apply theme
-                                        </Button>
+                                        <br />
+                                        <div className="flex flex-row items-center justify-end gap-2">
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => {
+                                                    setThemeMutation.mutate(theme.id);
+                                                }}
+                                            >
+                                                Apply Theme
+                                            </Button>
+                                        </div>
                                     </DialogContent>
                                 </Dialog>
                             ))}

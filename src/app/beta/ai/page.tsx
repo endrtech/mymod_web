@@ -8,10 +8,11 @@ import MessageList from "@/components/MessageList";
 import { useServerStore } from "@/store/server-store";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getDiscordData } from "@/queries/users";
 
 export default function AIPage() {
-    const [discordData, setDiscordData] = useState<any>(null);
-    const [guildData, setGuildData] = useState<any>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -22,63 +23,83 @@ export default function AIPage() {
         return [];
     });
 
+    const { data: discordData, isLoading: isDiscordLoading } = useQuery(getDiscordData());
+    const serverId = useServerStore((state) => state.currentServerId);
+
     useEffect(() => {
-        const serverId = window.localStorage.getItem("currentServerId");
-        const getDiscordUserData = async () => {
-            const userData = await getDiscordUser();
-            const guildData = await getCurrentGuild(serverId);
-            setDiscordData(userData);
-            setGuildData(guildData);
-        }
-        getDiscordUserData();
         localStorage.setItem("chatMessages", JSON.stringify(messages));
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+    if (isDiscordLoading || !serverId) {
+        return (
+            <div className="w-[70vw] h-screen flex items-center justify-center">
+                <Loader2 className="animate-spin" />
+            </div>
+        );
+    }
+
     const sendMessage = async (text: string) => {
-        const serverId = window.localStorage.getItem("currentServerId");
         const newMessages = [...messages, { role: "user", content: text }];
         setMessages(newMessages);
         setIsTyping(true); // show typing indicator
 
-        const res = await fetch("/api/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                messages: [...newMessages],
-                server: serverId,
-                user: discordData?.id
-            }),
-        });
+        try {
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    messages: [...newMessages],
+                    server: serverId,
+                    user: discordData?.id
+                }),
+            });
 
-        const data = await res.json();
-        const reply = data;
-        if (reply) setMessages([...newMessages, reply]);
+            if (!res.ok) {
+                throw new Error('Failed to send message');
+            }
 
-        setIsTyping(false); // hide typing indicator
+            const data = await res.json();
+            const reply = data;
+            if (reply) setMessages([...newMessages, reply]);
+        } catch (error) {
+            console.error('Error sending message:', error);
+            // You might want to show an error toast here
+        } finally {
+            setIsTyping(false); // hide typing indicator
+        }
     };
 
     const sendInitialPrompt = async () => {
-        const serverId = window.localStorage.getItem("currentServerId");
         setMessages([]); // clear messages
         setIsTyping(true); // show typing indicator
 
-        const res = await fetch("/api/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                messages: [{ role: "system", content: `Ignore all previous messages and conversation history and context. You are MYMOD Intelligence, a helpful assistant for MYMOD. You are able to help with general Discord moderation enquiries, and also utilise tools/functions to provide more rich answers and context. Please understand the question literally, and do not assume what they are asking. Use the conversation history and context to provide your answer. Limit all responses to under 500 characters. Please repond with 'Hey there! How can I help you with your server today?' after this prompt.` }],
-                server: serverId,
-                user: discordData?.id
-            }),
-        });
+        try {
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    messages: [{ role: "system", content: `Ignore all previous messages and conversation history and context. You are MYMOD Intelligence, a helpful assistant for MYMOD. You are able to help with general Discord moderation enquiries, and also utilise tools/functions to provide more rich answers and context. Please understand the question literally, and do not assume what they are asking. Use the conversation history and context to provide your answer. Limit all responses to under 500 characters. Please repond with 'Hey there! How can I help you with your server today?' after this prompt.` }],
+                    server: serverId,
+                    user: discordData?.id
+                }),
+            });
 
-        const data = await res.json();
-        const reply = data;
-        if (reply) setMessages([reply]);
+            if (!res.ok) {
+                throw new Error('Failed to send initial prompt');
+            }
 
-        setIsTyping(false); // hide typing indicator
+            const data = await res.json();
+            const reply = data;
+            if (reply) setMessages([reply]);
+        } catch (error) {
+            console.error('Error sending initial prompt:', error);
+            // You might want to show an error toast here
+        } finally {
+            setIsTyping(false); // hide typing indicator
+        }
     };
+
     return (
         <div className="w-[70vw] h-screen" onLoad={sendInitialPrompt} suppressHydrationWarning>
             <div className="p-4 -mt-16">

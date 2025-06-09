@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Briefcase, LayoutDashboard, Slash } from "lucide-react";
+import { Briefcase, LayoutDashboard, Loader2, Slash } from "lucide-react";
 import { getActiveCases } from "@/app/actions/cases/getActiveCases";
 import { DataTable } from "./data-table";
 import { Case, columns } from "./columns";
@@ -32,21 +32,39 @@ import { CreateCaseDialog } from "@/components/dialog/CreateCaseDialog";
 import { Toaster } from "@/components/ui/sonner";
 import { useServerStore } from "@/store/server-store";
 import { useEffect, useState } from "react";
-import {useSuspenseQuery} from "@tanstack/react-query";
-import {useServer} from "@/context/server-provider";
-import {getServerById} from "@/queries/servers";
-import {getCases} from "@/queries/cases";
+import { useQuery } from "@tanstack/react-query";
+import { useServer } from "@/context/server-provider";
+import { getServerById } from "@/queries/servers";
+import { getCases } from "@/queries/cases";
 
 export default function ServerMembers() {
   const memberDataArray: Case[] = [];
   const serverId = useServerStore((state) => state.currentServerId);
-  const { currentServerId } = useServer();
-  const { data: currentServerData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
-  const { data: activeCasesData } = useSuspenseQuery(getCases(serverId || currentServerId as string));
+  const { currentServerId, isLoading: isServerContextLoading } = useServer();
+
+  const effectiveServerId = serverId || currentServerId;
+
+  const { data: currentServerData, isLoading: isServerLoading } = useQuery({
+    ...getServerById(effectiveServerId as string),
+    enabled: !!effectiveServerId
+  });
+
+  const { data: activeCasesData, isLoading: isCasesLoading } = useQuery({
+    ...getCases(effectiveServerId as string),
+    enabled: !!effectiveServerId
+  });
+
+  if (isServerContextLoading || isServerLoading || isCasesLoading || !effectiveServerId) {
+    return (
+      <div className="w-[70vw] h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
+  }
 
   activeCasesData?.forEach((caseItem: any) => {
     memberDataArray.push({
-      serverId: currentServerData?.data.dsData.id,
+      serverId: currentServerData?.data?.dsData?.id,
       userId: caseItem.userID,
       avatar: caseItem.user_info.avatar,
       username: caseItem.user_info.username,

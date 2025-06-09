@@ -23,17 +23,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Slash } from "lucide-react";
+import { Loader2, Slash } from "lucide-react";
 import { DataTable } from "./data-table";
 import { columns, Payment } from "./columns";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { AISidebarTrigger } from "@/components/AISidebarTrigger";
 import { useEffect, useState } from "react";
 import { useServerStore } from "@/store/server-store";
-import {useSuspenseQuery} from "@tanstack/react-query";
-import {getServerById} from "@/queries/servers";
-import {useServer} from "@/context/server-provider";
-import {getGuildMembers} from "@/queries/guildmembers";
+import { useQuery } from "@tanstack/react-query";
+import { getServerById } from "@/queries/servers";
+import { useServer } from "@/context/server-provider";
+import { getGuildMembers } from "@/queries/guildmembers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,14 +43,31 @@ const geistSans = Geist({
 export default function ServerMembers() {
   const memberDataArray: Payment[] = [];
   const serverId = useServerStore((state) => state.currentServerId);
-  const { currentServerId } = useServer();
+  const { currentServerId, isLoading: isServerContextLoading } = useServer();
 
-  const { data: currentServerData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
-  const { data: memberData } = useSuspenseQuery(getGuildMembers(serverId || currentServerId as string));
+  const effectiveServerId = serverId || currentServerId;
+
+  const { data: currentServerData, isLoading: isServerLoading } = useQuery({
+    ...getServerById(effectiveServerId as string),
+    enabled: !!effectiveServerId
+  });
+
+  const { data: memberData, isLoading: isMembersLoading } = useQuery({
+    ...getGuildMembers(effectiveServerId as string),
+    enabled: !!effectiveServerId
+  });
+
+  if (isServerContextLoading || isServerLoading || isMembersLoading || !effectiveServerId) {
+    return (
+      <main className="w-[70vw] h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </main>
+    );
+  }
 
   memberData?.forEach((member: any) => {
     memberDataArray.push({
-      serverId: currentServerData?.data.dsData.id,
+      serverId: currentServerData?.data?.dsData?.id,
       userId: member?.id,
       image: member?.avatar,
       username: member?.globalName || member?.username,

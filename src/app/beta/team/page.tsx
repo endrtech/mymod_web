@@ -13,20 +13,33 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { HelpCircle, Slash } from "lucide-react";
+import { HelpCircle, Loader2, Slash } from "lucide-react";
 import { DataTable } from "./data-table";
 import { columns, Team } from "./columns";
 import { useServerStore } from "@/store/server-store";
-import {useSuspenseQuery} from "@tanstack/react-query";
-import {getGuildRelationshipsByServer} from "@/queries/guildrelationships";
-import {useServer} from "@/context/server-provider";
+import { useQuery } from "@tanstack/react-query";
+import { getGuildRelationshipsByServer } from "@/queries/guildrelationships";
+import { useServer } from "@/context/server-provider";
 
 export default function ServerPage() {
   const guildRelationshipDataArray: Team[] = [];
   const serverId = useServerStore((state) => state.currentServerId);
-  const { currentServerId } = useServer();
+  const { currentServerId, isLoading: isServerContextLoading } = useServer();
 
-  const { data: guildRelationshipData } = useSuspenseQuery(getGuildRelationshipsByServer(serverId || currentServerId as string));
+  const effectiveServerId = serverId || currentServerId;
+
+  const { data: guildRelationshipData, isLoading: isRelationshipsLoading } = useQuery({
+    ...getGuildRelationshipsByServer(effectiveServerId as string),
+    enabled: !!effectiveServerId
+  });
+
+  if (isServerContextLoading || isRelationshipsLoading || !effectiveServerId) {
+    return (
+      <main className="w-[70vw] h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </main>
+    );
+  }
 
   guildRelationshipData?.relData.forEach((team: any) => {
     guildRelationshipDataArray.push({
