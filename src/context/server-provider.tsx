@@ -6,11 +6,13 @@ import React, {
     useState,
     useEffect,
     ReactNode,
+    useCallback,
 } from "react";
 
 interface ServerContextType {
     currentServerId: string | null;
     setCurrentServerId: (id: string | null) => void;
+    isLoading: boolean;
 }
 
 const ServerContext = createContext<ServerContextType | undefined>(undefined);
@@ -20,27 +22,27 @@ interface ServerProviderProps {
 }
 
 export function ServerProvider({ children }: ServerProviderProps) {
-    const [currentServerId, setCurrentServerIdState] = useState<string | null>(
-        null
-    );
+    const [currentServerId, setCurrentServerIdState] = useState<string | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
     // Load from localStorage on mount
     useEffect(() => {
         const stored = localStorage.getItem("currentServerId");
-        setCurrentServerIdState(stored);
+        if (stored) {
+            setCurrentServerIdState(stored);
+        }
         setIsLoaded(true);
     }, []);
 
     // Update localStorage when state changes
-    const setCurrentServerId = (id: string | null) => {
+    const setCurrentServerId = useCallback((id: string | null) => {
         setCurrentServerIdState(id);
         if (id === null) {
             localStorage.removeItem("currentServerId");
         } else {
             localStorage.setItem("currentServerId", id);
         }
-    };
+    }, []);
 
     // Don't render until we've loaded from localStorage
     if (!isLoaded) {
@@ -48,7 +50,7 @@ export function ServerProvider({ children }: ServerProviderProps) {
     }
 
     return (
-        <ServerContext.Provider value={{ currentServerId, setCurrentServerId }}>
+        <ServerContext.Provider value={{ currentServerId, setCurrentServerId, isLoading: !isLoaded }}>
             {children}
         </ServerContext.Provider>
     );

@@ -18,6 +18,7 @@ import {getQueryClient} from "@/lib/query-client";
 import {getServers} from "@/queries/servers";
 import {dehydrate, HydrationBoundary} from "@tanstack/react-query";
 import {getAllThemes} from "@/queries/themegallery";
+import { ErrorBoundary } from "react-error-boundary";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -49,12 +50,15 @@ export default async function RootLayout({
   }
 
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(getServers);
-  void queryClient.prefetchQuery(getAllThemes());
+  await Promise.all([
+    queryClient.prefetchQuery(getServers),
+    queryClient.prefetchQuery(getAllThemes())
+  ]);
 
   return (
+    <ErrorBoundary fallback={<div>Something went wrong. Please try refreshing the page.</div>}>
       <HydrationBoundary state={dehydrate(queryClient)}>
-      <ServerProvider>
+        <ServerProvider>
           <div
               className={`${workSans.className} flex flex-col h-screen w-full [--header-height:calc(--spacing(10))] overflow-hidden`}>
             <SiteHeader/>
@@ -64,7 +68,9 @@ export default async function RootLayout({
                   <LeftSidebar/>
                   <WallpaperProvider>
                     <div className="min-w-full flex flex-row items-center">
-                      {children}
+                      <Suspense fallback={<LoadingOverlay />}>
+                        {children}
+                      </Suspense>
                     </div>
                   </WallpaperProvider>
                   <RightSidebar/>
@@ -72,8 +78,9 @@ export default async function RootLayout({
               </SidebarProvider>
             </div>
           </div>
-        <Toaster className="z-[50]" />
-      </ServerProvider>
+          <Toaster className="z-[50]" />
+        </ServerProvider>
       </HydrationBoundary>
+    </ErrorBoundary>
   );
 }

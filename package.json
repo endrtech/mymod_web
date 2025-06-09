@@ -59,6 +59,7 @@
     "react-day-picker": "8.10.1",
     "react-dom": "^19.0.0",
     "react-draggable": "^4.4.6",
+    "react-error-boundary": "^6.0.0",
     "react-markdown": "^10.1.0",
     "react-resizable-panels": "^2.1.7",
     "react-youtube": "^10.1.0",
