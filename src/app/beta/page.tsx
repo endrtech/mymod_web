@@ -14,9 +14,26 @@ export default function DiscordApp() {
   const serverId = useServerStore((state) => state.currentServerId) || "";
   const { currentServerId } = useServer();
 
-  const { data: serversData } = useSuspenseQuery(getServers);
-  const { data: serverData } = useQuery(getServerById(serverId || currentServerId || serversData[0].id));
-  const { data: usersChart } = useSuspenseQuery(getServerStatsGraph(serverId || currentServerId || serversData[0].id));
+  const { data: serversData, isLoading: isServersLoading } = useSuspenseQuery(getServers);
+  const effectiveServerId = serverId || currentServerId || (serversData?.[0]?.id);
+  
+  const { data: serverData, isLoading: isServerLoading } = useQuery({
+    ...getServerById(effectiveServerId),
+    enabled: !!effectiveServerId
+  });
+
+  const { data: usersChart, isLoading: isChartLoading } = useQuery({
+    ...getServerStatsGraph(effectiveServerId),
+    enabled: !!effectiveServerId
+  });
+
+  if (isServersLoading || isServerLoading || isChartLoading || !effectiveServerId) {
+    return (
+      <main className="w-full h-screen bg-transparent flex items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </main>
+    );
+  }
 
   return (
         <main className="w-full h-screen bg-transparent" suppressHydrationWarning>
