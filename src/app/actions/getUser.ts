@@ -6,7 +6,7 @@ export async function getUser(userId: string) {
   const sessionToken = (await cookies()).get("__session");
   try {
     const resp = await axios.get(
-      `http://localhost:3030/api/users/${userId}`,
+      `https://api.mymod.endr.tech/api/users/${userId}`,
       {
         headers: {
           Authorization: `Bearer ${sessionToken?.value}`,

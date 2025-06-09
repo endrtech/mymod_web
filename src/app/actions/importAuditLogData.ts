@@ -6,7 +6,7 @@ export async function importAuditLogData(serverId: string) {
   const sessionToken = (await cookies()).get("__session");
 
   const resp = await axios.get(
-    `http://localhost:3030/api/guilds/${serverId}/audit-log/import-discord`,
+    `https://api.mymod.endr.tech/api/guilds/${serverId}/audit-log/import-discord`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

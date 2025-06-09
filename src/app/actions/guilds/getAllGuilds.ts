@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 export async function getAllGuilds() {
   const sessionToken = (await cookies()).get("__session");
-  const response = await axios.get("http://localhost:3030/api/guilds", {
+  const response = await axios.get("https://api.mymod.endr.tech/api/guilds", {
     headers: {
       Authorization: `Bearer ${sessionToken?.value}`,
     },

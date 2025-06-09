@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export const editTheme = async (themeId: any, userId: any, body: any) => {
   const sessionToken = (await cookies()).get("__session");
   const response = await axios.post(
-    `http://localhost:3030/api/modules/theme_gallery/${userId}/${themeId}`,
+    `https://api.mymod.endr.tech/api/modules/theme_gallery/${userId}/${themeId}`,
     {
       name: body.name,
       description: body.description,

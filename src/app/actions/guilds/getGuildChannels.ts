@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export async function getGuildChannels(serverId: any, type: any) {
   const sessionToken = (await cookies()).get("__session");
   const resp = await axios.get(
-    `http://localhost:3030/api/guilds/${serverId}/channels?type=${type}`,
+    `https://api.mymod.endr.tech/api/guilds/${serverId}/channels?type=${type}`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,
