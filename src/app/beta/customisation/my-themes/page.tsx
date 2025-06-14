@@ -25,7 +25,7 @@ export default function MyThemes() {
     }
 
     return (
-        <div className="bg-background flex flex-col items-start justify-start w-[70vw] h-full p-4">
+        <div className="flex flex-col items-start justify-start w-[full h-full p-4">
             <div className="flex flex-col items-start gap-2 justify-start mb-4">
                 <span className="text-2xl font-semibold text-foreground">My Themes</span>
                 <span className="text-sm font-normal text-muted-foreground">Want to edit a theme? Head to Theme Creator to edit any of the themes listed here.</span>

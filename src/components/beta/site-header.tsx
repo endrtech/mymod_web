@@ -1,6 +1,6 @@
 "use client"
 import { Separator } from "../ui/separator"
-import { Bell, Command, SearchIcon, ServerIcon, UserIcon } from "lucide-react"
+import { Bell, ChevronRight, Command, SearchIcon, ServerIcon, Slash, UserIcon } from "lucide-react"
 import { Button } from "../ui/button"
 import { useSidebarStore } from "@/store/sidebar-store"
 import {
@@ -15,12 +15,16 @@ import { Avatar, AvatarImage } from "../ui/avatar"
 import { usePlatform } from "@/hooks/use-platform"
 import { ThemeToggle } from "./theme-toggle"
 import Link from "next/link"
-import {useQuery, useSuspenseQuery} from "@tanstack/react-query";
-import {getServerById, getServers} from "@/queries/servers";
-import {useServerStore} from "@/store/server-store";
-import {useServer} from "@/context/server-provider";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { getServerById, getServers } from "@/queries/servers";
+import { useServerStore } from "@/store/server-store";
+import { useServer } from "@/context/server-provider";
+import { InteractiveButton } from "../ui/interactive-button";
+import { useTheme } from "next-themes"
+import { SidebarButton } from "../sidebar-button"
 
 export const SiteHeader = () => {
+    const { theme } = useTheme();
     const { isMac, isElectron, isWindows, isLinux } = usePlatform();
     const setLeftSidebarOpen = useSidebarStore((state) => state.setLeftSidebarOpen);
     const isLeftSidebarOpen = useSidebarStore((state) => state.isLeftSidebarOpen);
@@ -34,7 +38,7 @@ export const SiteHeader = () => {
     const { data: servers } = useSuspenseQuery(getServers);
     const { data: server } = useQuery(getServerById(serverId || currentServerId as string || servers[0]?.id));
 
-    if(!currentServerId) {
+    if (!currentServerId) {
         setCurrentServerId(servers[0]?.id as string);
     }
 
@@ -48,8 +52,8 @@ export const SiteHeader = () => {
 
     if (isMobile) {
         return (
-            <header className="bg-background sticky top-0 z-50 flex w-full items-center border-b">
-                <div className="flex h-(--header-height) w-full items-center gap-2 px-4">
+            <header className="bg-background/50 backdrop-blur-2xl sticky top-0 z-50 flex w-full items-center border-b">
+                <div className="flex h-[var(--header-height)] bg-transparent w-full items-center gap-2 px-4">
                     <Sheet>
                         <SheetTrigger asChild>
                             <Button variant="ghost" size="icon">
@@ -124,16 +128,23 @@ export const SiteHeader = () => {
         )
     } else {
         return (
-            <header className={`dragRegion bg-background sticky top-0 z-50 flex w-full items-center border-b`}>
-                <div className="flex h-(--header-height) w-full items-center gap-2 px-4">
+            <header className={`dragRegion cursor-move sticky top-0 z-50 flex w-full items-center px-1 py-0.5`}>
+                <div className="flex h-[var(--header-height)] w-full items-center justify-around gap-2">
                     <Button
-                        className={`${(isElectron && isMac) ? "ml-16" : ""} h-8 w-8 noDrag`}
                         variant="ghost"
-                        size="icon"
+                        className={`h-8 w-8 noDrag cursor-pointer rounded-full ${(isElectron && isMac) ? "ml-18" : ""} liquidGlassBtn`}
                         onClick={() => setLeftSidebarOpen(!isLeftSidebarOpen)}
                     >
-                        <ServerIcon />
+                        <Avatar
+                            className="size-6 rounded-full">
+                            <AvatarImage
+                                src="/mymod-clear-light.png"
+                                alt="Server Menu"
+                                className="rounded-full"
+                            />
+                        </Avatar>
                     </Button>
+
                     {/*<Link href="/beta/ai">
                         <Button
                             className={`h-8 w-8 noDrag`}
@@ -143,20 +154,19 @@ export const SiteHeader = () => {
                             <SparklesIcon />
                         </Button>
                     </Link>*/}
-                    <Separator orientation="vertical" />
-                    <div className="w-full flex-1 flex flex-row items-center justify-center">
-                        <div className="flex flex-row items-center justify-center">
+                    <div className="flex flex-row items-center justify-center liquidGlassBtn py-0 pl-1 pr-3">
+                        <div className="flex flex-row gap-1 items-center justify-center">
                             {server && (
                                 <>
-                                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
-                                        <Avatar className="h-6 w-6 rounded-lg">
+                                    <div className="flex aspect-square size-8 items-center justify-center rounded-full">
+                                        <Avatar className="h-6 w-6 rounded-full">
                                             <AvatarImage
                                                 src={server.data.dsData.icon ? `https://cdn.discordapp.com/icons/${server.data.dsData.id}/${server.data.dsData.icon}` : "https://cdn.discordapp.com/embed/avatars/5.png"}
                                                 alt={server.data.dsData.name}
                                             />
                                         </Avatar>
                                     </div>
-                                    <span className="text-sm">{server.data.dsData.name}</span>
+                                    <span className="text-[14px] font-medium text-shadow-md">{server.data.dsData.name}</span>
                                 </>
                             )}
                             {
@@ -173,32 +183,29 @@ export const SiteHeader = () => {
                             }
                         </div>
                     </div>
-                    <Separator orientation="vertical" />
                     <div className="ml-auto flex items-center gap-2 noDrag">
                         <Link href="/beta/notifications">
                             <Button
-                                className="h-8 w-8"
-                                variant="ghost"
-                                size="icon"
+                                className="h-8 w-8 liquidGlassBtn"
                             >
-                                <Bell />
+                                <Bell className="size-4" />
                             </Button>
                         </Link>
-                        <ThemeToggle />
                         <Button
-                            className="h-8 w-8"
-                            variant="ghost"
-                            size="icon"
+                            className="h-8 w-8 liquidGlassBtn"
                         >
-                            <SearchIcon />
+                            <ThemeToggle />
                         </Button>
                         <Button
-                            className={`${(isElectron && (isWindows || isLinux) ? "mr-28" : "")} h-8 w-8`}
-                            variant="ghost"
-                            size="icon"
+                            className="h-8 w-8 liquidGlassBtn"
+                        >
+                            <SearchIcon className="size-4" />
+                        </Button>
+                        <Button
+                            className={`${(isElectron && (isWindows || isLinux) ? "pr-28" : "")} h-8 w-8 liquidGlassBtn`}
                             onClick={() => setRightSidebarOpen(!isRightSidebarOpen)}
                         >
-                            <UserIcon />
+                            <UserIcon className="size-4" />
                         </Button>
                     </div>
                 </div>

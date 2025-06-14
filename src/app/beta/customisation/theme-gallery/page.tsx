@@ -20,8 +20,10 @@ import { Loader2 } from "lucide-react";
 export default function ThemeGallery() {
     const serverId = useServerStore((state) => state.currentServerId);
     const { currentServerId, isLoading: isServerContextLoading } = useServer();
+    const queryClient = getQueryClient();
 
     const effectiveServerId = serverId || currentServerId;
+    console.log('Current effectiveServerId:', effectiveServerId);
 
     const { data: themes, isLoading: isThemesLoading } = useQuery(getAllThemes());
     const { data: serverData, isLoading: isServerLoading } = useQuery({
@@ -29,18 +31,23 @@ export default function ThemeGallery() {
         enabled: !!effectiveServerId
     });
 
-    if (isServerContextLoading || isThemesLoading || isServerLoading || !effectiveServerId) {
-        return (
-            <div className="w-full h-screen flex items-center justify-center">
-                <Loader2 className="animate-spin" />
-            </div>
-        );
-    }
-
     const setThemeMutation = useMutation({
-        mutationKey: ['set_theme'],
         mutationFn: async (themeId: string) => {
-            const findTheme = themes?.data.find((t: any) => t.id === themeId);
+            console.log('Mutation started with themeId:', themeId);
+            console.log('Current server data:', serverData);
+            console.log('Current themes data:', themes);
+            
+            if (!themes?.data || !serverData?.data) {
+                console.error('Missing required data:', { 
+                    hasThemes: !!themes?.data, 
+                    hasServerData: !!serverData?.data 
+                });
+                return;
+            }
+            
+            const findTheme = themes.data.find((t: any) => t.id === themeId);
+            console.log('Found theme:', findTheme);
+            
             const response = await updateGuildSettings(
                 serverData.data.dsData.id,
                 "appearance_set_theme",
@@ -54,13 +61,36 @@ export default function ThemeGallery() {
                     overlayPercent: findTheme?.overlayPercent,
                 },
             )
+            console.log('Update response:', response);
+            
             if (response === 200) {
                 toast.success("Theme applied successfully.");
             } else {
                 return toast.error("Unable to apply theme. Please contact support.");
             }
+        },
+        onSuccess: () => {
+            console.log('Mutation succeeded, attempting to invalidate queries');
+            console.log('Current effectiveServerId for invalidation:', effectiveServerId);
+            
+            // Log current query cache state
+            console.log('Current query cache:', queryClient.getQueryCache().getAll());
+            
+            // Invalidate both the specific guild query and the guilds list
+            queryClient.invalidateQueries();
+        },
+        onError: (error) => {
+            console.error('Mutation failed:', error);
         }
-    })
+    });
+
+    if (isServerContextLoading || isThemesLoading || isServerLoading || !effectiveServerId) {
+        return (
+            <div className="w-full h-screen flex items-center justify-center">
+                <Loader2 className="animate-spin" />
+            </div>
+        );
+    }
 
     return (
         <div className="w-full h-screen text-foreground">

@@ -15,6 +15,9 @@ import { getCurrentGuildMembers } from "@/app/actions/getCurrentGuildMembers"
 import { getCurrentGuildRelationships } from "@/app/actions/getCurrentGuildRelationships"
 import { Avatar, AvatarImage } from "../ui/avatar"
 import { useRouter } from "next/navigation"
+import { LiquidGlassDialog } from "../beta/liquid-glass-dialog"
+import { InteractiveButton } from "../ui/interactive-button"
+import { LiquidGlassSwitch } from "../beta/liquid-glass-switch"
 
 export const CreateCaseDialog = ({ currentServerData }: any) => {
     const router = useRouter();
@@ -63,13 +66,11 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
         }
     }
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button onClick={() => setOpen(!open)} variant="outline" size="icon">
-                    <Plus />
-                </Button>
-            </DialogTrigger>
-            <DialogContent className="min-w-[60%]">
+        <>
+            <InteractiveButton onClick={() => setOpen(!open)} variant="outline" className="w-fit p-2">
+                <Plus />
+            </InteractiveButton>
+            <LiquidGlassDialog open={open} onOpenChange={setOpen} className="min-w-[60%]">
                 <DialogTitle>Create a Case</DialogTitle>
                 <form onSubmit={createCaseFrm}>
                     <div className="flex flex-row gap-10 w-full">
@@ -78,13 +79,13 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                             <br />
                             <span className="text-sm w-full font-normal flex flex-row gap-2 py-2">
                                 <Select name="userId">
-                                    <SelectTrigger className="w-full">
+                                    <SelectTrigger className="w-full bg-background/50 backdrop-blur-xl border-muted shadow-[0_4px_16px_0_rgba(0,0,0,0.1)] rounded-full">
                                         <SelectValue placeholder="Select a user..." />
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent className="bg-background/50 backdrop-blur-md border-muted shadow-[0_4px_16px_0_rgba(0,0,0,0.1)] pointer-events-none rounded-3xl">
                                         {
                                             guildMembers?.map((member: any) => (
-                                                <SelectItem value={member.id} className="flex flex-row items-center gap-2">
+                                                <SelectItem value={member.id} className="flex flex-row items-center gap-2 cursor-pointer hover:bg-background/70 hover:underline rounded-full">
                                                     <Avatar className="w-6 h-6 rounded-full">
                                                         <AvatarImage
                                                             src={`${member.avatar || "https://cdn.discordapp.com/embed/avatars/5.png"}`}
@@ -104,13 +105,13 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                             <br />
                             <span className="text-sm w-full font-normal flex flex-row gap-2 py-2">
                                 <Select name="assigneeId">
-                                    <SelectTrigger className="w-full">
+                                    <SelectTrigger className="w-full bg-background/50 backdrop-blur-xl border-muted shadow-[0_4px_16px_0_rgba(0,0,0,0.1)] rounded-full">
                                         <SelectValue placeholder="Select a MYMOD user..." />
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent className="bg-background/50 backdrop-blur-md border-muted shadow-[0_4px_16px_0_rgba(0,0,0,0.1)] pointer-events-none rounded-3xl">
                                         {
                                             guildRelationships.relData?.map((member: any) => (
-                                                <SelectItem value={member.userId} className="flex flex-row items-center gap-2">
+                                                <SelectItem value={member.userId} className="flex flex-row items-center gap-2 cursor-pointer hover:bg-background/70 hover:underline rounded-full">
                                                     <Avatar className="w-6 h-6 rounded-full">
                                                         <AvatarImage
                                                             src={`${member.avatar || "https://cdn.discordapp.com/embed/avatars/5.png"}`}
@@ -133,14 +134,14 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                             <br />
                             <span className="text-sm w-full font-normal flex flex-row gap-2 py-2">
                                 <Select name="caseType">
-                                    <SelectTrigger className="w-full">
+                                    <SelectTrigger className="w-full bg-background/50 backdrop-blur-xl border-muted shadow-[0_4px_16px_0_rgba(0,0,0,0.1)] rounded-full">
                                         <SelectValue placeholder="Select a case type..." />
                                     </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="ban">Ban User</SelectItem>
-                                        <SelectItem value="kick">Kick User</SelectItem>
-                                        <SelectItem value="timeout">Timeout User</SelectItem>
-                                        <SelectItem value="warn">Warn User</SelectItem>
+                                    <SelectContent className="bg-background/50 backdrop-blur-md border-muted shadow-[0_4px_16px_0_rgba(0,0,0,0.1)] pointer-events-none rounded-3xl">
+                                        <SelectItem value="ban" className="flex flex-row items-center gap-2 cursor-pointer hover:bg-background/70 hover:underline rounded-full">Ban User</SelectItem>
+                                        <SelectItem value="kick" className="flex flex-row items-center gap-2 cursor-pointer hover:bg-background/70 hover:underline rounded-full">Kick User</SelectItem>
+                                        <SelectItem value="timeout" className="flex flex-row items-center gap-2 cursor-pointer hover:bg-background/70 hover:underline rounded-full">Timeout User</SelectItem>
+                                        <SelectItem value="warn" className="flex flex-row items-center gap-2 cursor-pointer hover:bg-background/70 hover:underline rounded-full">Warn User</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </span>
@@ -155,8 +156,8 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                                 />
                                 <input readOnly hidden name="caseExpires" value={caseTimestamp} />
                             </span>
-                            <br />
-                            <Label htmlFor="email" className="text-xs text-zinc-500">If a date is not selected, the case will be set to never expire.</Label>
+                            <Separator />
+                            <Label htmlFor="email" className="text-xs text-muted py-1">If a date is not selected, the case will be set to never expire.</Label>
                         </div>
                     </div>
                     <br />
@@ -165,7 +166,7 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                             <Label htmlFor="email">Case Description</Label>
                             <br />
                             <span className="text-sm font-normal flex flex-row gap-2 py-2">
-                                <Textarea name="caseReason" />
+                                <Textarea name="caseReason" className="bg-background/50 backdrop-blur-xl border-muted shadow-[0_4px_16px_0_rgba(0,0,0,0.1)]" />
                             </span>
                         </div>
                     </div>
@@ -173,8 +174,8 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                         <Separator />
                         <br />
                         <Label htmlFor="actionsTaken">Case Actions</Label>
-                        <div className="flex flex-row gap-4 p-2 w-full items-start">
-                            <div className="flex flex-col gap-2 w-full">
+                        <div className="flex flex-row gap-4 py-2">
+                            <div className="flex flex-col gap-2 p-4 w-full">
                                 <div className="flex flex-row items-center justify-between gap-2">
                                     <Label>Ban user</Label>
                                     <Switch
@@ -195,7 +196,7 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col gap-2 w-full">
+                            <div className="flex flex-col gap-2 p-4 rounded-lg w-full">
                                 <div className="flex flex-row items-center justify-between gap-2">
                                     <Label>Delete all messages sent by user</Label>
                                     <Switch
@@ -210,7 +211,7 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col gap-2 w-full">
+                            <div className="flex flex-col gap-2 rounded-lg w-full p-4">
                                 <div className="flex flex-row items-center justify-between gap-2">
                                     <Label>Send DM to user advising of case outcome</Label>
                                     <Switch
@@ -230,18 +231,16 @@ export const CreateCaseDialog = ({ currentServerData }: any) => {
                         <Separator />
                         <br />
                         <div className="flex flex-row items-center justify-end gap-2">
-                            <DialogClose asChild>
-                                <Button variant="ghost">
-                                    Close
-                                </Button>
+                            <DialogClose className="text-sm cursor-pointer hover:underline">
+                                Close
                             </DialogClose>
-                            <Button variant="outline" type="submit">
+                            <InteractiveButton className="w-fit font-semibold cursor-pointer py-2 px-4">
                                 Create case
-                            </Button>
+                            </InteractiveButton>
                         </div>
                     </div>
                 </form>
-            </DialogContent>
-        </Dialog>
+            </LiquidGlassDialog>
+        </>
     )
 }

@@ -26,12 +26,12 @@ export default function DatePicker({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-[280px] justify-start text-left font-normal">
+        <Button variant="outline" className="w-full justify-start text-left font-normal bg-background/50 backdrop-blur-xl border-muted shadow-[0_4px_16px_0_rgba(0,0,0,0.1)] rounded-full">
           <CalendarIcon className="mr-2 h-4 w-4" />
           {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 dark" align="start">
+      <PopoverContent className="w-auto p-0 bg-background/50 backdrop-blur-md border-muted shadow-[0_4px_16px_0_rgba(0,0,0,0.1)] pointer-events-none rounded-3xl" align="start">
         <div className="p-2">
           <Calendar
             mode="single"

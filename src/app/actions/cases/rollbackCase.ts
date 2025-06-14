@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export async function rollbackCase(caseId: string) {
   const sessionToken = (await cookies()).get("__session");
   const resp = await axios.get(
-    `https://api.mymod.endr.tech/api/cases/rollback-case/${caseId}`,
+    `http://localhost:3030/api/cases/rollback-case/${caseId}`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

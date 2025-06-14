@@ -103,30 +103,30 @@ export default function NotificationsPage() {
     const columns = getColumns(handleMarkAsRead, handleDelete);
 
     return (
-        <div className="w-[70vw] h-screen" suppressHydrationWarning>
+        <div className="w-full h-screen" suppressHydrationWarning>
             <h1 className="text-2xl font-bold text-foreground py-4">Notifications</h1>
             <Tabs defaultValue="unread" className="w-full">
                 <TabsList className="w-full">
                     <TabsTrigger value="unread" className="flex flex-row items-center gap-2">
                         Unread
-                        <Badge variant="outline">{notificationsUnread.length}</Badge>
+                        <Badge variant="outline">{notificationsUnreadDataArray.length}</Badge>
                     </TabsTrigger>
                     <TabsTrigger value="read" className="flex flex-row items-center gap-2">
                         Read
-                        <Badge variant="outline">{notificationsRead.length}</Badge>
+                        <Badge variant="outline">{notificationsReadDataArray.length}</Badge>
                     </TabsTrigger>
                     <TabsTrigger value="all" className="flex flex-row items-center gap-2">
                         All
                         <Badge variant="outline">{notificationsDataArray.length}</Badge>
                     </TabsTrigger>
                 </TabsList>
-                <TabsContent value="unread" className="w-full bg-background/60 rounded-lg p-4">
+                <TabsContent value="unread" className="w-full bg-background/60 backdrop-blur-md rounded-lg p-4">
                     <DataTable columns={columns} data={notificationsUnreadDataArray} />
                 </TabsContent>
-                <TabsContent value="read" className="w-full bg-background/60 rounded-lg p-4">
+                <TabsContent value="read" className="w-full bg-background/60 backdrop-blur-md rounded-lg p-4">
                     <DataTable columns={columns} data={notificationsReadDataArray} />
                 </TabsContent>
-                <TabsContent value="all" className="w-full bg-background/60 rounded-lg p-4">
+                <TabsContent value="all" className="w-full bg-background/60 backdrop-blur-md rounded-lg p-4">
                     <DataTable columns={columns} data={notificationsDataArray} />
                 </TabsContent>
             </Tabs>

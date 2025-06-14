@@ -54,6 +54,25 @@
     --font-hanken-grotesk: "Hanken Grotesk", sans-serif;
     --font-comic-sans: "Comic Relief", sans-serif;
 
+    --shadow-offset: 0;
+    --shadow-blur: 20px;
+    --shadow-spread: -5px;
+    --shadow-color: rgba(255, 255, 255, 0.7);
+
+    /* Painted glass */
+    --tint-color: 255, 255, 255;
+    --tint-opacity: 0.4;
+
+    /* Background frost */
+    --frost-blur: 2px;
+
+    /* SVG noise/distortion */
+    --noise-frequency: 0.008;
+    --distortion-strength: 77;
+
+    /* Outer shadow blur */
+    --outer-shadow-blur: 24px;
+
     --radius: 0.625rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -78,7 +97,7 @@
     --chart-3: 240 1% 58%;
     --chart-4: 240 1% 42%;
     --chart-5: 240 2% 26%;
-    --sidebar: oklch(0.985 0 0);
+    --sidebar: oklch(1 0 0 / 50%);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
     --sidebar-primary-foreground: oklch(0.985 0 0);
@@ -86,6 +105,39 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+}
+
+.glassDiv {
+    border-radius: 28px;
+    cursor: move;
+    isolation: isolate;
+    touch-action: none;
+    /* enable pointer dragging on touch */
+    box-shadow: 0px 6px var(--outer-shadow-blur) rgba(0, 0, 0, 0.2);
+}
+
+.glassDiv::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: 28px;
+    box-shadow:
+        inset var(--shadow-offset) var(--shadow-offset) var(--shadow-blur) var(--shadow-spread) var(--shadow-color);
+    background-color: rgba(var(--tint-color), var(--tint-opacity));
+}
+
+.glassDiv::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 28px;
+    backdrop-filter: blur(var(--frost-blur));
+    filter: url(#glass-distortion);
+    isolation: isolate;
+    -webkit-backdrop-filter: blur(var(--frost-blur));
+    -webkit-filter: url("#glass-distortion");
 }
 
 .dark {
@@ -122,7 +174,7 @@
     --chart-3: 240 1% 58%;
     --chart-4: 240 1% 42%;
     --chart-5: 240 2% 26%;
-    --sidebar: oklch(0.205 0 0);
+    --sidebar: oklch(0.145 0 0 / 50%);
     --sidebar-foreground: oklch(0.985 0 0);
     --sidebar-primary: oklch(0.488 0.243 264.376);
     --sidebar-primary-foreground: oklch(0.985 0 0);
@@ -185,17 +237,16 @@
 .customTooltip {
     @apply bg-background text-white;
 }
+
 polygon {
     @apply hidden;
 }
 
 .bkg-gradient {
-    background: radial-gradient(
-        circle at top center,
-        rgba(0, 191, 255, 0.6) 10%,
-        rgba(138, 43, 226, 0.4) 40%,
-        rgba(255, 0, 128, 0.3) 70%
-    );
+    background: radial-gradient(circle at top center,
+            rgba(0, 191, 255, 0.6) 10%,
+            rgba(138, 43, 226, 0.4) 40%,
+            rgba(255, 0, 128, 0.3) 70%);
     filter: blur(40px);
     border-radius: 20px;
     width: 100%;
@@ -203,13 +254,11 @@ polygon {
 }
 
 .animate-gradient-blur {
-    background: linear-gradient(
-        270deg,
-        rgba(0, 191, 255, 0.6),
-        rgba(138, 43, 226, 0.4),
-        rgba(255, 0, 128, 0.3),
-        rgba(245, 86, 0, 0.4)
-    );
+    background: linear-gradient(270deg,
+            rgba(0, 191, 255, 0.6),
+            rgba(138, 43, 226, 0.4),
+            rgba(255, 0, 128, 0.3),
+            rgba(245, 86, 0, 0.4));
     width: 100%;
     height: 100px;
     background-size: 400% 400%;
@@ -220,21 +269,21 @@ polygon {
     0% {
         background-position: 0% 50%;
     }
+
     50% {
         background-position: 100% 50%;
     }
+
     100% {
         background-position: 0% 50%;
     }
 }
 
 .bkg-header-gradient {
-    background: radial-gradient(
-        circle at top center,
-        rgba(0, 191, 255, 0.6) 10%,
-        rgba(138, 43, 226, 0.4) 40%,
-        rgba(255, 0, 128, 0.3) 70%
-    );
+    background: radial-gradient(circle at top center,
+            rgba(0, 191, 255, 0.6) 10%,
+            rgba(138, 43, 226, 0.4) 40%,
+            rgba(255, 0, 128, 0.3) 70%);
     filter: blur(30px);
     width: 80%;
     height: 50px;
@@ -242,21 +291,15 @@ polygon {
 
 .chat-gradient-bg {
     background:
-        radial-gradient(
-            circle at 20% 80%,
+        radial-gradient(circle at 20% 80%,
             rgba(0, 164, 255, 0.4),
-            transparent 40%
-        ),
-        radial-gradient(
-            circle at 70% 90%,
+            transparent 40%),
+        radial-gradient(circle at 70% 90%,
             rgba(186, 0, 255, 0.3),
-            transparent 50%
-        ),
-        radial-gradient(
-            circle at 50% 70%,
+            transparent 50%),
+        radial-gradient(circle at 50% 70%,
             rgba(255, 0, 128, 0.3),
-            transparent 60%
-        );
+            transparent 60%);
     background-size: 300% 300%;
     filter: blur(40px);
     animation: gradient-move 10s ease infinite;
@@ -265,33 +308,25 @@ polygon {
 
 .beta-chat-gradient-bg {
     background:
-        radial-gradient(
-            circle at 20% 80%,
+        radial-gradient(circle at 20% 80%,
             rgba(0, 164, 255, 0.4),
-            transparent 40%
-        ),
-        radial-gradient(
-            circle at 70% 90%,
+            transparent 40%),
+        radial-gradient(circle at 70% 90%,
             rgba(186, 0, 255, 0.3),
-            transparent 50%
-        ),
-        radial-gradient(
-            circle at 50% 70%,
+            transparent 50%),
+        radial-gradient(circle at 50% 70%,
             rgba(255, 0, 128, 0.3),
-            transparent 60%
-        );
+            transparent 60%);
     background-size: 300% 300%;
     filter: blur(40px);
     animation: gradient-move 10s ease infinite;
 }
 
 .send-btn-gradient {
-    background: linear-gradient(
-        270deg,
-        rgba(0, 164, 255, 1),
-        rgba(186, 0, 255, 1),
-        rgba(255, 0, 128, 1)
-    );
+    background: linear-gradient(270deg,
+            rgba(0, 164, 255, 1),
+            rgba(186, 0, 255, 1),
+            rgba(255, 0, 128, 1));
     background-size: 600% 600%;
     animation: gradient-flow 8s ease infinite;
 }
@@ -332,24 +367,20 @@ polygon {
     position: absolute;
     width: 300px;
     height: 300px;
-    background: radial-gradient(
-        circle,
-        rgba(0, 191, 255, 0.4),
-        rgba(255, 0, 128, 0)
-    );
+    background: radial-gradient(circle,
+            rgba(0, 191, 255, 0.4),
+            rgba(255, 0, 128, 0));
     filter: blur(60px);
     z-index: -1;
 }
 
 .animated-gradient {
-    background: linear-gradient(
-        270deg,
-        #ff0080,
-        #7928ca,
-        #2afadf,
-        #00f2fe,
-        #ff0080
-    );
+    background: linear-gradient(270deg,
+            #ff0080,
+            #7928ca,
+            #2afadf,
+            #00f2fe,
+            #ff0080);
     background-size: 800% 800%;
     animation: gradientFlow 6s linear infinite;
 }
@@ -407,6 +438,7 @@ polygon {
 }
 
 @keyframes typingBlink {
+
     0%,
     80%,
     100% {
@@ -425,6 +457,7 @@ polygon {
         0% {
             background-position: 200% 0;
         }
+
         100% {
             background-position: 0% 0;
         }
@@ -481,4 +514,149 @@ polygon {
 
 ::-webkit-scrollbar-thumb:hover {
     @apply bg-foreground/70;
+}
+
+/* Glass effect styles */
+.glass-effect {
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    background: color-mix(in oklch, var(--background) 8%, transparent);
+    border: 1px solid color-mix(in oklch, var(--foreground) 8%, transparent);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 24px -1px color-mix(in oklch, var(--foreground) 10%, transparent);
+}
+
+.glass-effect:hover {
+    background: color-mix(in oklch, var(--background) 12%, transparent);
+    border: 1px solid color-mix(in oklch, var(--foreground) 15%, transparent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px -1px color-mix(in oklch, var(--foreground) 15%, transparent);
+}
+
+.glass-button {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: color-mix(in oklch, var(--background) 95%, transparent);
+    border: 1px solid color-mix(in oklch, var(--foreground) 20%, transparent);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px -1px color-mix(in oklch, var(--foreground) 15%, transparent);
+}
+
+.glass-button:hover {
+    background: color-mix(in oklch, var(--background) 98%, transparent);
+    border: 1px solid color-mix(in oklch, var(--foreground) 30%, transparent);
+    box-shadow: 0 12px 40px -1px color-mix(in oklch, var(--foreground) 20%, transparent);
+}
+
+.glass-button:active {
+    transform: translateY(0) scale(0.98);
+    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-tooltip {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: color-mix(in oklch, var(--background) 95%, transparent);
+    border: 1px solid color-mix(in oklch, var(--foreground) 20%, transparent);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px -1px color-mix(in oklch, var(--foreground) 15%, transparent);
+    color: var(--foreground);
+    font-weight: 500;
+    padding: 8px 12px;
+}
+
+.glass-tooltip:hover {
+    background: color-mix(in oklch, var(--background) 98%, transparent);
+    border: 1px solid color-mix(in oklch, var(--foreground) 30%, transparent);
+    box-shadow: 0 12px 40px -1px color-mix(in oklch, var(--foreground) 20%, transparent);
+}
+
+/* Dark mode specific adjustments */
+:root[class~="dark"] .glass-button {
+    box-shadow: 0 8px 32px -1px color-mix(in oklch, black 25%, transparent);
+}
+
+:root[class~="dark"] .glass-button:hover {
+    box-shadow: 0 12px 40px -1px color-mix(in oklch, black 35%, transparent);
+}
+
+:root[class~="dark"] .glass-tooltip {
+    box-shadow: 0 8px 32px -1px color-mix(in oklch, black 25%, transparent);
+}
+
+:root[class~="dark"] .glass-tooltip:hover {
+    box-shadow: 0 12px 40px -1px color-mix(in oklch, black 35%, transparent);
+}
+
+.nav-item {
+    background: transparent;
+    border: none;
+    transition: all 0.2s ease;
+    color: var(--foreground);
+    opacity: 0.7;
+}
+
+.nav-item:hover {
+    background: color-mix(in oklch, var(--background) 5%, transparent);
+    opacity: 1;
+    transform: translateX(4px);
+}
+
+.nav-trigger {
+    background: transparent;
+    border: none;
+    transition: all 0.2s ease;
+    color: var(--foreground);
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+.nav-trigger:hover {
+    background: color-mix(in oklch, var(--background) 5%, transparent);
+    opacity: 1;
+}
+
+/* Dark mode adjustments are handled by the theme variables */
+/* Radial gradient utility */
+.bg-gradient-radial {
+    background-image: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* Custom glass morphism */
+.glass-refract {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 25%,
+            rgba(255, 255, 255, 0.02) 50%,
+            rgba(255, 255, 255, 0.05) 75%,
+            rgba(255, 255, 255, 0.1) 100%);
+}
+
+.lgBtn {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: white;
+    border: none;
+    box-shadow:
+        inset 3px 3px 0.5px -3.5px rgba(255, 255, 255, 0.5),
+        inset 2px 2px 1px -2px rgb(179, 179, 179),
+        inset -2px -2px 1px -2px rgb(179, 179, 179),
+        inset 0 0 0 1px rgb(153, 153, 153),
+        inset 0 0 22px rgba(242, 242, 242, 0.5);
+}
+
+.liquidGlassBtn {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(var(--background), 10%);
+    color: white;
+    border-radius: 360px;
+    border: none;
+    mix-blend-mode: multiply;
+    box-shadow:
+        inset 3px 3px 0.5px -3.5px rgba(255, 255, 255, 0.5),
+        inset 2px 2px 1px -2px rgb(179, 179, 179),
+        inset -2px -2px 1px -2px rgb(179, 179, 179),
+        inset 0 0 0 1px rgb(153, 153, 153),
+        inset 0 0 22px rgba(242, 242, 242, 0.5);
 }

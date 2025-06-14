@@ -36,6 +36,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useServer } from "@/context/server-provider";
 import { getServerById } from "@/queries/servers";
 import { getCases } from "@/queries/cases";
+import { LiquidGlassCard } from "@/components/beta/liquid-glass-card";
+import { LiquidGlassCardNoAnimate } from "@/components/beta/liquid-glass-card-no-animate";
 
 export default function ServerMembers() {
   const memberDataArray: Case[] = [];
@@ -56,8 +58,10 @@ export default function ServerMembers() {
 
   if (isServerContextLoading || isServerLoading || isCasesLoading || !effectiveServerId) {
     return (
-      <div className="w-[70vw] h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin" />
+      <div className="w-full h-screen flex items-center justify-center">
+        <LiquidGlassCard className="flex flex-row items-center justify-center p-12 rounded-lg">
+          <Loader2 className="animate-spin" size={45} />
+        </LiquidGlassCard>
       </div>
     );
   }
@@ -78,48 +82,27 @@ export default function ServerMembers() {
   });
 
   return (
-    <div className="w-[70vw] h-screen" suppressHydrationWarning>
+    <div className="w-full h-screen" suppressHydrationWarning>
       <div className="relative z-[10] w-full h-full">
-        <div className="flex flex-col items-left mt-[15px] w-full p-6">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  href={`/beta`}
-                  className="hover:text-foreground"
-                >
-                  Overview
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator>
-                <Slash />
-              </BreadcrumbSeparator>
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  href={`/beta/cases`}
-                  className="hover:text-foreground"
-                >
+        <LiquidGlassCardNoAnimate className="p-4">
+          <div className="flex flex-col items-start w-full">
+            <div className="flex flex-row w-full items-center justify-between gap-2">
+              <div className="flex flex-col items-start p-1">
+                <div className={`font-semibold text-3xl text-foreground`}>
                   Cases
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-          <div className="flex flex-row w-full justify-between gap-2">
-            <div className="flex flex-col items-start p-1">
-              <div className={`font-semibold text-4xl text-foreground`}>
-                Cases
+                </div>
+                <p className={`font-medium text-ms text-muted-foreground`}>
+                  Open and action cases against a user for anything, such as
+                  banning, or warning a user.
+                </p>
               </div>
-              <p className={`font-medium text-lg text-muted-foreground`}>
-                Open and action cases against a user for anything, such as
-                banning, or warning a user.
-              </p>
+              <CreateCaseDialog currentServerData={currentServerData} />
             </div>
-            <CreateCaseDialog currentServerData={currentServerData} />
           </div>
-        </div>
-        <div className="p-6 -mt-12 h-[80vh] overflow-y-auto">
+        </LiquidGlassCardNoAnimate>
+        <LiquidGlassCardNoAnimate className="p-6 mt-12 h-[75vh] overflow-y-auto">
           <DataTable columns={columns} data={memberDataArray} />
-        </div>
+        </LiquidGlassCardNoAnimate>
       </div>
     </div>
   );

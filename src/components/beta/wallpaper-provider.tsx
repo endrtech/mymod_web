@@ -28,27 +28,25 @@ export const WallpaperProvider = ({ children }: { children: React.ReactNode }) =
 
     return (
         <div
-            className={`${inter.className} ${poppins.className} ${roboto.className} ${barlowSemiCondensed.className} ${geistSans.className} ${hankenGrotesk.className} antialiased bg-background w-full h-screen`}
+            className={`${inter.className} ${poppins.className} ${roboto.className} ${barlowSemiCondensed.className} ${geistSans.className} ${hankenGrotesk.className} antialiased bg-background w-full h-screen relative`}
             suppressHydrationWarning={true}
         >
             {/* Video background if it's an mp4 */}
             {isVideo && (
-                <>
-                    <video
-                        className="absolute inset-0 w-full h-screen object-cover z-0"
-                        src={bg}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                    />
-                </>
+                <video
+                    className="fixed inset-0 w-full h-full object-cover z-0"
+                    src={bg}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                />
             )}
 
             {/* Gradient/image background if not a video */}
             {!isVideo && (
                 <div
-                    className="absolute inset-0 w-full h-full z-0"
+                    className="fixed inset-0 w-full h-full z-0"
                     style={{
                         backgroundImage: bg
                             ? `url('${bg}')`
@@ -60,9 +58,11 @@ export const WallpaperProvider = ({ children }: { children: React.ReactNode }) =
                     }}
                 />
             )}
-            <div className="absolute inset-0 w-full h-full z-1 bg-gradient-to-b from-background/70 to-background/70 backdrop-blur-sm" />
+
+            {/* SidebarInset now handles its own positioning and scrolling */}
+            <div className="fixed z-[1] top-0 left-0 w-[100vw] h-full bg-background/20 backdrop-blur-md" />
             <SidebarInset
-                className={`z-[10] relative w-full h-screen ${font} bg-transparent`}
+                className={`z-[10] top-0 left-0 w-[70vw] h-full ${font} bg-transparent`}
                 suppressHydrationWarning={true}
             >
                 {children}

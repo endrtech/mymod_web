@@ -19,25 +19,27 @@ import React from "react";
 import { permanentRedirect } from "next/navigation";
 import { useServerStore } from "@/store/server-store";
 import { toast } from "sonner";
-import {useSuspenseQuery} from "@tanstack/react-query";
-import {getServerById, getServers} from "@/queries/servers";
-import {useServer} from "@/context/server-provider";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getServerById, getServers } from "@/queries/servers";
+import { useServer } from "@/context/server-provider";
+import { InteractiveButton } from "../ui/interactive-button";
+import { Button } from "../ui/button";
 
 export const ServerSwitcher = () => {
     const serverId = useServerStore((state) => state.currentServerId);
-    const {currentServerId, setCurrentServerId} = useServer();
+    const { currentServerId, setCurrentServerId } = useServer();
     const setServerId = useServerStore((state) => state.setServerId);
     const [open, setOpen] = React.useState(false);
 
     const { data: serversData } = useSuspenseQuery(getServers);
     const { data: serverData } = useSuspenseQuery(getServerById(serverId || currentServerId || serversData[0].id));
 
-    if(!currentServerId) {
+    if (!currentServerId) {
         setCurrentServerId(serversData[0].id as string);
     }
 
     const switchServer = async (id: string) => {
-        if(id === serverId) return;
+        if (id === serverId) return;
         setOpen(false);
 
         setTimeout(() => {
@@ -58,9 +60,10 @@ export const ServerSwitcher = () => {
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
+                <Button
+                    variant="ghost"
                     size="lg"
-                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground w-full p-2 rounded-md gap-1"
                 >
                     {serversData && !serverData && (
                         <Avatar className="h-8 w-8 rounded-lg flex items-center justify-center">
@@ -86,11 +89,11 @@ export const ServerSwitcher = () => {
                             : !serverData ? "Loading..." : "Select a server"}</span>
                     </div>
                     <ChevronsUpDown className="ml-auto size-4" />
-                </SidebarMenuButton>
+                </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-                className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg z-[20]"
-                side={"right"}
+                className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg bg-background/50 backdrop-blur-xl z-[30]"
+                side={"bottom"}
                 align="start"
                 sideOffset={4}
             >

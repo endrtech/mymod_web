@@ -19,6 +19,8 @@ import {getServers} from "@/queries/servers";
 import {dehydrate, HydrationBoundary} from "@tanstack/react-query";
 import {getAllThemes} from "@/queries/themegallery";
 import { ErrorBoundary } from "react-error-boundary";
+import { TitleBar } from "@/components/beta/title-bar";
+import { getNotifications } from "@/queries/users";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -52,6 +54,7 @@ export default async function RootLayout({
   const queryClient = getQueryClient();
   await Promise.all([
     queryClient.prefetchQuery(getServers),
+    queryClient.prefetchQuery(getNotifications(discordData?.id)),
     queryClient.prefetchQuery(getAllThemes())
   ]);
 
@@ -62,18 +65,16 @@ export default async function RootLayout({
           <div
               className={`${workSans.className} flex flex-col h-screen w-full [--header-height:calc(--spacing(10))] overflow-hidden`}>
             <SiteHeader/>
-            <div className="flex flex-row w-full h-full relative">
+            <div className="flex flex-row w-full h-[calc(100vh-var(--header-height))] relative top-0">
               <SidebarProvider>
-                <div className="flex flex-row w-full h-full">
-                  <LeftSidebar/>
-                  <WallpaperProvider>
-                    <div className="min-w-full flex flex-row items-center">
-                      <Suspense fallback={<LoadingOverlay />}>
-                        {children}
-                      </Suspense>
-                    </div>
-                  </WallpaperProvider>
-                  <RightSidebar/>
+                <div className="flex flex-row w-full h-full relative">
+                    <LeftSidebar/>
+                    <WallpaperProvider>
+                        <Suspense fallback={<LoadingOverlay />}>
+                          {children}
+                        </Suspense>
+                    </WallpaperProvider>
+                    <RightSidebar/>
                 </div>
               </SidebarProvider>
             </div>

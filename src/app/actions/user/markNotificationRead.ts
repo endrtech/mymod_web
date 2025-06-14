@@ -8,7 +8,7 @@ export const markNotificationRead = async (
 ) => {
   const sessionToken = (await cookies()).get("__session");
   const response = await axios.get(
-    `https://api.mymod.endr.tech/api/users/${userId}/notification/read/${notificationId}`,
+    `http://localhost:3030/api/users/${userId}/notification/read/${notificationId}`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

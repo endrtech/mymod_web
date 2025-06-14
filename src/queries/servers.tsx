@@ -20,9 +20,6 @@ export const getServerById = (id: string) => {
         queryFn: async () => {
             return await getCurrentGuild(id);
         },
-        refetchInterval: 60000,
-        refetchIntervalInBackground: true,
-        refetchOnWindowFocus: true
     })
 }
 

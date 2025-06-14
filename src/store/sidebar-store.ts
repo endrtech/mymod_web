@@ -19,8 +19,8 @@ interface SideDrawerStore {
 }
 
 export const useSidebarStore = create<SidebarState>((set) => ({
-  isLeftSidebarOpen: true,
-  isRightSidebarOpen: true,
+  isLeftSidebarOpen: false,
+  isRightSidebarOpen: false,
   toggleLeftSidebar: () => set((state) => ({ isLeftSidebarOpen: !state.isLeftSidebarOpen })),
   toggleRightSidebar: () => set((state) => ({ isRightSidebarOpen: !state.isRightSidebarOpen })),
   setLeftSidebarOpen: (isOpen) => set({ isLeftSidebarOpen: isOpen }),
@@ -28,8 +28,8 @@ export const useSidebarStore = create<SidebarState>((set) => ({
 })) 
 
 export const useSideDrawerStore = create<SideDrawerStore>((set) => ({
-  isLeftDrawerOpen: true,
-  isRightDrawerOpen: true,
+  isLeftDrawerOpen: false,
+  isRightDrawerOpen: false,
   toggleLeftDrawer: () => set((state) => ({ isLeftDrawerOpen: !state.isLeftDrawerOpen })),
   toggleRightDrawer: () => set((state) => ({ isRightDrawerOpen: !state.isRightDrawerOpen })),
   setLeftDrawerOpen: (isOpen) => set({ isLeftDrawerOpen: isOpen }),

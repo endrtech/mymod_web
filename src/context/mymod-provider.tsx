@@ -1,10 +1,11 @@
 "use client"
-import React, {useEffect} from "react";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import React from "react";
+import {QueryClientProvider} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
+import { getQueryClient } from "@/lib/query-client";
 
 export default function MYMODProvider({ children }: { children: React.ReactNode }) {
-    const queryClient = new QueryClient();
+    const queryClient = getQueryClient();
 
     return (
         <QueryClientProvider client={queryClient}>
