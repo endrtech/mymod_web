@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export async function getGuildMemberBans(serverId: any, userId: any) {
   const sessionToken = (await cookies()).get("__session");
   const resp = await axios.get(
-    `http://localhost:3030/api/guilds/${serverId}/members/${userId}/bans`,
+    `https://api.mymod.com.au/api/guilds/${serverId}/members/${userId}/bans`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

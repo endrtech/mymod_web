@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import LoadingOverlay from "../components/beta/loading";
 import NextTopLoader from "nextjs-toploader";
 import { PostHogProvider } from "../components/PostHogProvider";
-import { montserrat } from "./:d:/app/server/[serverId]/fonts";
+import { montserrat } from "./portal/fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import MYMODProvider from "@/context/mymod-provider";
 

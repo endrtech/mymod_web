@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const getAppInfo = async () => {
-  const response = await axios.get(`http://localhost:3030/api/app_info`);
+  const response = await axios.get(`https://api.mymod.com.au/api/app_info`);
 
   if (response.status === 200) {
     return {

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const setAppInfo = async (body: any) => {
   const response = await axios.post(
-    `http://localhost:3030/api/app_info`,
+    `https://api.mymod.com.au/api/app_info`,
     {
       version: body.version,
       previousBuild: body.previousBuild,

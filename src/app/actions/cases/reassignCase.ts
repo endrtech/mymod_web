@@ -11,7 +11,7 @@ export async function reassignCase(
 ) {
   const sessionToken = (await cookies()).get("__session");
   const resp = await axios.post(
-    `http://localhost:3030/api/cases/reassign/${caseId}`,
+    `https://api.mymod.com.au/api/cases/reassign/${caseId}`,
     body,
     {
       headers: {

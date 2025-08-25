@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export async function searchAuditLogs(serverId: any, query: any) {
   const sessionToken = (await cookies()).get("__session");
   const resp = await axios.get(
-    `http://localhost:3030/api/guilds/${serverId}/audit-log/search/${query}`,
+    `https://api.mymod.com.au/api/guilds/${serverId}/audit-log/search/${query}`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

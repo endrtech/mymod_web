@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export async function getCurrentGuildRelationships(serverId: string) {
   const sessionToken = (await cookies()).get("__session");
   const resp = await axios.get(
-    `http://localhost:3030/api/integrations/guild_relationships/${serverId}`,
+    `https://api.mymod.com.au/api/integrations/guild_relationships/${serverId}`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

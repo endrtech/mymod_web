@@ -30,7 +30,7 @@ import {
 import {
   barlowSemiCondensed,
   geistSans,
-} from "@/app/:d:/app/server/[serverId]/fonts";
+} from "@/app/portal/fonts";
 import { ThemeGalleryMain } from "../theme_gallery/ThemeGalleryMain";
 import { getThemes } from "@/app/actions/getThemes";
 import { ThemeGalleryDrawer } from "../theme_gallery/ThemeGalleryDrawer";

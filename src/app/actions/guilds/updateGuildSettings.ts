@@ -9,7 +9,7 @@ export const updateGuildSettings = async (
 ) => {
   const sessionToken = (await cookies()).get("__session");
   const resp = await axios.post(
-    `http://localhost:3030/api/guilds/${serverId}`,
+    `https://api.mymod.com.au/api/guilds/${serverId}`,
     {
       setting,
       content,

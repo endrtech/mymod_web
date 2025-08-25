@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export const deleteNotification = async (userId: any, notificationId: any) => {
   const sessionToken = (await cookies()).get("__session");
   const response = await axios.delete(
-    `http://localhost:3030/api/users/${userId}/notification/${notificationId}`,
+    `https://api.mymod.com.au/api/users/${userId}/notification/${notificationId}`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getTotalGuilds = async () => {
   const response = await axios.get(
-    "http://localhost:3030/api/dashboard/guild-count",
+    "https://api.mymod.com.au/api/dashboard/guild-count",
   );
 
   if (response.status === 200) {

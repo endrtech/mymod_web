@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export const deleteCase = async (caseId: any) => {
   const sessionToken = (await cookies()).get("__session");
   const resp = await axios.delete(
-    `http://localhost:3030/api/cases/${caseId}`,
+    `https://api.mymod.com.au/api/cases/${caseId}`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

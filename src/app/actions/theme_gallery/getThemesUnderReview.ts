@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export const getThemesUnderReview = async () => {
   const sessionToken = (await cookies()).get("__session");
   const response = await axios.get(
-    `http://localhost:3030/api/modules/theme_gallery?status=pending_review`,
+    `https://api.mymod.com.au/api/modules/theme_gallery?status=pending_review`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

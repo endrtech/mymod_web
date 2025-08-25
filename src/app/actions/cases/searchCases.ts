@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export const searchCases = async (serverId: any, query: any) => {
   const sessionToken = (await cookies()).get("__session");
   const resp = await axios.get(
-    `http://localhost:3030/api/cases/search/${serverId}/${query}`,
+    `https://api.mymod.com.au/api/cases/search/${serverId}/${query}`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

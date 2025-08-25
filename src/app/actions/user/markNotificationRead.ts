@@ -8,7 +8,7 @@ export const markNotificationRead = async (
 ) => {
   const sessionToken = (await cookies()).get("__session");
   const response = await axios.get(
-    `http://localhost:3030/api/users/${userId}/notification/read/${notificationId}`,
+    `https://api.mymod.com.au/api/users/${userId}/notification/read/${notificationId}`,
     {
       headers: {
         Authorization: `Bearer ${sessionToken?.value}`,

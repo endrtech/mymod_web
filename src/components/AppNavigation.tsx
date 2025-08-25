@@ -46,7 +46,7 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import { ServerNavigation } from "./ServerNavigation";
-import { montserrat } from "@/app/:d:/app/server/[serverId]/fonts";
+import { montserrat } from "@/app/portal/fonts";
 import { toast } from "sonner";
 import { Toaster } from "./ui/sonner";
 

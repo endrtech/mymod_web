@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { geistSans } from "../:d:/app/server/[serverId]/fonts";
+import { geistSans } from "../portal/fonts";
 import { motion, useAnimation } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
