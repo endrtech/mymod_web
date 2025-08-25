@@ -36,7 +36,9 @@ export function LoginForm({
             <div className="grid gap-6">
               <div>
                 <SignInButton mode="redirect" forceRedirectUrl="/portal">
+                  <Button variant="outline" className="w-full">
                     Login with ENDR ID
+                  </Button>
                 </SignInButton>
               </div>
             </div>
