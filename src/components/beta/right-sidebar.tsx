@@ -51,11 +51,6 @@ export const RightSidebar = () => {
 
     const { data: currentServerData } = useSuspenseQuery(getServerById(serverId || currentServerId as string));
 
-    const betaOptOut = () => {
-        window.localStorage.setItem("betaEnabled", "false");
-        return permanentRedirect("/:d:/app");
-    }
-
     return (
         <SidebarProvider open={isRightSidebarOpen}>
             <LiquidGlassSidebar variant="floating" className="top-(--header-height) h-[calc(100svh-var(--header-height))]!" side="right">
@@ -108,7 +103,7 @@ export const RightSidebar = () => {
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuGroup>
-                                        <Link href="/beta/account">
+                                        <Link href="/portal/account">
                                             <DropdownMenuItem>
                                                 <IconUserCircle />
                                                 Account
@@ -125,13 +120,6 @@ export const RightSidebar = () => {
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </SidebarMenuItem>
-                        {!isElectron && (
-                            <SidebarMenuItem>
-                                <InteractiveButton onClick={betaOptOut} className="w-full p-1 text-sm">
-                                    <ChevronLeft /> Return to modUI 1
-                                </InteractiveButton>
-                            </SidebarMenuItem>
-                        )}
                     </SidebarMenu>
                 </SidebarHeader>
                 <SidebarContent>
@@ -147,17 +135,17 @@ export const RightSidebar = () => {
                                 <CollapsibleContent>
                                     <SidebarGroupContent className="space-y-1">
                                         <SidebarMenuItem>
-                                            <InteractiveLinkButton href="/beta/customisation/theme-gallery" className="w-full">
+                                            <InteractiveLinkButton href="/portal/customisation/theme-gallery" className="w-full">
                                                 Theme Gallery
                                             </InteractiveLinkButton>
                                         </SidebarMenuItem>
                                         <SidebarMenuItem>
-                                            <InteractiveLinkButton href="/beta/customisation/theme-creator" className="w-full">
+                                            <InteractiveLinkButton href="/portal/customisation/theme-creator" className="w-full">
                                                 Theme Creator
                                             </InteractiveLinkButton>
                                         </SidebarMenuItem>
                                         <SidebarMenuItem>
-                                            <InteractiveLinkButton href="/beta/customisation/my-themes" className="w-full">
+                                            <InteractiveLinkButton href="/portal/customisation/my-themes" className="w-full">
                                                 My Themes
                                             </InteractiveLinkButton>
                                         </SidebarMenuItem>

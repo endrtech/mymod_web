@@ -1,6 +1,6 @@
 "use client"
 import getCurrentGuild from "@/app/actions/getCurrentGuild";
-import { barlowSemiCondensed, geistSans, hankenGrotesk, inter, poppins, roboto } from "@/app/beta/fonts"
+import { barlowSemiCondensed, geistSans, hankenGrotesk, inter, poppins, roboto } from "@/app/portal/fonts"
 import { useServerStore } from "@/store/server-store";
 import { useEffect, useState } from "react";
 import { SidebarInset } from "../ui/sidebar";

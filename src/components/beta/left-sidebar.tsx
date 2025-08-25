@@ -179,7 +179,7 @@ export const LeftSidebar = () => {
                       </TooltipProvider>
 
                       {hasAccess('mymod_cases') && (
-                        <Link href="/beta/cases">
+                        <Link href="/portal/cases">
                           <SidebarButton
                             className="cursor-pointer"
                             color1={currentServerData?.data.mmData.module_config.appearance?.gradient?.color_1}
@@ -192,7 +192,7 @@ export const LeftSidebar = () => {
                           </SidebarButton>
                         </Link>
                       )}
-                      <Link href="/beta/apps">
+                      <Link href="/portal/apps">
                         <SidebarButton
                           className="cursor-pointer"
                           color1={currentServerData?.data.mmData.module_config.appearance?.gradient?.color_1}
@@ -205,7 +205,7 @@ export const LeftSidebar = () => {
                         </SidebarButton>
                       </Link>
                       {hasAccess('settings') && (
-                        <Link href="/beta/settings">
+                        <Link href="/portal/settings">
                           <SidebarButton
                             className="cursor-pointer"
                             color1={currentServerData?.data.mmData.module_config.appearance?.gradient?.color_1}
@@ -233,7 +233,7 @@ export const LeftSidebar = () => {
                           {hasAccess("overview") && (
                             <SidebarMenuItem>
                               <InteractiveLinkButton
-                                href={`/beta`}
+                                href={`/portal`}
                                 className="nav-item w-full"
                               >
                                 <span>Overview</span>
@@ -243,7 +243,7 @@ export const LeftSidebar = () => {
                           {hasAccess("members") && (
                             <SidebarMenuItem>
                               <InteractiveLinkButton
-                                href={`/beta/members`}
+                                href={`/portal/members`}
                                 className="nav-item w-full"
                               >
                                 <span>Members</span>
@@ -253,7 +253,7 @@ export const LeftSidebar = () => {
                           {hasAccess("audit_log") && (
                             <SidebarMenuItem>
                               <InteractiveLinkButton
-                                href={`/beta/logs`}
+                                href={`/portal/logs`}
                                 className="nav-item w-full"
                               >
                                 <span>Logs</span>
@@ -263,7 +263,7 @@ export const LeftSidebar = () => {
                           {hasAccess("team") && (
                             <SidebarMenuItem>
                               <InteractiveLinkButton
-                                href={`/beta/team`}
+                                href={`/portal/team`}
                                 className="nav-item w-full"
                               >
                                 <span>Team</span>

@@ -184,7 +184,7 @@ export const SiteHeader = () => {
                         </div>
                     </div>
                     <div className="ml-auto flex items-center gap-2 noDrag">
-                        <Link href="/beta/notifications">
+                        <Link href="/portal/notifications">
                             <Button
                                 className="h-8 w-8 liquidGlassBtn"
                             >

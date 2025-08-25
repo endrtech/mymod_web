@@ -46,18 +46,17 @@ const LiquidGlassCard = React.forwardRef<HTMLDivElement, LiquidGlassCardProps>(
       <LiquidGlass
         className={cn("liquid-glass-card", className)}
         blurAmount={blurAmount}
-        color={tintColor}
         displacementScale={displacementScale}
         style={{
           width: typeof width === 'number' ? `${width}px` : width,
           height: typeof height === 'number' ? `${height}px` : height,
           borderRadius: `${borderRadius}px`,
           overflow: 'hidden', /* Ensure content is clipped */
+          background: tintColor ? `rgba(${parseInt(tintColor.slice(1, 3), 16)}, ${parseInt(tintColor.slice(3, 5), 16)}, ${parseInt(tintColor.slice(5, 7), 16)}, ${tintOpacity})` : undefined,
           ...style,
           // Applying outer shadow here as LiquidGlass might not handle it directly
           boxShadow: `0px 6px ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, 0.2)`,
         }}
-        {...props}
       >
         {/* Content */}
         {children && (
@@ -139,7 +138,6 @@ LiquidGlassCardFooter.displayName = "LiquidGlassCardFooter";
 
 export {
   LiquidGlassCard,
-  LiquidGlassControls,
   LiquidGlassCardHeader,
   LiquidGlassCardFooter,
   LiquidGlassCardTitle,

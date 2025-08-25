@@ -12,12 +12,7 @@ export default function Main() {
 
   useEffect(() => {
     if (userId) {
-      const betaEnabled = window.localStorage.getItem("betaEnabled");
-      if(betaEnabled === "true") {
-        return permanentRedirect("/beta");
-      } else {
-        return permanentRedirect("/:d:/app");
-      }
+        return permanentRedirect("/portal");
     }
   }, [userId]);
 

@@ -19,7 +19,6 @@ import {getServers} from "@/queries/servers";
 import {dehydrate, HydrationBoundary} from "@tanstack/react-query";
 import {getAllThemes} from "@/queries/themegallery";
 import { ErrorBoundary } from "react-error-boundary";
-import { TitleBar } from "@/components/beta/title-bar";
 import { getNotifications } from "@/queries/users";
 
 const workSans = Work_Sans({
@@ -27,7 +26,7 @@ const workSans = Work_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "MYMOD Beta - Home",
+  title: "MYMOD - Home",
   description: "Welcome to the future of moderation.",
 };
 
