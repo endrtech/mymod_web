@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "http://localhost:3001",
+            value: "http://mymod.endr.my",
           },
           {
             key: "Access-Control-Allow-Methods",
